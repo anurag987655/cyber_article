@@ -1,10 +1,9 @@
 ---
-layout: page
+layout: default
 title: "My Projects"
 permalink: /projects/
 ---
 
-# My Projects
 
 ## Project 1: Personal Website
 This website itself! Built with Jekyll and GitHub Pages.

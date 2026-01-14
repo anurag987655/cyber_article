@@ -1,10 +1,9 @@
 ---
-layout: page
+layout: default
 title: "Frequently Asked Questions"
 permalink: /faq/
 ---
 
-# Frequently Asked Questions
 
 **Q: What is this website about?**
 A: This is my personal website built with Jekyll and GitHub Pages.
