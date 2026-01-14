@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: default
 title: "My First Article"
 date: 2026-01-14
 categories: [updates]
