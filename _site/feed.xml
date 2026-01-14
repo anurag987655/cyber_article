@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2026-01-14T12:15:15+05:45</updated><id>http://localhost:4000/feed.xml</id><title type="html">Your awesome title</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">My First Article</title><link href="http://localhost:4000/updates/2026/01/14/my-first-article.html" rel="alternate" type="text/html" title="My First Article" /><published>2026-01-14T00:00:00+05:45</published><updated>2026-01-14T00:00:00+05:45</updated><id>http://localhost:4000/updates/2026/01/14/my-first-article</id><content type="html" xml:base="http://localhost:4000/updates/2026/01/14/my-first-article.html"><![CDATA[<h1 id="welcome-to-my-first-article">Welcome to My First Article</h1>
+
+<p>This is my first article on my new Jekyll website! I’ll be posting regularly about my projects and thoughts.</p>
+
+<h2 id="what-ive-learned-today">What I’ve Learned Today</h2>
+
+<ol>
+  <li>How to install Jekyll with GitHub Pages</li>
+  <li>How to fix permission errors with Bundler</li>
+  <li>How to create multiple pages for a website</li>
+</ol>
+
+<p>Stay tuned for more updates!</p>]]></content><author><name></name></author><category term="updates" /><summary type="html"><![CDATA[Welcome to My First Article]]></summary></entry></feed>
