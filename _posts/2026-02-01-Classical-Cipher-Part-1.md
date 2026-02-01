@@ -1,0 +1,818 @@
+---
+layout: default
+title: "Classical Cipher Part-I"
+date: 2026-02-01
+categories: [updates]
+---
+This article will introduce readers with basic mathematical notation used in cryptography, the idea behind cryptography and some of the classical cryptographic algorithm.
+
+<style>
+.cipher-container {
+    font-family: sans-serif;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    background: #fff;
+    margin: 20px 0;
+}
+
+.cipher-input {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box; 
+}
+
+.cipher-key {
+    width: 80px;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.cipher-output-box {
+    font-family: monospace;
+    font-size: 1.5rem;
+    color: #2e7d32; 
+    background: #f1f8e9;
+    padding: 12px;
+    border-radius: 4px;
+    min-height: 1.5rem;
+    border: 1px dashed #81c784;
+    word-wrap: break-word;
+}
+
+.cipher-visual {
+    font-size: 0.85rem;
+    color: #777;
+    font-style: italic;
+}
+
+/* Table styling */
+.math-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-family: sans-serif;
+    border: 1px solid #ddd;
+}
+
+.math-table th {
+    background-color: #f2f2f2;
+    padding: 12px 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-weight: bold;
+}
+
+.math-table td {
+    padding: 10px 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.math-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+</style>
+
+---
+
+## Basic Cryptography Theory
+
+The fundamental idea behind cryptography is very simple:
+
+1. In communication, only authorized individuals should be able to read messages.  
+2. Anyone who intercepts the message should see a meaningless message.
+
+### Thinking Transformation As A Function: 
+Cryptography uses the concepts of **plaintext** and **ciphertext** to encode messages.  
+Cryptography deals with transformation of  normal messages (plaintext) into unreadable form (ciphertext).
+
+The transformation can be thought of as a function:
+
+$$
+y = f(x)
+$$
+
+where:
+
+- $x$ is the original message (plaintext)  
+- $y = f(x)$ is the encrypted message (ciphertext)  
+
+### Special Property Of This Function: 
+
+- Computing $f(x)$ from $x$ is **relatively easy problem**  
+- Recovering $x$ from $f(x)$ is **computationally hard problem**, unless one has a secret value **key**
+
+
+### Example
+
+A simple example of such function comes from number theory.
+
+Let $$p$$ and $$q$$ be two large prime numbers, and define:
+
+$$ N = p \times q $$
+
+Computing $$N$$ from $$p$$ and $$q$$ is extremely easy, even for very large numbers.
+
+However, given only $$N$$, finding the original primes $$p$$ and $$q$$ is a **computationally hard problem**.
+
+## Mathematical Notations
+
+Let $$\mathbb{Z}_{26}$$ denote the set of integers modulo 26:
+
+$$ \mathbb{Z}_{26} = \mathbb{Z} / 26\mathbb{Z} = \{0, 1, 2, \ldots, 25\} $$
+
+We associate each letter in english alphabet with an element of $$\mathbb{Z}_{26}$$. This is done by mapping.
+
+$$ A \mapsto 0,\; B \mapsto 1,\; C \mapsto 2,\; \ldots,\; Z \mapsto 25 $$
+
+This allows us to represent the letter as numbers and hence apply the idea of modular arithemetic for encrypting and decrypting messages.
+
+<br>
+
+
+**Note:**
+
+---
+
+From this point onward we will assume every plaintext or ciphertext is first converted to its numerical representation in $$\mathbb{Z}_{26}$$ using above mapping and inverse mapping is applied to convert numbers to letters.
+
+---
+
+<br>
+Let $$\mathcal{P}$$ denote the space of all possible **plaintext messages**.
+
+Let $$\mathcal{C}$$ denote the space of all possible **ciphertext messages**.
+
+Let $$\mathcal{K}$$ denote the key space, that is, the set of all possible **keys**.
+
+<br>
+
+An encryption algorithm is a function
+
+$$ E : \mathcal{P} \times \mathcal{K} \rightarrow \mathcal{C} $$
+
+and a decryption algorithm is a function
+
+$$ D : \mathcal{C} \times \mathcal{K} \rightarrow \mathcal{P} $$
+
+For every key $$k \in \mathcal{K}$$ and every message $$m \in \mathcal{P}$$,
+
+$$ D(E(m, k), k) = m $$
+
+## Some Classical Cryptograpy Algorithm
+
+## 1. The Caeser Cipher
+
+In this cryptography technique a plaintext is converted to ciphertext by shifting fixed number of places down or up the alphabet.
+
+### Mathematical Formulation
+
+Let $$\mathcal{P}$$, $$\mathcal{C}$$, and $$\mathcal{K}$$ belong to  
+
+$$ \mathbb{Z}_{26} = \{0,1,2,\ldots,25\} $$
+
+Then the encryption function for caeser cipher is defined by:
+
+$$ E_k(x) = (x + k) \bmod 26 = y $$
+
+The decryption function undoes the encryption and is defined by:
+
+$$ D_k(y) = (y - k) \bmod 26 $$
+
+### Example
+
+Let us see how a message is encrypted using caser cipher. Let the message (plaintext) be "APPLE".
+
+$$ P = \text{APPLE} $$
+
+We map each message letter $$m_i \in P$$ to its corresponding number in $$\mathbb{Z}_{26}$$ using the fixed alphabet mapping.
+
+$$ A \mapsto 0,\; P \mapsto 15,\; L \mapsto 11,\; E \mapsto 4 $$
+
+So,
+
+$$ P = (0, 15, 15, 11, 4) $$
+
+lets take keyvalue $$k = 3$$.
+
+Apply the encryption rule $$E_k(x) = (x + k) \bmod 26$$ for the plaintext "APPLE" with $$k=3$$:
+
+<table class="math-table">
+<thead>
+<tr>
+<th>Plaintext $$P$$</th>
+<th>Numeric $$x$$</th>
+<th>$$E_k(x) = (x + k) \bmod 26 = y$$</th>
+<th>Ciphertext $$C$$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>0</td>
+<td>(0 + 3) mod 26 = 3</td>
+<td>D</td>
+</tr>
+<tr>
+<td>P</td>
+<td>15</td>
+<td>(15 + 3) mod 26 = 18</td>
+<td>S</td>
+</tr>
+<tr>
+<td>P</td>
+<td>15</td>
+<td>(15 + 3) mod 26 = 18</td>
+<td>S</td>
+</tr>
+<tr>
+<td>L</td>
+<td>11</td>
+<td>(11 + 3) mod 26 = 14</td>
+<td>O</td>
+</tr>
+<tr>
+<td>E</td>
+<td>4</td>
+<td>(4 + 3) mod 26 = 7</td>
+<td>H</td>
+</tr>
+</tbody>
+</table>
+
+So the ciphertext is:
+
+$$ \text{DSSOH} $$
+
+Now inversely, you can take the cipher text DSSOH to plain text with mapping followed by decryption function. 
+Now, to decrypt the ciphertext "DSSOH" using $$D_k(y) = (y - k) \bmod 26$$ with $$k=3$$:
+
+<table class="math-table">
+<thead>
+<tr>
+<th>Ciphertext $$C$$</th>
+<th>Numeric $$y$$</th>
+<th>$$D_k(y) = (y - k) \bmod 26 = x$$</th>
+<th>Plaintext $$P$$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D</td>
+<td>3</td>
+<td>(3 - 3) mod 26 = 0</td>
+<td>A</td>
+</tr>
+<tr>
+<td>S</td>
+<td>18</td>
+<td>(18 - 3) mod 26 = 15</td>
+<td>P</td>
+</tr>
+<tr>
+<td>S</td>
+<td>18</td>
+<td>(18 - 3) mod 26 = 15</td>
+<td>P</td>
+</tr>
+<tr>
+<td>O</td>
+<td>14</td>
+<td>(14 - 3) mod 26 = 11</td>
+<td>L</td>
+</tr>
+<tr>
+<td>H</td>
+<td>7</td>
+<td>(7 - 3) mod 26 = 4</td>
+<td>E</td>
+</tr>
+</tbody>
+</table>
+
+So the decrypted plaintext is:
+
+$$ \text{APPLE} $$
+
+Try to encrypt message with other key!!
+
+<br>
+
+---
+
+### Interactive Caeser Cipher
+
+
+<div class="cipher-container">
+    <h3 style="margin-top: 0;">Caesar Encryptor</h3>
+    
+    <label>Plaintext:</label><br>
+    <input type="text" id="encryptInput" placeholder="Enter plaintext (e.g. APPLE)..." class="cipher-input"><br>
+    
+    <label>Key (1-25):</label><br>
+    <input type="number" id="encryptKey" value="3" min="1" max="25" class="cipher-key"><br>
+    
+    <hr style="border: 0; border-top: 1px solid #eee;">
+    
+    <div style="margin-top: 10px;">
+        <strong>Ciphertext:</strong>
+        <p id="encryptResult" class="cipher-output-box" style="color: #d32f2f; background: #ffebee; border-color: #ef9a9a;">---</p>
+    </div>
+
+    <div id="encryptVisual" class="cipher-visual">
+        Current mapping: A → D
+    </div>
+</div>
+
+<script>
+  (function() {
+    const input = document.getElementById('encryptInput');
+    const keyField = document.getElementById('encryptKey');
+    const output = document.getElementById('encryptResult');
+    const visual = document.getElementById('encryptVisual');
+
+    const encrypt = () => {
+      const text = input.value;
+      const kRaw = keyField.value;
+      let k = parseInt(kRaw);
+
+      // Validation for keyspace 1-25
+      if (kRaw === "" || isNaN(k) || k < 1 || k > 25) {
+        output.innerText = "Please enter a value in keyspace from 1-25";
+        output.style.fontSize = "0.9rem";
+        output.style.color = "#888";
+        visual.innerText = "Invalid Key";
+        return;
+      }
+
+      // Reset styles for valid output
+      output.style.fontSize = "1.5rem";
+      output.style.color = "#d32f2f";
+
+      const result = text.split('').map(char => {
+        const code = char.charCodeAt(0);
+        
+        // Handle Uppercase
+        if (code >= 65 && code <= 90) {
+          return String.fromCharCode(((code - 65 + k) % 26) + 65);
+        }
+        // Handle Lowercase
+        if (code >= 97 && code <= 122) {
+          return String.fromCharCode(((code - 97 + k) % 26) + 97);
+        }
+        return char;
+      }).join('');
+      
+      output.innerText = result || "---";
+      
+      const shiftedA = String.fromCharCode(((0 + k) % 26) + 65);
+      visual.innerText = `Current mapping: A → ${shiftedA}`;
+    };
+
+    // Added a 'change' listener to snap manual typing back to 1-25 range
+    keyField.addEventListener('change', function() {
+        if (this.value > 25) this.value = 25;
+        if (this.value < 1 && this.value !== "") this.value = 1;
+        encrypt();
+    });
+
+    input.addEventListener('input', encrypt);
+    keyField.addEventListener('input', encrypt);
+  })();
+</script>
+
+
+
+
+<div class="cipher-container" style="max-width: 500px;">
+    <h3 style="margin-top: 0;">Caesar Decryptor</h3>
+    
+    <label>Ciphertext:</label><br>
+    <input type="text" id="decryptInput" placeholder="Enter ciphertext (e.g. DSSOH)..." class="cipher-input"><br>
+    
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <div>
+            <label>Key (1-25):</label><br>
+            <input type="number" id="decryptKey" value="3" min="1" max="25" class="cipher-key">
+        </div>
+        <div style="margin-top: 20px;">
+            <button id="bruteForceBtn" style="padding: 8px 15px; cursor: pointer; background: #2e7d32; color: white; border: none; border-radius: 4px;">Brute Force All Keys</button>
+        </div>
+    </div>
+    
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+    
+    <strong>Plaintext (Selected Key):</strong>
+    <p id="decryptResult" class="cipher-output-box">---</p>
+
+    <div id="bruteForceArea" style="display: none; margin-top: 15px;">
+        <strong>Brute Force Results:</strong>
+        <div id="bruteForceList" style="font-family: monospace; font-size: 0.85rem; background: #fdfdfd; border: 1px solid #eee; padding: 10px; height: 150px; overflow-y: scroll; margin-top: 5px;">
+        </div>
+    </div>
+</div>
+
+<script>
+  (function() {
+    const input = document.getElementById('decryptInput');
+    const keyField = document.getElementById('decryptKey');
+    const output = document.getElementById('decryptResult');
+    const btn = document.getElementById('bruteForceBtn');
+    const bfArea = document.getElementById('bruteForceArea');
+    const bfList = document.getElementById('bruteForceList');
+
+    const decryptText = (text, k) => {
+        return text.split('').map(char => {
+            const code = char.charCodeAt(0);
+            if (code >= 65 && code <= 90) return String.fromCharCode(((code - 65 - k + 26) % 26) + 65);
+            if (code >= 97 && code <= 122) return String.fromCharCode(((code - 97 - k + 26) % 26) + 97);
+            return char;
+        }).join('');
+    };
+
+    const updateSingle = () => {
+        const kRaw = keyField.value;
+        const k = parseInt(kRaw);
+        if (kRaw === "" || isNaN(k) || k < 1 || k > 25) {
+            output.innerText = "Please enter a value in keyspace from 1-25";
+            output.style.fontSize = "0.9rem";
+            output.style.color = "#888";
+            return;
+        }
+        output.style.fontSize = "1.5rem";
+        output.style.color = "#2e7d32";
+        output.innerText = decryptText(input.value, k) || "---";
+    };
+
+    // Snap manual typing back to 1-25 range
+    keyField.addEventListener('change', function() {
+        if (this.value > 25) this.value = 25;
+        if (this.value < 1 && this.value !== "") this.value = 1;
+        updateSingle();
+    });
+
+    btn.addEventListener('click', () => {
+        const text = input.value;
+        if (!text) return;
+        
+        bfArea.style.display = "block";
+        bfList.innerHTML = ""; 
+        
+        for (let k = 1; k <= 25; k++) {
+            const decoded = decryptText(text, k);
+            const row = document.createElement('div');
+            row.style.padding = "2px 0";
+            row.innerHTML = `<span style="color: #888;">Key ${k.toString().padStart(2, '0')}:</span> <strong>${decoded}</strong>`;
+            bfList.appendChild(row);
+        }
+    });
+
+    input.addEventListener('input', updateSingle);
+    keyField.addEventListener('input', updateSingle);
+  })();
+</script>
+
+---
+
+### Security Analysis
+
+since there are only 25 possible key. An attacker can easily brute force every key until he gets meaningful word. As you saw, it can be done typically in seconds.
+
+<br><br>
+
+## 2. Affine Cipher
+
+The affine cipher is an extension of the Caesar cipher that uses **two keys**:
+a multiplicative key $$a$$ and an additive key $$b$$.
+
+### Mathematical Formulation
+
+Let the plaintext, ciphertext, and key space be defined over  
+
+$$ \mathbb{Z}_{26} = \{0,1,2,\ldots,25\} $$
+
+Then the encryption function for the affine cipher is defined as
+
+$$ E(x) = (a x + b) \bmod 26 = y $$
+
+The decryption function is defined as
+
+$$ D(y) = a^{-1}(y - b) \bmod 26 $$
+
+where $$a^{-1}$$ is the **multiplicative inverse of $$a$$ modulo 26\)**,  
+that is,
+
+$$ a \cdot a^{-1} \equiv 1 \pmod{26} $$
+
+### Example
+
+Assuming plaintext message to be **APPlE**. first we apply fixed alphabet mapping to get numeric values:
+
+$$ P = (0, 15, 15, 11, 4) $$
+
+for this example lets choose:
+
+$$ a = 5, \quad b = 8 $$
+
+---
+
+**Note:** a should be coprime to 26. The coprime numbers to 26 are {1,3,5,7,9,11,15,17,19,21,23,25} which are possible value of a.
+
+---
+
+so the encryption function becomes:
+
+$$ E(x) = (5 x + 8) \bmod 26 = y $$
+
+<table class="math-table">
+<thead>
+<tr>
+<th>$$x$$</th>
+<th>$$5x+8$$</th>
+<th>mod 26</th>
+<th>Cipher</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>8</td>
+<td>8</td>
+<td>I</td>
+</tr>
+<tr>
+<td>15</td>
+<td>83</td>
+<td>5</td>
+<td>F</td>
+</tr>
+<tr>
+<td>15</td>
+<td>83</td>
+<td>5</td>
+<td>F</td>
+</tr>
+<tr>
+<td>11</td>
+<td>63</td>
+<td>11</td>
+<td>L</td>
+</tr>
+<tr>
+<td>4</td>
+<td>28</td>
+<td>2</td>
+<td>C</td>
+</tr>
+</tbody>
+</table>
+
+so the ciphertext is "IFFLC".
+Now lets see how decryption works to get back "APPLE".
+
+The inverse of 5 modulo 26 is:
+
+$$ 5^{-1} \equiv 21 \pmod{26} $$
+
+if you are confused on modular inverse, you can read my article on [An introduction to number theory for cryptography.](https://anurag987655.github.io/cyber_article/updates/2026/01/21/An-introduction-to-number-theory-for-cryptography/)
+
+so The decryption function is:
+
+$$ D(y) = 21(y - 8) \bmod 26 $$
+
+<table class="math-table">
+<thead>
+<tr>
+<th>Cipher $$y$$</th>
+<th>$$y-8$$</th>
+<th>$$21(y-8)$$</th>
+<th>mod 26</th>
+<th>Plain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>I (8)</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>A</td>
+</tr>
+<tr>
+<td>F (5)</td>
+<td>-3</td>
+<td>-63</td>
+<td>15</td>
+<td>P</td>
+</tr>
+<tr>
+<td>F (5)</td>
+<td>-3</td>
+<td>-63</td>
+<td>15</td>
+<td>P</td>
+</tr>
+<tr>
+<td>L (11)</td>
+<td>3</td>
+<td>63</td>
+<td>11</td>
+<td>L</td>
+</tr>
+<tr>
+<td>C (2)</td>
+<td>-6</td>
+<td>-126</td>
+<td>4</td>
+<td>E</td>
+</tr>
+</tbody>
+</table>
+
+In this plaintext "APPLE" was decrypted from cipihertext "IFFLC".
+
+<br>
+
+---
+
+### Interactive Affine Cipher
+
+
+<div class="cipher-container">
+    <h3 style="margin-top: 0;">Affine Encryptor</h3>
+    
+    <label>Plaintext:</label><br>
+    <input type="text" id="affineEncInput" placeholder="Enter plaintext..." class="cipher-input"><br>
+    
+    <div style="display: flex; gap: 10px;">
+        <div>
+            <label>Key a (Coprime):</label><br>
+            <select id="affineKeyA" class="cipher-key" style="width: 100px;">
+                <option value="1">1</option><option value="3">3</option>
+                <option value="5" selected>5</option><option value="7">7</option>
+                <option value="9">9</option><option value="11">11</option>
+                <option value="15">15</option><option value="17">17</option>
+                <option value="19">19</option><option value="21">21</option>
+                <option value="23">23</option><option value="25">25</option>
+            </select>
+        </div>
+        <div>
+            <label>Key b (0-25):</label><br>
+            <input type="number" id="affineKeyB" value="8" min="0" max="25" class="cipher-key" style="width: 100px;">
+        </div>
+    </div>
+    
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+    
+    <strong>Ciphertext:</strong>
+    <p id="affineEncResult" class="cipher-output-box" style="color: #d32f2f; background: #ffebee; border-color: #ef9a9a;">---</p>
+</div>
+
+<script>
+(function() {
+    const input = document.getElementById('affineEncInput');
+    const keyA = document.getElementById('affineKeyA');
+    const keyB = document.getElementById('affineKeyB');
+    const output = document.getElementById('affineEncResult');
+
+    const process = () => {
+        let a = parseInt(keyA.value);
+        let b = parseInt(keyB.value);
+        const text = input.value;
+
+        // Force b into 0-25 range if typed manually
+        if (b < 0) b = 0; if (b > 25) b = 25;
+
+        const result = text.split('').map(char => {
+            const code = char.charCodeAt(0);
+            if (code >= 65 && code <= 90) return String.fromCharCode(((a * (code - 65) + b) % 26 + 26) % 26 + 65);
+            if (code >= 97 && code <= 122) return String.fromCharCode(((a * (code - 97) + b) % 26 + 26) % 26 + 97);
+            return char;
+        }).join('');
+        output.innerText = result || "---";
+    };
+
+    [input, keyA, keyB].forEach(el => el.addEventListener('input', process));
+})();
+</script>
+
+
+
+<div class="cipher-container" style="max-width: 500px;">
+    <h3 style="margin-top: 0;">Affine Decryptor</h3>
+    
+    <label>Ciphertext:</label><br>
+    <input type="text" id="affineDecInput" placeholder="Enter ciphertext..." class="cipher-input"><br>
+    
+    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <div>
+            <label>a:</label><br>
+            <select id="decA" class="cipher-key" style="width: 70px;">
+                <option value="1">1</option><option value="3">3</option>
+                <option value="5" selected>5</option><option value="7">7</option>
+                <option value="9">9</option><option value="11">11</option>
+                <option value="15">15</option><option value="17">17</option>
+                <option value="19">19</option><option value="21">21</option>
+                <option value="23">23</option><option value="25">25</option>
+            </select>
+        </div>
+        <div>
+            <label>b (0-25):</label><br>
+            <input type="number" id="decB" value="8" min="0" max="25" class="cipher-key" style="width: 70px;">
+        </div>
+        <button id="affineBruteBtn" style="margin-top:20px; padding: 8px 15px; cursor: pointer; background: #2e7d32; color: white; border: none; border-radius: 4px;">Brute Force</button>
+    </div>
+    
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+    
+    <strong>Plaintext:</strong>
+    <p id="affineDecResult" class="cipher-output-box">---</p>
+
+    <div id="affineBfArea" style="display: none; margin-top: 15px;">
+        <strong>Brute Force Results:</strong>
+        <div id="affineBfList" style="font-family: monospace; font-size: 0.8rem; background: #fdfdfd; border: 1px solid #eee; padding: 10px; height: 180px; overflow-y: scroll;"></div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const input = document.getElementById('affineDecInput');
+    const keyA = document.getElementById('decA');
+    const keyB = document.getElementById('decB');
+    const output = document.getElementById('affineDecResult');
+    const btn = document.getElementById('affineBruteBtn');
+    const bfList = document.getElementById('affineBfList');
+    const bfArea = document.getElementById('affineBfArea');
+
+    const inverseMap = {1:1, 3:9, 5:21, 7:15, 9:3, 11:19, 15:7, 17:23, 19:11, 21:5, 23:17, 25:25};
+
+    const decrypt = (text, a, b) => {
+        const aInv = inverseMap[a];
+        return text.split('').map(char => {
+            const code = char.charCodeAt(0);
+            if (code >= 65 && code <= 90) return String.fromCharCode(((aInv * (code - 65 - b + 26)) % 26 + 26) % 26 + 65);
+            if (code >= 97 && code <= 122) return String.fromCharCode(((aInv * (code - 97 - b + 26)) % 26 + 26) % 26 + 97);
+            return char;
+        }).join('');
+    };
+
+    const update = () => {
+        let b = parseInt(keyB.value) || 0;
+        if (b < 0) b = 0; if (b > 25) b = 25;
+        output.innerText = decrypt(input.value, parseInt(keyA.value), b) || "---";
+    };
+
+    btn.addEventListener('click', () => {
+        bfArea.style.display = "block";
+        bfList.innerHTML = "";
+        const text = input.value;
+        if(!text) return;
+        Object.keys(inverseMap).forEach(a => {
+            for (let b = 0; b < 26; b++) {
+                const row = document.createElement('div');
+                row.style.borderBottom = "1px solid #eee";
+                row.innerHTML = `<span style="color:#888">a:${a}, b:${b}:</span> ${decrypt(text, a, b)}`;
+                bfList.appendChild(row);
+            }
+        });
+    });
+
+    [input, keyA, keyB].forEach(el => el.addEventListener('input', update));
+})();
+</script>
+
+---
+
+### Security Analysis
+
+As we have read till now, $$a$$ can only those values which are coprime with 26.
+
+$$ \{1,3,5,7,9,11,15,17,19,21,23,25\} $$
+
+This is for modular inverse to exist.so there are **12 possible** choice for $$a$$. However $$b$$ can take any values in $$\mathbb{Z}_{26}$$, so there are **26 possible** choice for $$b$$.
+And therefore the total possible combination of keys is:
+
+$$ |\mathcal{K}| = 12 \times 26 = 312 $$
+
+A modern computer can bruteforce it instantly. So it is not secure cipher.
+
+## Conclusion
+
+so far we have seen two simple classical cipher, Caeser and Affine.
+
+- Both use a fixed key to transform letters.
+- Their key spaces are small (26 for Caesar, 312 for Affine) and thus modern computers can break them almost instantly.
+
+<br>
+
+In the next article, we will explore **cipher with changing key** which are hard to break.
+
+---
+*End of article.*
