@@ -1,4 +1,2692 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2026-01-14T20:10:07+05:45</updated><id>http://localhost:4000/feed.xml</id><title type="html">Anurag’s Digital Space</title><subtitle>Welcome to my digital garden where I share articles, projects, and ideas.</subtitle><entry><title type="html">My First Article</title><link href="http://localhost:4000/updates/2026/01/14/my-first-article/" rel="alternate" type="text/html" title="My First Article" /><published>2026-01-14T00:00:00+05:45</published><updated>2026-01-14T00:00:00+05:45</updated><id>http://localhost:4000/updates/2026/01/14/my-first-article</id><content type="html" xml:base="http://localhost:4000/updates/2026/01/14/my-first-article/"><![CDATA[<h1 id="welcome-to-my-first-article">Welcome to My First Article</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="http://localhost:4000/cyber_article/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/cyber_article/" rel="alternate" type="text/html" /><updated>2026-02-07T12:15:29+05:45</updated><id>http://localhost:4000/cyber_article/feed.xml</id><title type="html">Anurag’s Digital Space</title><subtitle>Welcome to my digital garden where I share articles, projects, and ideas.</subtitle><entry><title type="html">Classical Cipher Part-II</title><link href="http://localhost:4000/cyber_article/updates/2026/02/06/Classic-Cipher-Part-2/" rel="alternate" type="text/html" title="Classical Cipher Part-II" /><published>2026-02-06T00:00:00+05:45</published><updated>2026-02-06T00:00:00+05:45</updated><id>http://localhost:4000/cyber_article/updates/2026/02/06/Classic-Cipher-Part-2</id><content type="html" xml:base="http://localhost:4000/cyber_article/updates/2026/02/06/Classic-Cipher-Part-2/"><![CDATA[<p>This article will introduce readers with some more classical cipher. This article will introduce polyalphabetic cipher where cryptographic algorithm uses a vector key.</p>
+
+<hr />
+
+<style>
+    /* GLOBAL STYLES */
+    body {
+        font-family: -apple-system, Segoe UI, Helvetica, Arial, sans-serif;
+        color: #24292e;
+        max-width: 700px;
+        margin: 40px auto;
+        line-height: 1.5;
+        padding: 20px;
+        background-color: #f6f8fa;
+    }
+    
+    /* Common section styles */
+    .module-section {
+        margin-bottom: 60px;
+        padding: 20px;
+        border: 1px solid #e1e4e8;
+        border-radius: 8px;
+        background-color: #ffffff;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    
+    .module-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #2ea44f;
+        color: #1b1f23;
+    }
+    
+    /* Vigenere specific */
+    .decrypt-title { 
+        border-bottom-color: #0366d6; 
+    }
+    
+    /* Playfair specific */
+    .playfair-title { 
+        border-bottom-color: #f66a0a; 
+    }
+    
+    .playfair-decrypt-title { 
+        border-bottom-color: #6f42c1; 
+    }
+    
+    label { 
+        display: block; 
+        font-size: 12px; 
+        font-weight: bold; 
+        text-transform: uppercase;
+        color: #586069; 
+        margin-bottom: 5px; 
+        margin-top: 15px;
+    }
+    
+    input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #d1d5da;
+        border-radius: 4px;
+        font-family: monospace;
+        box-sizing: border-box;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+    
+    button {
+        cursor: pointer;
+        padding: 10px 20px;
+        border-radius: 4px;
+        border: none;
+        font-weight: bold;
+        color: white;
+        margin-top: 10px;
+        width: 100%;
+        transition: opacity 0.2s;
+    }
+    
+    button:hover {
+        opacity: 0.9;
+    }
+    
+    /* Vigenere buttons */
+    .btn-enc { 
+        background: #2ea44f; 
+    }
+    
+    .btn-dec { 
+        background: #0366d6; 
+    }
+    
+    /* Playfair buttons */
+    .btn-playfair-enc { 
+        background: #f66a0a; 
+    }
+    
+    .btn-playfair-dec { 
+        background: #6f42c1; 
+    }
+    
+    .result-display {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f6f8fa;
+        border-radius: 4px;
+        font-family: monospace;
+        min-height: 24px;
+        word-break: break-all;
+        border: 1px solid #e1e4e8;
+    }
+    
+    /* Playfair matrix styles */
+    .matrix-container {
+        display: grid;
+        grid-template-columns: repeat(5, 40px);
+        gap: 5px;
+        margin: 15px 0;
+        justify-content: center;
+    }
+    
+    .cell {
+        width: 40px;
+        height: 40px;
+        border: 1px solid #e1e4e8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f6f8fa;
+        font-family: monospace;
+        font-weight: bold;
+        border-radius: 3px;
+    }
+    
+    .loading { 
+        animation: pulse 0.8s infinite; 
+        color: #6a737d; 
+    }
+    
+    @keyframes pulse { 
+        0%, 100% { opacity: 1; } 
+        50% { opacity: 0.4; } 
+    }
+    
+    /* Typography */
+    h1, h2, h3 {
+        margin-top: 24px;
+        margin-bottom: 16px;
+    }
+    
+    h2 {
+        border-bottom: 1px solid #eaecef;
+        padding-bottom: 8px;
+    }
+    
+    code {
+        background-color: rgba(27,31,35,0.05);
+        border-radius: 3px;
+        font-family: SFMono-Regular,Consolas,Menlo,monospace;
+        padding: 0.2em 0.4em;
+    }
+    
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 16px 0;
+    }
+    
+    th, td {
+        border: 1px solid #dfe2e5;
+        padding: 8px 12px;
+        text-align: left;
+    }
+    
+    th {
+        background-color: #f6f8fa;
+    }
+</style>
+
+<h2 id="the-vigenère-cipher">The Vigenère cipher:</h2>
+
+<p>The Vigenère cipher is upgraded version of Caesar cipher that uses repeating keyword instead of single fixed keyword.</p>
+
+<h3 id="mathematical-formulation">Mathematical Formulation:</h3>
+
+<p>Let the plaintext (P), ciphertext (C), and key (K) symbols belong to</p>
+
+\[\mathbb{Z}_{26} = \{0,1,2,\ldots,25\}.\]
+
+<p>The key is a vector and is defined as</p>
+
+\[K = (k_1, k_2, k_3, \ldots, k_m),\]
+
+<p>where each $k_i \in \mathbb{Z}_{26}$.</p>
+
+<p>The key is repeated cyclically to match the entire length of the plaintext.</p>
+
+<p>Let the plaintext be</p>
+
+\[P = (x_1, x_2, \ldots, x_n),\]
+
+<p>where each $x_i \in \mathbb{Z}_{26}$.</p>
+
+<hr />
+
+<p>The encryption function is</p>
+
+\[E(x_i) = (x_i + k_i) \bmod 26 = y_i.\]
+
+<hr />
+
+<p>The decryption function is</p>
+
+\[D(y_i) = (y_i - k_i) \bmod 26 = x_i.\]
+
+<hr />
+
+<h3 id="example">Example:</h3>
+
+<p>Let the plaintext be</p>
+
+\[P = \text{APPLE}.\]
+
+<p>So we already know as per fixed alphabet mapping APPLE gets mapped to following:</p>
+
+\[P = (0, 15, 15, 11, 4).\]
+
+<p>Let the key be</p>
+
+\[K = \text{KEY}.\]
+
+<p>Using the same mapping:</p>
+
+\[K \mapsto (10, 4, 24).\]
+
+<p>There are 5 values in plaintext. So we will repeat value on keyvector to make its length 5 by repeating.</p>
+
+\[K = (10, 4, 24, 10, 4).\]
+
+<hr />
+
+<p>Applying the encryption function:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>$x_i$ (Plain)</th>
+      <th>$k_i$ (Key)</th>
+      <th>$x_i + k_i$</th>
+      <th>$\bmod 26$</th>
+      <th>Cipher</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0 (A)</td>
+      <td>10 (K)</td>
+      <td>10</td>
+      <td>10</td>
+      <td>K</td>
+    </tr>
+    <tr>
+      <td>15 (P)</td>
+      <td>4 (E)</td>
+      <td>19</td>
+      <td>19</td>
+      <td>T</td>
+    </tr>
+    <tr>
+      <td>15 (P)</td>
+      <td>24 (Y)</td>
+      <td>39</td>
+      <td>13</td>
+      <td>N</td>
+    </tr>
+    <tr>
+      <td>11 (L)</td>
+      <td>10 (K)</td>
+      <td>21</td>
+      <td>21</td>
+      <td>V</td>
+    </tr>
+    <tr>
+      <td>4 (E)</td>
+      <td>4 (E)</td>
+      <td>8</td>
+      <td>8</td>
+      <td>I</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>So the ciphertext is</p>
+
+\[C = \text{KTNVI}.\]
+
+<hr />
+
+<p>Applying the decryption function:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>$y_i$ (Cipher)</th>
+      <th>$k_i$ (Key)</th>
+      <th>$y_i - k_i$</th>
+      <th>$\bmod 26$</th>
+      <th>Plain</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>10 (K)</td>
+      <td>10 (K)</td>
+      <td>0</td>
+      <td>0</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>19 (T)</td>
+      <td>4 (E)</td>
+      <td>15</td>
+      <td>15</td>
+      <td>P</td>
+    </tr>
+    <tr>
+      <td>13 (N)</td>
+      <td>24 (Y)</td>
+      <td>-11</td>
+      <td>15</td>
+      <td>P</td>
+    </tr>
+    <tr>
+      <td>21 (V)</td>
+      <td>10 (K)</td>
+      <td>11</td>
+      <td>11</td>
+      <td>L</td>
+    </tr>
+    <tr>
+      <td>8 (I)</td>
+      <td>4 (E)</td>
+      <td>4</td>
+      <td>4</td>
+      <td>E</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Thus, the original plaintext is recovered:</p>
+
+\[P = \text{APPLE}.\]
+
+<h3 id="interactive-vigenère-cipher">Interactive Vigenère cipher:</h3>
+<p>Try out Vigenère cipher for encryption and decryption:</p>
+
+<div class="module-section">
+    <h2 class="module-title">1. Plaintext to Ciphertext</h2>
+    <label>Encryption Key</label>
+    <input type="text" id="enc_key" placeholder="Key..." />
+    <label>Plaintext Message</label>
+    <input type="text" id="enc_input" placeholder="Message..." />
+    <button class="btn-enc" onclick="processVigenere('enc')">Execute Encryption</button>
+    <div class="result-display" id="enc_res">Waiting for data...</div>
+</div>
+
+<div class="module-section">
+    <h2 class="module-title decrypt-title">2. Ciphertext to Plaintext</h2>
+    <label>Decryption Key</label>
+    <input type="text" id="dec_key" placeholder="Key..." />
+    <label>Encrypted Ciphertext</label>
+    <input type="text" id="dec_input" placeholder="Ciphertext..." />
+    <button class="btn-dec" onclick="processVigenere('dec')">Execute Decryption</button>
+    <div class="result-display" id="dec_res">Waiting for data...</div>
+</div>
+
+<script>
+    function vigenereLogic(text, key, isEncrypt) {
+        if (!key || !text) return "ERROR: MISSING INPUT";
+        
+        let output = "";
+        let keyIndex = 0;
+        const cleanKey = key.toUpperCase().replace(/[^A-Z]/g, "");
+
+        for (let i = 0; i < text.length; i++) {
+            let char = text[i];
+            
+            if (char.match(/[a-z]/i)) {
+                const isUpper = char === char.toUpperCase();
+                const code = char.toUpperCase().charCodeAt(0) - 65;
+                const k = cleanKey.charCodeAt(keyIndex % cleanKey.length) - 65;
+                
+                let shift = isEncrypt ? (code + k) % 26 : (code - k + 26) % 26;
+                
+                let resultChar = String.fromCharCode(shift + 65);
+                output += isUpper ? resultChar : resultChar.toLowerCase();
+                
+                keyIndex++;
+            } else {
+                output += char;
+            }
+        }
+        return output;
+    }
+
+    function processVigenere(mode) {
+        const key = document.getElementById(mode + '_key').value;
+        const input = document.getElementById(mode + '_input').value;
+        const display = document.getElementById(mode + '_res');
+
+        display.innerHTML = "<span class='loading'>Processing case-sensitive shift...</span>";
+
+        setTimeout(() => {
+            display.innerText = vigenereLogic(input, key, mode === 'enc');
+        }, 600);
+    }
+</script>
+
+<hr />
+
+<h2 id="playfair-cipher">Playfair Cipher</h2>
+
+<p>The Playfair cipher is quite different from the ciphers we have seen so far.<br />
+Instead of encrypting single letters, it encrypts <strong>pairs of letters (digraphs)</strong>.<br />
+It uses a <strong>5 × 5 matrix</strong> of letters as the main structure for both encryption and decryption.</p>
+
+<hr />
+
+<h3 id="how-to-generate-the-5--5-matrix">How to Generate the 5 × 5 Matrix</h3>
+
+<ol>
+  <li>
+    <p>Choose a <strong>keyword</strong> and remove all repeated letters from it.</p>
+  </li>
+  <li>
+    <p>Fill the matrix <strong>row-wise</strong> using the letters of the keyword first.</p>
+  </li>
+  <li>
+    <p>After the keyword is filled, insert the remaining letters of the alphabet
+(in alphabetical order) that do <strong>not</strong> already appear in the key.</p>
+  </li>
+  <li>
+    <p>Since the English alphabet has 26 letters and the grid has only 25 cells,<br />
+the letters <strong>I and J are treated as the same letter</strong> and share one cell.</p>
+
+    <p><br /></p>
+
+    <p><strong>NOTE: You can use interactive demonstration below to generate the 5*5 matrix and practice to learn how it is done.</strong></p>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="preparing-the-plaintext">Preparing the Plaintext</h3>
+
+<p>Before encryption, the message must be prepared:</p>
+
+<ol>
+  <li>
+    <p>Split the plaintext into <strong>pairs of letters</strong>.</p>
+  </li>
+  <li>
+    <p>If a pair contains the <strong>same letter twice</strong>, insert <strong>X</strong> between them<br />
+and then continue pairing.</p>
+
+    <p>Example:<br />
+BALLOON → BA LX LO ON</p>
+  </li>
+  <li>
+    <p>If the final pair contains only <strong>one letter</strong>, append <strong>X</strong> to complete it.</p>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="rules-for-encryption">Rules for Encryption</h3>
+
+<p>Let the two letters of a pair be located in the matrix.</p>
+
+<ol>
+  <li>
+    <p><strong>Same Row</strong><br />
+Replace each letter with the letter <strong>to its right</strong><br />
+(wrap around to the beginning if needed).</p>
+  </li>
+  <li>
+    <p><strong>Same Column</strong><br />
+Replace each letter with the letter <strong>below it</strong><br />
+(wrap around to the top if needed).</p>
+  </li>
+  <li>
+    <p><strong>Different Row and Column (Rectangle Rule)</strong><br />
+Replace each letter with the letter in the <strong>same row</strong><br />
+but in the <strong>column of the other letter</strong>.</p>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="rules-for-decryption">Rules for Decryption</h3>
+
+<p>The rules are the reverse of encryption:</p>
+
+<ol>
+  <li>
+    <p><strong>Same Row</strong><br />
+Replace each letter with the letter <strong>to its left</strong>.</p>
+  </li>
+  <li>
+    <p><strong>Same Column</strong><br />
+Replace each letter with the letter <strong>above it</strong>.</p>
+  </li>
+  <li>
+    <p><strong>Rectangle Rule</strong><br />
+Use the same rectangle method as encryption<br />
+(rows stay the same, columns are swapped).</p>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="example-1">Example:</h3>
+
+<p>Let the keyword be:
+<strong>APPLE</strong></p>
+
+<p>and the plaintext be : 
+<strong>I AM LEARNING CRYPTOGRAPHY.</strong></p>
+
+<p>First remove repeated letters in keyspace and then construction 5 * 5 matrix :</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>A</th>
+      <th>P</th>
+      <th>L</th>
+      <th>E</th>
+      <th>B</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>C</td>
+      <td>D</td>
+      <td>F</td>
+      <td>G</td>
+      <td>H</td>
+    </tr>
+    <tr>
+      <td>I/J</td>
+      <td>K</td>
+      <td>M</td>
+      <td>N</td>
+      <td>O</td>
+    </tr>
+    <tr>
+      <td>Q</td>
+      <td>R</td>
+      <td>S</td>
+      <td>T</td>
+      <td>U</td>
+    </tr>
+    <tr>
+      <td>V</td>
+      <td>W</td>
+      <td>X</td>
+      <td>Y</td>
+      <td>Z</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h4 id="preparing-plaintext-">Preparing Plaintext :</h4>
+
+<p>Remove spaces from plaintext and convert to digraphs according to the rules from <strong>Preparing the Message</strong> . The plaintext becomes:</p>
+
+<p><br /></p>
+
+<p><strong>IA ML EA RN IN GC RY PT OG RA PH YX</strong></p>
+
+<p><br /></p>
+
+<hr />
+
+<h4 id="encrypt-each-pair">Encrypt Each Pair</h4>
+
+<p>Apply the rule of encryption:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Pair</th>
+      <th>Rule</th>
+      <th>Cipher</th>
+      <th>Logic</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>IA</td>
+      <td>Same Column</td>
+      <td>QC</td>
+      <td>I is below A. I moves down to Q, A moves down to C.</td>
+    </tr>
+    <tr>
+      <td>ML</td>
+      <td>Same Column</td>
+      <td>SF</td>
+      <td>M is below L. M moves down to S, L moves down to F.</td>
+    </tr>
+    <tr>
+      <td>EA</td>
+      <td>Same Row</td>
+      <td>BP</td>
+      <td>E moves right to B, A moves right to P.</td>
+    </tr>
+    <tr>
+      <td>RN</td>
+      <td>Rectangle</td>
+      <td>TK</td>
+      <td>R(4,2) and N(3,4). Corners: T and K.</td>
+    </tr>
+    <tr>
+      <td>IN</td>
+      <td>Same Row</td>
+      <td>KO</td>
+      <td>I moves right to K, N moves right to O.</td>
+    </tr>
+    <tr>
+      <td>GC</td>
+      <td>Same Row</td>
+      <td>HD</td>
+      <td>G moves right to H, C moves right to D.</td>
+    </tr>
+    <tr>
+      <td>RY</td>
+      <td>Rectangle</td>
+      <td>TW</td>
+      <td>R(4,2) and Y(5,4). Corners: T and W.</td>
+    </tr>
+    <tr>
+      <td>PT</td>
+      <td>Rectangle</td>
+      <td>ER</td>
+      <td>P(1,2) and T(4,4). Corners: E and R.</td>
+    </tr>
+    <tr>
+      <td>OG</td>
+      <td>Rectangle</td>
+      <td>NH</td>
+      <td>O(3,5) and G(2,4). Corners: N and H.</td>
+    </tr>
+    <tr>
+      <td>RA</td>
+      <td>Rectangle</td>
+      <td>QP</td>
+      <td>R(4,2) and A(1,1). Corners: Q and P.</td>
+    </tr>
+    <tr>
+      <td>PH</td>
+      <td>Rectangle</td>
+      <td>BD</td>
+      <td>P(1,2) and H(2,5). Corners: B and D.</td>
+    </tr>
+    <tr>
+      <td>YX</td>
+      <td>Same Row</td>
+      <td>ZY</td>
+      <td>Y moves right to Z, X moves right to Y.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>so finally the obtained ciphertext is <strong>QCSFBPTKKOHDTWERNHQPBDZY</strong></p>
+
+<p><br /></p>
+
+<hr />
+
+<p><strong>TRY OUT THE DECRYPTION!!</strong></p>
+
+<hr />
+
+<h3 id="interactive-playfair-cipher">Interactive Playfair cipher:</h3>
+
+<p>Try out interactive Playfair cipher for encryption and decryption:</p>
+
+<div class="module-section">
+    <h2 class="module-title playfair-title">1. Playfair Encryption</h2>
+    <label>Keyword (Matrix Generation)</label>
+    <input type="text" id="playfair_enc_key" placeholder="Enter key..." oninput="updatePlayfairMatrix('enc')" />
+    
+    <div class="matrix-container" id="playfair_enc_matrix"></div>
+
+    <label>Plaintext Message</label>
+    <input type="text" id="playfair_enc_input" placeholder="Enter message..." />
+    
+    <button class="btn-playfair-enc" onclick="processPlayfair('enc')">Execute Playfair Encryption ➔</button>
+    <div class="result-display" id="playfair_enc_res">Waiting for data...</div>
+</div>
+
+<div class="module-section">
+    <h2 class="module-title playfair-decrypt-title">2. Playfair Decryption</h2>
+    <label>Keyword</label>
+    <input type="text" id="playfair_dec_key" placeholder="Enter key..." oninput="updatePlayfairMatrix('dec')" />
+    
+    <div class="matrix-container" id="playfair_dec_matrix"></div>
+
+    <label>Ciphertext</label>
+    <input type="text" id="playfair_dec_input" placeholder="Enter ciphertext..." />
+    
+    <button class="btn-playfair-dec" onclick="processPlayfair('dec')">Execute Playfair Decryption ➔</button>
+    <div class="result-display" id="playfair_dec_res">Waiting for data...</div>
+</div>
+
+<script>
+    function getPlayfairMatrix(key) {
+        key = key.toUpperCase().replace(/J/g, "I").replace(/[^A-Z]/g, "");
+        let alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+        let full = [...new Set((key + alphabet).split(""))].slice(0, 25);
+        return full;
+    }
+
+    function updatePlayfairMatrix(mode) {
+        const key = document.getElementById(`playfair_${mode}_key`).value;
+        const matrix = getPlayfairMatrix(key);
+        const container = document.getElementById(`playfair_${mode}_matrix`);
+        container.innerHTML = matrix.map(char => `<div class="cell">${char}</div>`).join('');
+    }
+
+    function playfairLogic(text, key, isEncrypt) {
+        const m = getPlayfairMatrix(key);
+        let cleanText = text.toUpperCase().replace(/J/g, "I").replace(/[^A-Z]/g, "");
+
+        let prepared = cleanText;
+        if (isEncrypt) {
+            prepared = "";
+            for (let i = 0; i < cleanText.length; i += 2) {
+                let a = cleanText[i];
+                let b = cleanText[i + 1];
+                if (!b) {
+                    prepared += a + "X";
+                } else if (a === b) {
+                    prepared += a + "X";
+                    i--;
+                } else {
+                    prepared += a + b;
+                }
+            }
+        }
+
+        let out = "";
+        const move = isEncrypt ? 1 : -1;
+
+        for (let i = 0; i < prepared.length; i += 2) {
+            let a = prepared[i], b = prepared[i + 1];
+            let i1 = m.indexOf(a), i2 = m.indexOf(b);
+            let r1 = Math.floor(i1/5), c1 = i1%5;
+            let r2 = Math.floor(i2/5), c2 = i2%5;
+
+            if (r1 === r2) {
+                out += m[r1 * 5 + (c1 + move + 5) % 5] + m[r2 * 5 + (c2 + move + 5) % 5];
+            } else if (c1 === c2) {
+                out += m[((r1 + move + 5) % 5) * 5 + c1] + m[((r2 + move + 5) % 5) * 5 + c2];
+            } else {
+                out += m[r1 * 5 + c2] + m[r2 * 5 + c1];
+            }
+        }
+
+        if (!isEncrypt) {
+            let healed = "";
+            for (let i = 0; i < out.length; i++) {
+                let current = out[i];
+                let prev = out[i-1];
+                let next = out[i+1];
+                
+                if (current === "X") {
+                    if (prev && next && prev === next) continue;
+                    if (i === out.length - 1) continue;
+                }
+                healed += current;
+            }
+            return healed;
+        }
+
+        return out;
+    }
+
+    function processPlayfair(mode) {
+        const key = document.getElementById(`playfair_${mode}_key`).value;
+        const input = document.getElementById(`playfair_${mode}_input`).value;
+        const display = document.getElementById(`playfair_${mode}_res`);
+
+        display.innerHTML = "<span class='loading'>Processing...</span>";
+
+        setTimeout(() => {
+            display.innerText = playfairLogic(input, key, mode === 'enc');
+        }, 400);
+    }
+
+    // Initialize matrices
+    updatePlayfairMatrix('enc');
+    updatePlayfairMatrix('dec');
+</script>
+
+<hr />
+
+<h2 id="conclusion">Conclusion:</h2>
+
+<p>In this part, we explored some advanced classical ciphers, however, they remain vulnerable to cryptanalysis. In the upcoming article, we will look at more classical cipher and eventually identify vulnerability in classical cipher.</p>
+
+<p><br /></p>
+
+<hr />
+
+<p><em>End of article.</em></p>]]></content><author><name></name></author><category term="updates" /><summary type="html"><![CDATA[This article will introduce readers with some more classical cipher. This article will introduce polyalphabetic cipher where cryptographic algorithm uses a vector key.]]></summary></entry><entry><title type="html">Classical Cipher Part-I</title><link href="http://localhost:4000/cyber_article/updates/2026/02/01/Classical-Cipher-Part-1/" rel="alternate" type="text/html" title="Classical Cipher Part-I" /><published>2026-02-01T00:00:00+05:45</published><updated>2026-02-01T00:00:00+05:45</updated><id>http://localhost:4000/cyber_article/updates/2026/02/01/Classical-Cipher-Part-1</id><content type="html" xml:base="http://localhost:4000/cyber_article/updates/2026/02/01/Classical-Cipher-Part-1/"><![CDATA[<p>This article will introduce readers with basic mathematical notation used in cryptography, the idea behind cryptography and some of the classical cryptographic algorithm.</p>
+
+<style>
+.cipher-container {
+    font-family: sans-serif;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    background: #fff;
+    margin: 20px 0;
+}
+
+.cipher-input {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box; 
+}
+
+.cipher-key {
+    width: 80px;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.cipher-output-box {
+    font-family: monospace;
+    font-size: 1.5rem;
+    color: #2e7d32; 
+    background: #f1f8e9;
+    padding: 12px;
+    border-radius: 4px;
+    min-height: 1.5rem;
+    border: 1px dashed #81c784;
+    word-wrap: break-word;
+}
+
+.cipher-visual {
+    font-size: 0.85rem;
+    color: #777;
+    font-style: italic;
+}
+
+/* Table styling */
+.math-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-family: sans-serif;
+    border: 1px solid #ddd;
+}
+
+.math-table th {
+    background-color: #f2f2f2;
+    padding: 12px 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-weight: bold;
+}
+
+.math-table td {
+    padding: 10px 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.math-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+</style>
+
+<hr />
+
+<h2 id="basic-cryptography-theory">Basic Cryptography Theory</h2>
+
+<p>The fundamental idea behind cryptography is very simple:</p>
+
+<ol>
+  <li>In communication, only authorized individuals should be able to read messages.</li>
+  <li>Anyone who intercepts the message should see a meaningless message.</li>
+</ol>
+
+<h3 id="thinking-transformation-as-a-function">Thinking Transformation As A Function:</h3>
+<p>Cryptography uses the concepts of <strong>plaintext</strong> and <strong>ciphertext</strong> to encode messages.<br />
+Cryptography deals with transformation of  normal messages (plaintext) into unreadable form (ciphertext).</p>
+
+<p>The transformation can be thought of as a function:</p>
+
+\[y = f(x)\]
+
+<p>where:</p>
+
+<ul>
+  <li>$x$ is the original message (plaintext)</li>
+  <li>$y = f(x)$ is the encrypted message (ciphertext)</li>
+</ul>
+
+<h3 id="special-property-of-this-function">Special Property Of This Function:</h3>
+
+<ul>
+  <li>Computing $f(x)$ from $x$ is <strong>relatively easy problem</strong></li>
+  <li>Recovering $x$ from $f(x)$ is <strong>computationally hard problem</strong>, unless one has a secret value <strong>key</strong></li>
+</ul>
+
+<h3 id="example">Example</h3>
+
+<p>A simple example of such function comes from number theory.</p>
+
+<p>Let \(p\) and \(q\) be two large prime numbers, and define:</p>
+
+\[N = p \times q\]
+
+<p>Computing \(N\) from \(p\) and \(q\) is extremely easy, even for very large numbers.</p>
+
+<p>However, given only \(N\), finding the original primes \(p\) and \(q\) is a <strong>computationally hard problem</strong>.</p>
+
+<h2 id="mathematical-notations">Mathematical Notations</h2>
+
+<p>Let \(\mathbb{Z}_{26}\) denote the set of integers modulo 26:</p>
+
+\[\mathbb{Z}_{26} = \mathbb{Z} / 26\mathbb{Z} = \{0, 1, 2, \ldots, 25\}\]
+
+<p>We associate each letter in english alphabet with an element of \(\mathbb{Z}_{26}\). This is done by mapping.</p>
+
+\[A \mapsto 0,\; B \mapsto 1,\; C \mapsto 2,\; \ldots,\; Z \mapsto 25\]
+
+<p>This allows us to represent the letter as numbers and hence apply the idea of modular arithemetic for encrypting and decrypting messages.</p>
+
+<p><br /></p>
+
+<p><strong>Note:</strong></p>
+
+<hr />
+
+<p>From this point onward we will assume every plaintext or ciphertext is first converted to its numerical representation in \(\mathbb{Z}_{26}\) using above mapping and inverse mapping is applied to convert numbers to letters.</p>
+
+<hr />
+
+<p><br />
+Let \(\mathcal{P}\) denote the space of all possible <strong>plaintext messages</strong>.</p>
+
+<p>Let \(\mathcal{C}\) denote the space of all possible <strong>ciphertext messages</strong>.</p>
+
+<p>Let \(\mathcal{K}\) denote the key space, that is, the set of all possible <strong>keys</strong>.</p>
+
+<p><br /></p>
+
+<p>An encryption algorithm is a function</p>
+
+\[E : \mathcal{P} \times \mathcal{K} \rightarrow \mathcal{C}\]
+
+<p>and a decryption algorithm is a function</p>
+
+\[D : \mathcal{C} \times \mathcal{K} \rightarrow \mathcal{P}\]
+
+<p>For every key \(k \in \mathcal{K}\) and every message \(m \in \mathcal{P}\),</p>
+
+\[D(E(m, k), k) = m\]
+
+<h2 id="some-classical-cryptograpy-algorithm">Some Classical Cryptograpy Algorithm</h2>
+
+<h2 id="1-the-caeser-cipher">1. The Caeser Cipher</h2>
+
+<p>In this cryptography technique a plaintext is converted to ciphertext by shifting fixed number of places down or up the alphabet.</p>
+
+<h3 id="mathematical-formulation">Mathematical Formulation</h3>
+
+<p>Let \(\mathcal{P}\), \(\mathcal{C}\), and \(\mathcal{K}\) belong to</p>
+
+\[\mathbb{Z}_{26} = \{0,1,2,\ldots,25\}\]
+
+<p>Then the encryption function for caeser cipher is defined by:</p>
+
+\[E_k(x) = (x + k) \bmod 26 = y\]
+
+<p>The decryption function undoes the encryption and is defined by:</p>
+
+\[D_k(y) = (y - k) \bmod 26\]
+
+<h3 id="example-1">Example</h3>
+
+<p>Let us see how a message is encrypted using caser cipher. Let the message (plaintext) be “APPLE”.</p>
+
+\[P = \text{APPLE}\]
+
+<p>We map each message letter \(m_i \in P\) to its corresponding number in \(\mathbb{Z}_{26}\) using the fixed alphabet mapping.</p>
+
+\[A \mapsto 0,\; P \mapsto 15,\; L \mapsto 11,\; E \mapsto 4\]
+
+<p>So,</p>
+
+\[P = (0, 15, 15, 11, 4)\]
+
+<p>lets take keyvalue \(k = 3\).</p>
+
+<p>Apply the encryption rule \(E_k(x) = (x + k) \bmod 26\) for the plaintext “APPLE” with \(k=3\):</p>
+
+<table class="math-table">
+<thead>
+<tr>
+<th>Plaintext $$P$$</th>
+<th>Numeric $$x$$</th>
+<th>$$E_k(x) = (x + k) \bmod 26 = y$$</th>
+<th>Ciphertext $$C$$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>0</td>
+<td>(0 + 3) mod 26 = 3</td>
+<td>D</td>
+</tr>
+<tr>
+<td>P</td>
+<td>15</td>
+<td>(15 + 3) mod 26 = 18</td>
+<td>S</td>
+</tr>
+<tr>
+<td>P</td>
+<td>15</td>
+<td>(15 + 3) mod 26 = 18</td>
+<td>S</td>
+</tr>
+<tr>
+<td>L</td>
+<td>11</td>
+<td>(11 + 3) mod 26 = 14</td>
+<td>O</td>
+</tr>
+<tr>
+<td>E</td>
+<td>4</td>
+<td>(4 + 3) mod 26 = 7</td>
+<td>H</td>
+</tr>
+</tbody>
+</table>
+
+<p>So the ciphertext is:</p>
+
+\[\text{DSSOH}\]
+
+<p>Now inversely, you can take the cipher text DSSOH to plain text with mapping followed by decryption function. 
+Now, to decrypt the ciphertext “DSSOH” using \(D_k(y) = (y - k) \bmod 26\) with \(k=3\):</p>
+
+<table class="math-table">
+<thead>
+<tr>
+<th>Ciphertext $$C$$</th>
+<th>Numeric $$y$$</th>
+<th>$$D_k(y) = (y - k) \bmod 26 = x$$</th>
+<th>Plaintext $$P$$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D</td>
+<td>3</td>
+<td>(3 - 3) mod 26 = 0</td>
+<td>A</td>
+</tr>
+<tr>
+<td>S</td>
+<td>18</td>
+<td>(18 - 3) mod 26 = 15</td>
+<td>P</td>
+</tr>
+<tr>
+<td>S</td>
+<td>18</td>
+<td>(18 - 3) mod 26 = 15</td>
+<td>P</td>
+</tr>
+<tr>
+<td>O</td>
+<td>14</td>
+<td>(14 - 3) mod 26 = 11</td>
+<td>L</td>
+</tr>
+<tr>
+<td>H</td>
+<td>7</td>
+<td>(7 - 3) mod 26 = 4</td>
+<td>E</td>
+</tr>
+</tbody>
+</table>
+
+<p>So the decrypted plaintext is:</p>
+
+\[\text{APPLE}\]
+
+<p>Try to encrypt message with other key!!</p>
+
+<p><br /></p>
+
+<hr />
+
+<h3 id="interactive-caeser-cipher">Interactive Caeser Cipher</h3>
+
+<div class="cipher-container">
+    <h3 style="margin-top: 0;">Caesar Encryptor</h3>
+    
+    <label>Plaintext:</label><br />
+    <input type="text" id="encryptInput" placeholder="Enter plaintext (e.g. APPLE)..." class="cipher-input" /><br />
+    
+    <label>Key (1-25):</label><br />
+    <input type="number" id="encryptKey" value="3" min="1" max="25" class="cipher-key" /><br />
+    
+    <hr style="border: 0; border-top: 1px solid #eee;" />
+    
+    <div style="margin-top: 10px;">
+        <strong>Ciphertext:</strong>
+        <p id="encryptResult" class="cipher-output-box" style="color: #d32f2f; background: #ffebee; border-color: #ef9a9a;">---</p>
+    </div>
+
+    <div id="encryptVisual" class="cipher-visual">
+        Current mapping: A → D
+    </div>
+</div>
+
+<script>
+  (function() {
+    const input = document.getElementById('encryptInput');
+    const keyField = document.getElementById('encryptKey');
+    const output = document.getElementById('encryptResult');
+    const visual = document.getElementById('encryptVisual');
+
+    const encrypt = () => {
+      const text = input.value;
+      const kRaw = keyField.value;
+      let k = parseInt(kRaw);
+
+      // Validation for keyspace 1-25
+      if (kRaw === "" || isNaN(k) || k < 1 || k > 25) {
+        output.innerText = "Please enter a value in keyspace from 1-25";
+        output.style.fontSize = "0.9rem";
+        output.style.color = "#888";
+        visual.innerText = "Invalid Key";
+        return;
+      }
+
+      // Reset styles for valid output
+      output.style.fontSize = "1.5rem";
+      output.style.color = "#d32f2f";
+
+      const result = text.split('').map(char => {
+        const code = char.charCodeAt(0);
+        
+        // Handle Uppercase
+        if (code >= 65 && code <= 90) {
+          return String.fromCharCode(((code - 65 + k) % 26) + 65);
+        }
+        // Handle Lowercase
+        if (code >= 97 && code <= 122) {
+          return String.fromCharCode(((code - 97 + k) % 26) + 97);
+        }
+        return char;
+      }).join('');
+      
+      output.innerText = result || "---";
+      
+      const shiftedA = String.fromCharCode(((0 + k) % 26) + 65);
+      visual.innerText = `Current mapping: A → ${shiftedA}`;
+    };
+
+    // Added a 'change' listener to snap manual typing back to 1-25 range
+    keyField.addEventListener('change', function() {
+        if (this.value > 25) this.value = 25;
+        if (this.value < 1 && this.value !== "") this.value = 1;
+        encrypt();
+    });
+
+    input.addEventListener('input', encrypt);
+    keyField.addEventListener('input', encrypt);
+  })();
+</script>
+
+<div class="cipher-container" style="max-width: 500px;">
+    <h3 style="margin-top: 0;">Caesar Decryptor</h3>
+    
+    <label>Ciphertext:</label><br />
+    <input type="text" id="decryptInput" placeholder="Enter ciphertext (e.g. DSSOH)..." class="cipher-input" /><br />
+    
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <div>
+            <label>Key (1-25):</label><br />
+            <input type="number" id="decryptKey" value="3" min="1" max="25" class="cipher-key" />
+        </div>
+        <div style="margin-top: 20px;">
+            <button id="bruteForceBtn" style="padding: 8px 15px; cursor: pointer; background: #2e7d32; color: white; border: none; border-radius: 4px;">Brute Force All Keys</button>
+        </div>
+    </div>
+    
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+    
+    <strong>Plaintext (Selected Key):</strong>
+    <p id="decryptResult" class="cipher-output-box">---</p>
+
+    <div id="bruteForceArea" style="display: none; margin-top: 15px;">
+        <strong>Brute Force Results:</strong>
+        <div id="bruteForceList" style="font-family: monospace; font-size: 0.85rem; background: #fdfdfd; border: 1px solid #eee; padding: 10px; height: 150px; overflow-y: scroll; margin-top: 5px;">
+        </div>
+    </div>
+</div>
+
+<script>
+  (function() {
+    const input = document.getElementById('decryptInput');
+    const keyField = document.getElementById('decryptKey');
+    const output = document.getElementById('decryptResult');
+    const btn = document.getElementById('bruteForceBtn');
+    const bfArea = document.getElementById('bruteForceArea');
+    const bfList = document.getElementById('bruteForceList');
+
+    const decryptText = (text, k) => {
+        return text.split('').map(char => {
+            const code = char.charCodeAt(0);
+            if (code >= 65 && code <= 90) return String.fromCharCode(((code - 65 - k + 26) % 26) + 65);
+            if (code >= 97 && code <= 122) return String.fromCharCode(((code - 97 - k + 26) % 26) + 97);
+            return char;
+        }).join('');
+    };
+
+    const updateSingle = () => {
+        const kRaw = keyField.value;
+        const k = parseInt(kRaw);
+        if (kRaw === "" || isNaN(k) || k < 1 || k > 25) {
+            output.innerText = "Please enter a value in keyspace from 1-25";
+            output.style.fontSize = "0.9rem";
+            output.style.color = "#888";
+            return;
+        }
+        output.style.fontSize = "1.5rem";
+        output.style.color = "#2e7d32";
+        output.innerText = decryptText(input.value, k) || "---";
+    };
+
+    // Snap manual typing back to 1-25 range
+    keyField.addEventListener('change', function() {
+        if (this.value > 25) this.value = 25;
+        if (this.value < 1 && this.value !== "") this.value = 1;
+        updateSingle();
+    });
+
+    btn.addEventListener('click', () => {
+        const text = input.value;
+        if (!text) return;
+        
+        bfArea.style.display = "block";
+        bfList.innerHTML = ""; 
+        
+        for (let k = 1; k <= 25; k++) {
+            const decoded = decryptText(text, k);
+            const row = document.createElement('div');
+            row.style.padding = "2px 0";
+            row.innerHTML = `<span style="color: #888;">Key ${k.toString().padStart(2, '0')}:</span> <strong>${decoded}</strong>`;
+            bfList.appendChild(row);
+        }
+    });
+
+    input.addEventListener('input', updateSingle);
+    keyField.addEventListener('input', updateSingle);
+  })();
+</script>
+
+<hr />
+
+<h3 id="security-analysis">Security Analysis</h3>
+
+<p>since there are only 25 possible key. An attacker can easily brute force every key until he gets meaningful word. As you saw, it can be done typically in seconds.</p>
+
+<p><br /><br /></p>
+
+<h2 id="2-affine-cipher">2. Affine Cipher</h2>
+
+<p>The affine cipher is an extension of the Caesar cipher that uses <strong>two keys</strong>:
+a multiplicative key \(a\) and an additive key \(b\).</p>
+
+<h3 id="mathematical-formulation-1">Mathematical Formulation</h3>
+
+<p>Let the plaintext, ciphertext, and key space be defined over</p>
+
+\[\mathbb{Z}_{26} = \{0,1,2,\ldots,25\}\]
+
+<p>Then the encryption function for the affine cipher is defined as</p>
+
+\[E(x) = (a x + b) \bmod 26 = y\]
+
+<p>The decryption function is defined as</p>
+
+\[D(y) = a^{-1}(y - b) \bmod 26\]
+
+<p>where \(a^{-1}\) is the <strong>multiplicative inverse of \(a\) modulo 26)</strong>,<br />
+that is,</p>
+
+\[a \cdot a^{-1} \equiv 1 \pmod{26}\]
+
+<h3 id="example-2">Example</h3>
+
+<p>Assuming plaintext message to be <strong>APPlE</strong>. first we apply fixed alphabet mapping to get numeric values:</p>
+
+\[P = (0, 15, 15, 11, 4)\]
+
+<p>for this example lets choose:</p>
+
+\[a = 5, \quad b = 8\]
+
+<hr />
+
+<p><strong>Note:</strong> a should be coprime to 26. The coprime numbers to 26 are {1,3,5,7,9,11,15,17,19,21,23,25} which are possible value of a.</p>
+
+<hr />
+
+<p>so the encryption function becomes:</p>
+
+\[E(x) = (5 x + 8) \bmod 26 = y\]
+
+<table class="math-table">
+<thead>
+<tr>
+<th>$$x$$</th>
+<th>$$5x+8$$</th>
+<th>mod 26</th>
+<th>Cipher</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>8</td>
+<td>8</td>
+<td>I</td>
+</tr>
+<tr>
+<td>15</td>
+<td>83</td>
+<td>5</td>
+<td>F</td>
+</tr>
+<tr>
+<td>15</td>
+<td>83</td>
+<td>5</td>
+<td>F</td>
+</tr>
+<tr>
+<td>11</td>
+<td>63</td>
+<td>11</td>
+<td>L</td>
+</tr>
+<tr>
+<td>4</td>
+<td>28</td>
+<td>2</td>
+<td>C</td>
+</tr>
+</tbody>
+</table>
+
+<p>so the ciphertext is “IFFLC”.
+Now lets see how decryption works to get back “APPLE”.</p>
+
+<p>The inverse of 5 modulo 26 is:</p>
+
+\[5^{-1} \equiv 21 \pmod{26}\]
+
+<p>if you are confused on modular inverse, you can read my article on <a href="https://anurag987655.github.io/cyber_article/updates/2026/01/21/An-introduction-to-number-theory-for-cryptography/">An introduction to number theory for cryptography.</a></p>
+
+<p>so The decryption function is:</p>
+
+\[D(y) = 21(y - 8) \bmod 26\]
+
+<table class="math-table">
+<thead>
+<tr>
+<th>Cipher $$y$$</th>
+<th>$$y-8$$</th>
+<th>$$21(y-8)$$</th>
+<th>mod 26</th>
+<th>Plain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>I (8)</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>A</td>
+</tr>
+<tr>
+<td>F (5)</td>
+<td>-3</td>
+<td>-63</td>
+<td>15</td>
+<td>P</td>
+</tr>
+<tr>
+<td>F (5)</td>
+<td>-3</td>
+<td>-63</td>
+<td>15</td>
+<td>P</td>
+</tr>
+<tr>
+<td>L (11)</td>
+<td>3</td>
+<td>63</td>
+<td>11</td>
+<td>L</td>
+</tr>
+<tr>
+<td>C (2)</td>
+<td>-6</td>
+<td>-126</td>
+<td>4</td>
+<td>E</td>
+</tr>
+</tbody>
+</table>
+
+<p>In this plaintext “APPLE” was decrypted from cipihertext “IFFLC”.</p>
+
+<p><br /></p>
+
+<hr />
+
+<h3 id="interactive-affine-cipher">Interactive Affine Cipher</h3>
+
+<div class="cipher-container">
+    <h3 style="margin-top: 0;">Affine Encryptor</h3>
+    
+    <label>Plaintext:</label><br />
+    <input type="text" id="affineEncInput" placeholder="Enter plaintext..." class="cipher-input" /><br />
+    
+    <div style="display: flex; gap: 10px;">
+        <div>
+            <label>Key a (Coprime):</label><br />
+            <select id="affineKeyA" class="cipher-key" style="width: 100px;">
+                <option value="1">1</option><option value="3">3</option>
+                <option value="5" selected="">5</option><option value="7">7</option>
+                <option value="9">9</option><option value="11">11</option>
+                <option value="15">15</option><option value="17">17</option>
+                <option value="19">19</option><option value="21">21</option>
+                <option value="23">23</option><option value="25">25</option>
+            </select>
+        </div>
+        <div>
+            <label>Key b (0-25):</label><br />
+            <input type="number" id="affineKeyB" value="8" min="0" max="25" class="cipher-key" style="width: 100px;" />
+        </div>
+    </div>
+    
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;" />
+    
+    <strong>Ciphertext:</strong>
+    <p id="affineEncResult" class="cipher-output-box" style="color: #d32f2f; background: #ffebee; border-color: #ef9a9a;">---</p>
+</div>
+
+<script>
+(function() {
+    const input = document.getElementById('affineEncInput');
+    const keyA = document.getElementById('affineKeyA');
+    const keyB = document.getElementById('affineKeyB');
+    const output = document.getElementById('affineEncResult');
+
+    const process = () => {
+        let a = parseInt(keyA.value);
+        let b = parseInt(keyB.value);
+        const text = input.value;
+
+        // Force b into 0-25 range if typed manually
+        if (b < 0) b = 0; if (b > 25) b = 25;
+
+        const result = text.split('').map(char => {
+            const code = char.charCodeAt(0);
+            if (code >= 65 && code <= 90) return String.fromCharCode(((a * (code - 65) + b) % 26 + 26) % 26 + 65);
+            if (code >= 97 && code <= 122) return String.fromCharCode(((a * (code - 97) + b) % 26 + 26) % 26 + 97);
+            return char;
+        }).join('');
+        output.innerText = result || "---";
+    };
+
+    [input, keyA, keyB].forEach(el => el.addEventListener('input', process));
+})();
+</script>
+
+<div class="cipher-container" style="max-width: 500px;">
+    <h3 style="margin-top: 0;">Affine Decryptor</h3>
+    
+    <label>Ciphertext:</label><br />
+    <input type="text" id="affineDecInput" placeholder="Enter ciphertext..." class="cipher-input" /><br />
+    
+    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <div>
+            <label>a:</label><br />
+            <select id="decA" class="cipher-key" style="width: 70px;">
+                <option value="1">1</option><option value="3">3</option>
+                <option value="5" selected="">5</option><option value="7">7</option>
+                <option value="9">9</option><option value="11">11</option>
+                <option value="15">15</option><option value="17">17</option>
+                <option value="19">19</option><option value="21">21</option>
+                <option value="23">23</option><option value="25">25</option>
+            </select>
+        </div>
+        <div>
+            <label>b (0-25):</label><br />
+            <input type="number" id="decB" value="8" min="0" max="25" class="cipher-key" style="width: 70px;" />
+        </div>
+        <button id="affineBruteBtn" style="margin-top:20px; padding: 8px 15px; cursor: pointer; background: #2e7d32; color: white; border: none; border-radius: 4px;">Brute Force</button>
+    </div>
+    
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;" />
+    
+    <strong>Plaintext:</strong>
+    <p id="affineDecResult" class="cipher-output-box">---</p>
+
+    <div id="affineBfArea" style="display: none; margin-top: 15px;">
+        <strong>Brute Force Results:</strong>
+        <div id="affineBfList" style="font-family: monospace; font-size: 0.8rem; background: #fdfdfd; border: 1px solid #eee; padding: 10px; height: 180px; overflow-y: scroll;"></div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const input = document.getElementById('affineDecInput');
+    const keyA = document.getElementById('decA');
+    const keyB = document.getElementById('decB');
+    const output = document.getElementById('affineDecResult');
+    const btn = document.getElementById('affineBruteBtn');
+    const bfList = document.getElementById('affineBfList');
+    const bfArea = document.getElementById('affineBfArea');
+
+    const inverseMap = {1:1, 3:9, 5:21, 7:15, 9:3, 11:19, 15:7, 17:23, 19:11, 21:5, 23:17, 25:25};
+
+    const decrypt = (text, a, b) => {
+        const aInv = inverseMap[a];
+        return text.split('').map(char => {
+            const code = char.charCodeAt(0);
+            if (code >= 65 && code <= 90) return String.fromCharCode(((aInv * (code - 65 - b + 26)) % 26 + 26) % 26 + 65);
+            if (code >= 97 && code <= 122) return String.fromCharCode(((aInv * (code - 97 - b + 26)) % 26 + 26) % 26 + 97);
+            return char;
+        }).join('');
+    };
+
+    const update = () => {
+        let b = parseInt(keyB.value) || 0;
+        if (b < 0) b = 0; if (b > 25) b = 25;
+        output.innerText = decrypt(input.value, parseInt(keyA.value), b) || "---";
+    };
+
+    btn.addEventListener('click', () => {
+        bfArea.style.display = "block";
+        bfList.innerHTML = "";
+        const text = input.value;
+        if(!text) return;
+        Object.keys(inverseMap).forEach(a => {
+            for (let b = 0; b < 26; b++) {
+                const row = document.createElement('div');
+                row.style.borderBottom = "1px solid #eee";
+                row.innerHTML = `<span style="color:#888">a:${a}, b:${b}:</span> ${decrypt(text, a, b)}`;
+                bfList.appendChild(row);
+            }
+        });
+    });
+
+    [input, keyA, keyB].forEach(el => el.addEventListener('input', update));
+})();
+</script>
+
+<hr />
+
+<h3 id="security-analysis-1">Security Analysis</h3>
+
+<p>As we have read till now, \(a\) can only those values which are coprime with 26.</p>
+
+\[\{1,3,5,7,9,11,15,17,19,21,23,25\}\]
+
+<p>This is for modular inverse to exist.so there are <strong>12 possible</strong> choice for \(a\). However \(b\) can take any values in \(\mathbb{Z}_{26}\), so there are <strong>26 possible</strong> choice for \(b\).
+And therefore the total possible combination of keys is:</p>
+
+\[|\mathcal{K}| = 12 \times 26 = 312\]
+
+<p>A modern computer can bruteforce it instantly. So it is not secure cipher.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>so far we have seen two simple classical cipher, Caeser and Affine.</p>
+
+<ul>
+  <li>Both use a fixed key to transform letters.</li>
+  <li>Their key spaces are small (26 for Caesar, 312 for Affine) and thus modern computers can break them almost instantly.</li>
+</ul>
+
+<p><br /></p>
+
+<p>In the next article, we will explore <strong>cipher with changing key</strong> which are hard to break.</p>
+
+<hr />
+<p><em>End of article.</em></p>]]></content><author><name></name></author><category term="updates" /><summary type="html"><![CDATA[This article will introduce readers with basic mathematical notation used in cryptography, the idea behind cryptography and some of the classical cryptographic algorithm.]]></summary></entry><entry><title type="html">An introduction to number theory for cryptography</title><link href="http://localhost:4000/cyber_article/updates/2026/01/21/An-introduction-to-number-theory-for-cryptography/" rel="alternate" type="text/html" title="An introduction to number theory for cryptography" /><published>2026-01-21T00:00:00+05:45</published><updated>2026-01-21T00:00:00+05:45</updated><id>http://localhost:4000/cyber_article/updates/2026/01/21/An-introduction-to-number-theory-for-cryptography</id><content type="html" xml:base="http://localhost:4000/cyber_article/updates/2026/01/21/An-introduction-to-number-theory-for-cryptography/"><![CDATA[<p>This article provides the reader a glimpse of number theory that is required for cryptography.<br />
+So let us ponder into the world of number theory.</p>
+
+<style>
+/* Unified CSS for all clocks */
+.modular-clock-container {
+    text-align: center;
+    margin: 2rem auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: 2px solid #333;
+    padding: 20px;
+    border-radius: 15px;
+    background: white;
+    max-width: 500px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.modular-clock-container h3 {
+    margin-top: 0;
+    color: #2c3e50;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.modular-clock-svg {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+}
+
+.modular-clock-controls {
+    margin: 20px 0;
+}
+
+.modular-clock-btn {
+    margin: 0.3rem;
+    padding: 10px 20px;
+    cursor: pointer;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.modular-clock-btn:hover {
+    background: #2980b9;
+}
+
+.modular-clock-text {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-top: 15px;
+    color: #2c3e50;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+/* Special styles for different clock types */
+.clock-rim {
+    fill: none;
+    stroke: #2c3e50;
+    stroke-width: 2;
+}
+
+.clock-hand {
+    stroke: #e74c3c;
+    stroke-width: 3;
+    stroke-linecap: round;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.clock-dot {
+    fill: #2c3e50;
+}
+
+.clock-label {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    fill: #2c3e50;
+    text-anchor: middle;
+}
+
+.coprime-dot {
+    fill: #27ae60;
+}
+
+.non-coprime-dot {
+    fill: #bdc3c7;
+}
+
+.highlight-dot {
+    fill: #3498db;
+    r: 6;
+}
+</style>
+
+<hr />
+
+<h2 id="1-congruence">1) Congruence</h2>
+
+<p>Congruence expresses <strong>modular equality</strong>.</p>
+
+<p>We say,</p>
+
+\[a \equiv b \pmod{n}\]
+
+<p>when ( n ) divides ( a - b ).</p>
+
+<p>We read it as <em>“a is congruent to b modulo n”</em>.<br />
+It simply means that ( a ) and ( b ) differ by a multiple of ( n ).</p>
+
+<h3 id="examples">Examples</h3>
+
+\[17 \equiv 5 \pmod{12}\]
+
+<p>This means:</p>
+
+<p>\(17 - 5 = 12\)
+is divisible by 12.</p>
+
+\[15 \equiv 1 \pmod{7}\]
+
+<p>This means:</p>
+
+<p>\(15 - 1 = 14\)
+is divisible by 7.</p>
+
+<hr />
+
+<h2 id="intuition-for-congruence">Intuition for Congruence</h2>
+
+<p>Let us develop intuition for congruence using a <strong>clock</strong>.</p>
+
+<h3 id="example">Example:</h3>
+
+\[14 \equiv 2 \pmod{12}\]
+
+<p>Imagine a clock that has labels from 0 to 11.</p>
+<div class="modular-clock-container">
+  <h3>Modular Rotation: 14 ≡ 2 (mod 12)</h3>
+  <svg id="mod-clock" class="modular-clock-svg" viewBox="0 0 300 300">
+    <circle class="clock-rim" cx="150" cy="150" r="120" />
+  </svg>
+  <div class="modular-clock-controls">
+    <button onclick="animateMod(14)" class="modular-clock-btn">Spin to 14</button>
+    <button onclick="resetMod()" class="modular-clock-btn">Reset</button>
+  </div>
+  <p id="mod-text" class="modular-clock-text">Position: 0</p>
+</div>
+
+<script>
+  const modN = 12;
+  const modSvg = document.getElementById("mod-clock");
+  const modText = document.getElementById("mod-text");
+  
+  // Create labels
+  for (let i = 0; i < modN; i++) {
+    const angle = (2 * Math.PI * i) / modN - Math.PI / 2;
+    const x = 150 + 100 * Math.cos(angle);
+    const y = 150 + 100 * Math.sin(angle);
+    const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    label.setAttribute("x", x);
+    label.setAttribute("y", y + 5);
+    label.setAttribute("class", "clock-label");
+    label.textContent = i ;
+    modSvg.appendChild(label);
+  }
+
+  // Create Hand
+  const modHand = document.createElementNS("http://www.w3.org/2000/svg", "line");
+  modHand.setAttribute("x1", "150");
+  modHand.setAttribute("y1", "150");
+  modHand.setAttribute("x2", "150");
+  modHand.setAttribute("y2", "60");
+  modHand.setAttribute("class", "clock-hand");
+  modHand.style.transformOrigin = "150px 150px";
+  modSvg.appendChild(modHand);
+
+  function animateMod(val) {
+    modHand.style.transform = `rotate(${(360/modN) * val}deg)`;
+    modText.textContent = `14 mod 12 = ${val % modN} (One full lap + 2)`;
+  }
+  
+  function resetMod() {
+    modHand.style.transform = `rotate(0deg)`;
+    modText.textContent = "Position: 0";
+  }
+</script>
+
+<p>Starting from 0 if you move 14 steps forward you will land at 2 in the clock.</p>
+
+<p>Although 14 and 2 are different numbers, they represent the <strong>same position</strong> on the clock.</p>
+
+<p>This allows us to think modulo arithmetic as movement on a <strong>cycle</strong>.</p>
+
+<hr />
+
+<h2 id="negative-numbers-in-modulo">Negative Numbers in Modulo</h2>
+
+<p>Consider:</p>
+
+\[-1 \equiv 11 \pmod{12}\]
+
+<div class="modular-clock-container">
+  <h3>Modular Clock</h3>
+  <svg id="clock-neg" class="modular-clock-svg" viewBox="0 0 300 300"></svg>
+  <div class="modular-clock-controls">
+    <button id="btn-back" class="modular-clock-btn">-1 Step</button>
+    <button id="btn-reset" class="modular-clock-btn">Reset</button>
+  </div>
+  <p id="clock-text" class="modular-clock-text">Position: 0</p>
+</div>
+
+<script>
+  (function() {
+    const n = 12;
+    let currentRotation = 0;
+    let logicalPos = 0;
+
+    const svg = document.getElementById("clock-neg");
+    const textDisp = document.getElementById("clock-text");
+    const btnBack = document.getElementById("btn-back");
+    const btnReset = document.getElementById("btn-reset");
+    const center = 150;
+    const radius = 110;
+
+    // --- Drawing Logic ---
+    const rim = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    rim.setAttribute("cx", center); rim.setAttribute("cy", center);
+    rim.setAttribute("r", radius + 15); rim.setAttribute("class", "clock-rim");
+    svg.appendChild(rim);
+
+    for (let i = 0; i < n; i++) {
+      const angle = (2 * Math.PI * i) / n - Math.PI / 2;
+      const x = center + radius * Math.cos(angle);
+      const y = center + radius * Math.sin(angle);
+      const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      dot.setAttribute("cx", x); dot.setAttribute("cy", y);
+      dot.setAttribute("r", "4"); dot.setAttribute("class", "clock-dot");
+      svg.appendChild(dot);
+      const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      label.setAttribute("x", x);
+      label.setAttribute("y", y + (i === 6 ? 25 : (i > 3 && i < 9 ? 20 : 15)));
+      label.setAttribute("class", "clock-label");
+      label.textContent = i;
+      svg.appendChild(label);
+    }
+
+    const hand = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    hand.setAttribute("x1", center); hand.setAttribute("y1", center);
+    hand.setAttribute("x2", center); hand.setAttribute("y2", center - radius);
+    hand.setAttribute("class", "clock-hand");
+    hand.style.transformOrigin = "150px 150px";
+    svg.appendChild(hand);
+
+    // --- Update Function ---
+    function updateDisplay() {
+      hand.style.transform = `rotate(${currentRotation}deg)`;
+      let displayPos = logicalPos % n;
+      if (displayPos < 0) displayPos += n;
+      textDisp.textContent = "Position: " + displayPos;
+    }
+
+    // --- Event Listeners (Instead of onclick) ---
+    // This is much more stable in Markdown environments
+    btnBack.addEventListener("click", function() {
+      currentRotation -= (360 / n);
+      logicalPos -= 1;
+      updateDisplay();
+    });
+
+    btnReset.addEventListener("click", function() {
+      currentRotation = 0;
+      logicalPos = 0;
+      updateDisplay();
+    });
+    
+    updateDisplay();
+  })();
+</script>
+
+<p>This means <strong>one step backward from starting position (0)</strong>, which is 11.</p>
+
+<p>Negative numbers simply move backward on the same cycle.</p>
+
+<hr />
+
+<h2 id="an-algebraic-interpretation">An Algebraic Interpretation</h2>
+
+<p>Congruence can also be defined algebraically:</p>
+
+\[a \equiv b \pmod{n} \iff \exists k \in \mathbb{Z} \text{ such that } a = b + kn\]
+
+<p>This means that ( a ) and ( b ) differ by a multiple of ( n ).</p>
+
+<h3 id="example-1">Example</h3>
+
+\[23 \equiv 5 \pmod{9}\]
+
+<p>Thus,</p>
+
+\[23 = 5 + 2 \cdot 9\]
+
+<p>The integer <strong>2</strong> represents the number of complete 9-hour cycles required to reach 23 on a 9-hour clock.</p>
+
+<hr />
+
+<h2 id="conclusion-on-congruence">Conclusion on Congruence</h2>
+
+<p>Congruence modulo ( n ) allows us to represent the <strong>infinite set of integers</strong> using only <strong>( n ) distinct values</strong>.</p>
+
+<hr />
+
+<h2 id="2-residue-classes">2) Residue Classes</h2>
+
+<p>A <strong>residue class</strong> is the set of all integers that are congruent to a given number modulo ( n ).</p>
+
+<p>It is denoted by ( [a]_n ) and defined as:</p>
+
+\[[a]_n = \{ x \in \mathbb{Z} \mid x \equiv a \pmod{n} \}\]
+
+<h3 id="example-modulo-5">Example (Modulo 5)</h3>
+
+\[[1]_5 = \{ \ldots, -9, -4, 1, 6, 11, \ldots \}\]
+
+<p>This means:</p>
+
+\[-4 \equiv 1 \equiv 6 \equiv 11 \pmod{5}\]
+
+<p>The collection of all residue classes modulo ( n ) is denoted by:</p>
+
+\[\mathbb{Z}/n\mathbb{Z} = \{ [0]_n, [1]_n, \ldots, [n-1]_n \}\]
+
+<hr />
+
+<h2 id="3-arithmetic-operations-modulo--n-">3) Arithmetic Operations Modulo ( n )</h2>
+
+<h3 id="addition">Addition</h3>
+
+<p>In modular arithmetic, we add numbers and reduce if necessary.</p>
+
+\[3 + 4 = 7 \equiv 2 \pmod{5}\]
+
+<p><strong>Clock intuition:</strong><br />
+On a clock labeled ( 0,1,2,3,4 ), think of this as  starting at 3 and moving 4 steps forward.The hand will point at 2.</p>
+
+<p><strong>note</strong>
+You can also think of this as starting at 4 and moving 3 steps forward.</p>
+
+<div class="modular-clock-container">
+  <svg id="clock-mod5-fixed" class="modular-clock-svg" viewBox="0 0 300 300"></svg>
+  <div class="modular-clock-controls">
+    <button onclick="moveFourSteps()" class="modular-clock-btn">Move +4 Steps</button>
+    <button onclick="resetMod5()" class="modular-clock-btn">Reset</button>
+  </div>
+  <p id="clock-text-5" class="modular-clock-text">Position: 3</p>
+</div>
+
+<script>
+  (function() {
+    const n = 5;
+    const center = 150;
+    const radius = 110;
+    const svg = document.getElementById("clock-mod5-fixed");
+    const textDisp = document.getElementById("clock-text-5");
+
+    let totalDegrees = 0; 
+    let currentPos = 3;
+
+    // Draw Rim
+    const rim = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    rim.setAttribute("cx", center);
+    rim.setAttribute("cy", center);
+    rim.setAttribute("r", radius + 15);
+    rim.setAttribute("class", "clock-rim");
+    svg.appendChild(rim);
+
+    // Draw Labels
+    for (let i = 0; i < n; i++) {
+      const angle = (2 * Math.PI * i) / n - Math.PI / 2;
+      const x = center + radius * Math.cos(angle);
+      const y = center + radius * Math.sin(angle);
+      
+      const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      dot.setAttribute("cx", x);
+      dot.setAttribute("cy", y);
+      dot.setAttribute("r", "4");
+      dot.setAttribute("class", "clock-dot");
+      svg.appendChild(dot);
+
+      const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      label.setAttribute("x", x);
+      label.setAttribute("y", y + 20);
+      label.setAttribute("class", "clock-label");
+      label.textContent = i;
+      svg.appendChild(label);
+    }
+
+    // Create Hand (Initially pointing at 3)
+    const hand = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    hand.setAttribute("x1", center);
+    hand.setAttribute("y1", center);
+    hand.setAttribute("x2", center);
+    hand.setAttribute("y2", center - radius);
+    hand.setAttribute("class", "clock-hand");
+    hand.style.transformOrigin = "150px 150px";
+    
+    // Set initial position to 3
+    totalDegrees = (360 / n) * 3;
+    hand.style.transform = `rotate(${totalDegrees}deg)`;
+    svg.appendChild(hand);
+
+    window.moveFourSteps = function() {
+      totalDegrees += (360 / n) * 4;
+      currentPos = (currentPos + 4) % n;
+      hand.style.transform = `rotate(${totalDegrees}deg)`;
+      textDisp.textContent = "Position: " + currentPos;
+    };
+
+    window.resetMod5 = function() {
+      currentPos = 3;
+      totalDegrees = (360 / n) * 3;
+      hand.style.transform = `rotate(${totalDegrees}deg)`;
+      textDisp.textContent = "Position: 3";
+    };
+  })();
+</script>
+
+<hr />
+
+<h3 id="multiplication">Multiplication</h3>
+
+<p>Multiplication works similarly: multiply and reduce.</p>
+
+\[2 \cdot 4 = 8 \equiv 3 \pmod{5}\]
+
+<p>Modular multiplication is simply <strong>repeated modular addition</strong>.</p>
+
+<hr />
+
+<h2 id="4-modular-inverse">4) Modular Inverse</h2>
+
+<p>An integer ( a ) has a <strong>modular inverse</strong> ( b ) modulo ( n ) if:</p>
+
+\[a \cdot b \equiv 1 \pmod{n}\]
+
+<h3 id="does-every-number-have-an-inverse">Does Every Number Have an Inverse?</h3>
+
+<p>No.</p>
+
+<p>An integer ( a ) has a modular inverse modulo ( n ) <strong>if and only if</strong>:</p>
+
+\[\gcd(a, n) = 1\]
+
+<p>That is, ( a ) and ( n ) must be <strong>relatively prime</strong>.</p>
+
+<hr />
+
+<h2 id="intuition-for-modular-inverse">Intuition for Modular Inverse</h2>
+
+<p>Imagine a clock with ( n ) hours.<br />
+An inverse of a exists if repeated jumps of size ( a ) can land on 1.</p>
+
+<hr />
+
+<h3 id="example-1-inverse-of-3-modulo-7">Example 1: Inverse of 3 modulo 7</h3>
+
+<p>Clock: ( {0,1,2,3,4,5,6} )</p>
+
+<div class="modular-clock-container">
+  <svg id="clock-mod7" class="modular-clock-svg" viewBox="0 0 300 300"></svg>
+  <div class="modular-clock-controls">
+    <button id="jump-btn" onclick="startJumps()" class="modular-clock-btn">Start 5 Jumps (Step: 3)</button>
+    <button onclick="resetMod7()" class="modular-clock-btn">Reset</button>
+  </div>
+  <p id="clock-text-7" class="modular-clock-text">Position: 0</p>
+</div>
+
+<script>
+  (function() {
+    const n = 7;
+    const stepSize = 3;
+    const totalJumps = 5;
+    const center = 150;
+    const radius = 110;
+    
+    const svg = document.getElementById("clock-mod7");
+    const textDisp = document.getElementById("clock-text-7");
+    const btn = document.getElementById("jump-btn");
+
+    let currentRotation = 0;
+    let currentPos = 0;
+    let isRunning = false;
+
+    // Draw Rim
+    const rim = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    rim.setAttribute("cx", center);
+    rim.setAttribute("cy", center);
+    rim.setAttribute("r", radius + 15);
+    rim.setAttribute("class", "clock-rim");
+    svg.appendChild(rim);
+
+    // Draw Labels 0-6
+    for (let i = 0; i < n; i++) {
+      const angle = (2 * Math.PI * i) / n - Math.PI / 2;
+      const x = center + radius * Math.cos(angle);
+      const y = center + radius * Math.sin(angle);
+      
+      const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      dot.setAttribute("cx", x);
+      dot.setAttribute("cy", y);
+      dot.setAttribute("r", "4");
+      dot.setAttribute("class", "clock-dot");
+      svg.appendChild(dot);
+
+      const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      label.setAttribute("x", x);
+      label.setAttribute("y", y + 20);
+      label.setAttribute("class", "clock-label");
+      label.textContent = i;
+      svg.appendChild(label);
+    }
+
+    // Create Hand
+    const hand = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    hand.setAttribute("x1", center);
+    hand.setAttribute("y1", center);
+    hand.setAttribute("x2", center);
+    hand.setAttribute("y2", center - radius);
+    hand.setAttribute("class", "clock-hand");
+    hand.style.transformOrigin = "150px 150px";
+    svg.appendChild(hand);
+
+    // Staggered Jump Logic
+    window.startJumps = async function() {
+      if (isRunning) return;
+      isRunning = true;
+      btn.disabled = true;
+
+      for (let j = 1; j <= totalJumps; j++) {
+        currentRotation += (360 / n) * stepSize;
+        currentPos = (currentPos + stepSize) % n;
+        
+        hand.style.transform = `rotate(${currentRotation}deg)`;
+        textDisp.textContent = "Position: " + currentPos;
+        
+        await new Promise(resolve => setTimeout(resolve, 800));
+      }
+
+      isRunning = false;
+      btn.disabled = false;
+    };
+
+    window.resetMod7 = function() {
+      currentRotation = 0;
+      currentPos = 0;
+      hand.style.transform = `rotate(0deg)`;
+      textDisp.textContent = "Position: 0";
+    };
+  })();
+</script>
+
+<p>Starting from 0 and jumping by 3:</p>
+
+<ul>
+  <li>3</li>
+  <li>6</li>
+  <li>2</li>
+  <li>5</li>
+  <li><strong>1</strong></li>
+</ul>
+
+<p>It takes <strong>5 jumps</strong> to land on 1.</p>
+
+<p>Verification:</p>
+
+\[3 \cdot 5 = 15 \equiv 1 \pmod{7}\]
+
+<p>So the inverse of 3 modulo 7 is <strong>5</strong>.</p>
+
+<hr />
+
+<h3 id="example-2-inverse-of-2-modulo-8">Example 2: Inverse of 2 modulo 8</h3>
+
+<p>Jumping by 2 on an 8-hour clock:</p>
+
+<div class="modular-clock-container">
+  <svg id="clock-mod8" class="modular-clock-svg" viewBox="0 0 300 300"></svg>
+  <div class="modular-clock-controls">
+    <button id="loop-btn" onclick="startLoop()" class="modular-clock-btn">Start Infinite Loop</button>
+    <button onclick="stopLoop()" class="modular-clock-btn">Stop</button>
+    <button onclick="resetMod8()" class="modular-clock-btn">Reset</button>
+  </div>
+  <p id="clock-text-8" class="modular-clock-text">Position: 0</p>
+  <p id="loop-status" style="color: #666; font-size: 0.9rem; text-align: center; margin-top: 10px;">
+    The hand is skipping {1, 3, 5, 7}!
+  </p>
+</div>
+
+<script>
+  (function() {
+    const n = 8;
+    const stepSize = 2;
+    const center = 150;
+    const radius = 110;
+    
+    const svg = document.getElementById("clock-mod8");
+    const textDisp = document.getElementById("clock-text-8");
+
+    let currentRotation = 0;
+    let currentPos = 0;
+    let timer = null;
+
+    // Draw Rim
+    const rim = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    rim.setAttribute("cx", center);
+    rim.setAttribute("cy", center);
+    rim.setAttribute("r", radius + 15);
+    rim.setAttribute("class", "clock-rim");
+    svg.appendChild(rim);
+
+    // Draw Labels 0-7
+    for (let i = 0; i < n; i++) {
+      const angle = (2 * Math.PI * i) / n - Math.PI / 2;
+      const x = center + radius * Math.cos(angle);
+      const y = center + radius * Math.sin(angle);
+      
+      const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      dot.setAttribute("cx", x);
+      dot.setAttribute("cy", y);
+      dot.setAttribute("r", "5");
+      
+      const isReachable = (i % 2 === 0);
+      dot.setAttribute("class", isReachable ? "clock-dot" : "non-coprime-dot");
+      svg.appendChild(dot);
+
+      const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      label.setAttribute("x", x);
+      label.setAttribute("y", y + 20);
+      label.setAttribute("class", "clock-label");
+      label.style.fill = isReachable ? "#2c3e50" : "#95a5a6";
+      label.textContent = i;
+      svg.appendChild(label);
+    }
+
+    // Create Hand
+    const hand = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    hand.setAttribute("x1", center);
+    hand.setAttribute("y1", center);
+    hand.setAttribute("x2", center);
+    hand.setAttribute("y2", center - radius);
+    hand.setAttribute("class", "clock-hand");
+    hand.style.transformOrigin = "150px 150px";
+    svg.appendChild(hand);
+
+    window.startLoop = function() {
+      if (timer) return;
+      timer = setInterval(() => {
+        currentRotation += (360 / n) * stepSize;
+        currentPos = (currentPos + stepSize) % n;
+        hand.style.transform = `rotate(${currentRotation}deg)`;
+        textDisp.textContent = "Position: " + currentPos;
+      }, 600);
+    };
+
+    window.stopLoop = function() {
+      clearInterval(timer);
+      timer = null;
+    };
+
+    window.resetMod8 = function() {
+      stopLoop();
+      currentRotation = 0;
+      currentPos = 0;
+      hand.style.transform = `rotate(0deg)`;
+      textDisp.textContent = "Position: 0";
+    };
+  })();
+</script>
+
+\[0 \to 2 \to 4 \to 6 \to 0 \to \dots\]
+
+<p>The values repeat and never reach 1.<br />
+Thus, <strong>2 has no inverse modulo 8</strong>.</p>
+
+<hr />
+
+<h2 id="eulers-totient-function">Euler’s Totient Function</h2>
+
+<p>For a positive integer ( n ), Euler’s totient function ( \varphi(n) ) is defined as:</p>
+
+\[\varphi(n) = \text{number of integers } a \text{ such that } 1 \le a \le n \text{ and } \gcd(a,n)=1\]
+
+<p>It simply counts the number of integers relatively prime to a positive integer $a$ which are less than or equal to $a$</p>
+
+<h3 id="examples-1">Examples</h3>
+
+\[\varphi(7) = 6 \quad \{1,2,3,4,5,6\}\]
+
+\[\varphi(10) = 4 \quad \{1,3,7,9\}\]
+
+<hr />
+
+<h2 id="properties-of-eulers-totient-function">Properties of Euler’s Totient Function</h2>
+
+<ol>
+  <li>If ( p ) is prime:</li>
+</ol>
+
+\[\varphi(p) = p - 1\]
+
+<ol>
+  <li>If ( gcd(m,n) = 1 ):</li>
+</ol>
+
+\[\varphi(mn) = \varphi(m)\varphi(n)\]
+
+<ol>
+  <li>For a prime power:</li>
+</ol>
+
+\[\varphi(p^k) = p^k - p^{k-1} = p^k \left(1 - \frac{1}{p}\right)\]
+
+<p>If:</p>
+
+\[n = p_1^{k_1} p_2^{k_2} \cdots p_r^{k_r}\]
+
+<p>then:</p>
+
+\[\varphi(n) = n \left(1-\frac{1}{p_1}\right)\left(1-\frac{1}{p_2}\right)\cdots\left(1-\frac{1}{p_r}\right)\]
+
+<hr />
+
+<h2 id="eulers-theorem">Euler’s Theorem</h2>
+
+<p>If ( gcd(a,m) = 1 ), then:</p>
+
+\[a^{\varphi(m)} \equiv 1 \pmod{m}\]
+
+<h3 id="example-2">Example</h3>
+
+\[\varphi(15) = 8,\quad \gcd(2,15)=1\]
+
+\[2^8 = 256 = 15 \cdot 17 + 1 \equiv 1 \pmod{15}\]
+
+<hr />
+
+<h2 id="clock-intuition-for-eulers-theorem">Clock Intuition for Euler’s Theorem</h2>
+
+<p>For modulo 10, the numbers coprime to 10 are:</p>
+
+\[\{1,3,7,9\}\]
+
+<p>If we start at 1 and keep only coprime numbers on the clock and perform multiplicative jumping by any coprime step, after $\phi(12)=4$ jumps, we return to 1.</p>
+
+<p><strong>note</strong>:This holds true even if we start at any coprime number and take coprime multiplicative jump we are guarenteed to land at that initial coprime number position.</p>
+
+<div class="modular-clock-container">
+  <h3>Modulo 10 Experiment</h3>
+  <p style="text-align: center;">$\phi(10) = 4$. After 4 jumps, Coprimes hit 1.</p>
+  
+  <svg id="mod10-clock" class="modular-clock-svg" viewBox="0 0 300 300"></svg>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0;">
+    <div style="background: #e8f5e9; padding: 10px; border-radius: 8px;">
+      <p style="margin: 0 0 5px 0; font-weight: bold; color: #27ae60;">Coprime (Success)</p>
+      <button onclick="setA(3)" class="modular-clock-btn" style="width: 100%; margin: 2px 0;">3</button>
+      <button onclick="setA(7)" class="modular-clock-btn" style="width: 100%; margin: 2px 0;">7</button>
+      <button onclick="setA(9)" class="modular-clock-btn" style="width: 100%; margin: 2px 0;">9</button>
+    </div>
+    <div style="background: #ffebee; padding: 10px; border-radius: 8px;">
+      <p style="margin: 0 0 5px 0; font-weight: bold; color: #e74c3c;">Not Coprime (Fail)</p>
+      <button onclick="setA(2)" class="modular-clock-btn" style="width: 100%; margin: 2px 0; background: #95a5a6;">2</button>
+      <button onclick="setA(4)" class="modular-clock-btn" style="width: 100%; margin: 2px 0; background: #95a5a6;">4</button>
+      <button onclick="setA(5)" class="modular-clock-btn" style="width: 100%; margin: 2px 0; background: #95a5a6;">5</button>
+    </div>
+  </div>
+
+  <button onclick="doJump()" class="modular-clock-btn" style="width: 100%; padding: 12px; font-size: 1.1rem;">
+    Jump (×<span id="a-display">?</span>)
+  </button>
+  
+  <p id="m10-status" class="modular-clock-text">Select a number</p>
+  <button onclick="resetM10()" style="background:none; border:none; text-decoration:underline; cursor:pointer; color:#666; font-family: inherit;">
+    Reset Clock
+  </button>
+</div>
+
+<script>
+(function() {
+  const n = 10;
+  const svg = document.getElementById("mod10-clock");
+  const status = document.getElementById("m10-status");
+  const aDisp = document.getElementById("a-display");
+  
+  let currentPos = 1;
+  let totalDeg = 36; // 1 o'clock in a 10-point clock (360/10)
+  let currentA = null;
+  let hand;
+
+  function init() {
+    // Clear SVG
+    svg.innerHTML = '';
+    
+    // Draw rim
+    const rim = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    rim.setAttribute("cx", "150");
+    rim.setAttribute("cy", "150");
+    rim.setAttribute("r", "120");
+    rim.setAttribute("class", "clock-rim");
+    svg.appendChild(rim);
+    
+    // Draw numbers
+    for (let i = 1; i <= 10; i++) {
+      const val = i === 10 ? 0 : i;
+      const angle = (i * 36 - 90) * (Math.PI / 180);
+      const x = 150 + 100 * Math.cos(angle);
+      const y = 150 + 100 * Math.sin(angle);
+      
+      const isCoprime = [1, 3, 7, 9].includes(val);
+      const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      dot.setAttribute("cx", x);
+      dot.setAttribute("cy", y);
+      dot.setAttribute("r", isCoprime ? "6" : "3");
+      dot.setAttribute("class", isCoprime ? "coprime-dot" : "non-coprime-dot");
+      svg.appendChild(dot);
+
+      const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      t.setAttribute("x", x);
+      t.setAttribute("y", y + 20);
+      t.setAttribute("class", "clock-label");
+      t.textContent = val;
+      svg.appendChild(t);
+    }
+    
+    // Create hand
+    hand = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    hand.setAttribute("x1", "150");
+    hand.setAttribute("y1", "150");
+    hand.setAttribute("x2", "150");
+    hand.setAttribute("y2", "50");
+    hand.setAttribute("class", "clock-hand");
+    hand.style.transformOrigin = "150px 150px";
+    svg.appendChild(hand);
+    
+    updateH();
+  }
+
+  function updateH() {
+    hand.style.transform = `rotate(${totalDeg}deg)`;
+  }
+
+  window.setA = function(val) {
+    currentA = val;
+    aDisp.textContent = val;
+    resetM10();
+    status.textContent = "Ready to jump by " + val;
+    status.style.color = "#2c3e50";
+  };
+
+  window.doJump = function() {
+    if (!currentA) {
+      alert("Select a multiplier first!");
+      return;
+    }
+    const old = currentPos;
+    currentPos = (currentPos * currentA) % n;
+    
+    // Calculate clockwise distance
+    let diff = (currentPos === 0 ? 10 : currentPos) - (old === 0 ? 10 : old);
+    if (diff <= 0) diff += 10;
+    
+    totalDeg += (diff * 36);
+    updateH();
+    status.textContent = `Result: ${currentPos}`;
+    status.style.color = (currentPos === 1) ? "#27ae60" : ([1,3,7,9].includes(currentPos) ? "#2c3e50" : "#e74c3c");
+  };
+
+  window.resetM10 = function() {
+    currentPos = 1;
+    totalDeg = 36;
+    updateH();
+    status.textContent = currentA ? "Started at 1" : "Select a number";
+    status.style.color = "#2c3e50";
+  };
+
+  init();
+})();
+</script>
+
+<hr />
+
+<h2 id="fermats-little-theorem">Fermat’s Little Theorem</h2>
+
+<p>For a prime number ( p ) and ( gcd(a,p)=1 ):</p>
+
+\[a^{p-1} \equiv 1 \pmod{p}\]
+
+<p>This follows directly from Euler’s theorem.</p>
+
+<h3 id="clock-intuition">Clock Intuition</h3>
+
+<p>Imagine a clock with ( p-1 ) hours.<br />
+Starting at 1 and multiplicative jumping by ( a ), after exactly ( p-1 ) jumps, you return to 1.</p>
+
+<div class="modular-clock-container">
+  <h3>Fermat's Proof ($3^6 \equiv 1 \pmod 7$)</h3>
+  
+  <svg id="fermat-fixed" class="modular-clock-svg" viewBox="0 0 300 300"></svg>
+
+  <div class="modular-clock-controls">
+    <button id="btn-auto" onclick="autoCycle()" class="modular-clock-btn">Run Full 6 Jumps (×3)</button>
+    <div style="margin-top: 10px;">
+      <button id="btn-jump" onclick="manualJump()" class="modular-clock-btn">Manual Jump (×3)</button>
+      <button id="btn-reset" onclick="resetClock()" class="modular-clock-btn">Reset</button>
+    </div>
+  </div>
+
+  <p id="label-pos" class="modular-clock-text">Position: 1</p>
+  <p id="label-math" style="font-style: italic; color: #666; font-size: 0.9rem; height: 1.2rem; text-align: center;">
+    Ready
+  </p>
+</div>
+
+<script>
+(function() {
+  const p = 7;
+  const a = 3;
+  const svg = document.getElementById("fermat-fixed");
+  const posDisp = document.getElementById("label-pos");
+  const mathDisp = document.getElementById("label-math");
+  
+  const cx = 150, cy = 150, radius = 90;
+  let currentPos = 1;
+  let totalRotation = 360 / p; // Hand starts at 1
+  let isRunning = false;
+  let hand;
+
+  // Initial Draw
+  function setup() {
+    // Clear SVG
+    svg.innerHTML = '';
+    
+    // Draw rim
+    const rim = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    rim.setAttribute("cx", cx);
+    rim.setAttribute("cy", cy);
+    rim.setAttribute("r", radius + 15);
+    rim.setAttribute("class", "clock-rim");
+    svg.appendChild(rim);
+    
+    // Draw numbers
+    for (let i = 0; i < p; i++) {
+      const angle = (i * (360 / p) - 90) * (Math.PI / 180);
+      const x = cx + radius * Math.cos(angle);
+      const y = cy + radius * Math.sin(angle);
+
+      const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      dot.setAttribute("cx", x);
+      dot.setAttribute("cy", y);
+      dot.setAttribute("r", i === 1 ? "8" : "4");
+      dot.setAttribute("class", i === 1 ? "highlight-dot" : (i === 0 ? "non-coprime-dot" : "clock-dot"));
+      svg.appendChild(dot);
+
+      const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      text.setAttribute("x", x);
+      text.setAttribute("y", y + (i === 0 ? -15 : 25));
+      text.setAttribute("class", "clock-label");
+      text.textContent = i;
+      svg.appendChild(text);
+    }
+
+    // Create hand
+    hand = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    hand.setAttribute("x1", cx);
+    hand.setAttribute("y1", cy);
+    hand.setAttribute("x2", cx);
+    hand.setAttribute("y2", cy - radius);
+    hand.setAttribute("class", "clock-hand");
+    hand.style.transformOrigin = "150px 150px";
+    hand.style.transform = `rotate(${totalRotation}deg)`;
+    svg.appendChild(hand);
+  }
+
+  // The Logic
+  window.manualJump = function() {
+    if (isRunning) return;
+    performJump();
+  };
+
+  function performJump() {
+    const oldPos = currentPos;
+    currentPos = (currentPos * a) % p;
+    
+    // Logic for distance: how many numbers forward on the clock face?
+    let steps = currentPos - oldPos;
+    if (steps <= 0) steps += p;
+
+    totalRotation += (steps * (360 / p));
+    hand.style.transform = `rotate(${totalRotation}deg)`;
+    
+    posDisp.textContent = "Position: " + currentPos;
+    mathDisp.textContent = `${oldPos} × 3 ≡ ${currentPos} (mod 7)`;
+    
+    if (currentPos === 1) {
+      posDisp.style.color = "#27ae60";
+    } else {
+      posDisp.style.color = "#3498db";
+    }
+  }
+
+  window.autoCycle = async function() {
+    if (isRunning) return;
+    isRunning = true;
+    const btn = document.getElementById("btn-auto");
+    btn.disabled = true;
+    
+    // Internal reset without unlocking
+    currentPos = 1;
+    totalRotation = 360 / p;
+    hand.style.transform = `rotate(${totalRotation}deg)`;
+    posDisp.textContent = "Position: 1";
+    posDisp.style.color = "#3498db";
+    mathDisp.textContent = "Starting...";
+    
+    await new Promise(r => setTimeout(r, 600));
+
+    for (let i = 1; i <= 6; i++) {
+      performJump();
+      await new Promise(r => setTimeout(r, 1000));
+    }
+    
+    mathDisp.textContent = `6 Jumps Complete: 3^6 ≡ 1`;
+    isRunning = false;
+    btn.disabled = false;
+  };
+
+  window.resetClock = function() {
+    if (isRunning) return;
+    currentPos = 1;
+    totalRotation = 360 / p;
+    hand.style.transform = `rotate(${totalRotation}deg)`;
+    posDisp.textContent = "Position: 1";
+    posDisp.style.color = "#3498db";
+    mathDisp.textContent = "Ready";
+  };
+
+  setup();
+})();
+</script>
+
+<hr />
+
+<p><em>End of article.</em></p>]]></content><author><name></name></author><category term="updates" /><summary type="html"><![CDATA[This article provides the reader a glimpse of number theory that is required for cryptography. So let us ponder into the world of number theory.]]></summary></entry><entry><title type="html">My First Article</title><link href="http://localhost:4000/cyber_article/updates/2026/01/14/my-first-article/" rel="alternate" type="text/html" title="My First Article" /><published>2026-01-14T00:00:00+05:45</published><updated>2026-01-14T00:00:00+05:45</updated><id>http://localhost:4000/cyber_article/updates/2026/01/14/my-first-article</id><content type="html" xml:base="http://localhost:4000/cyber_article/updates/2026/01/14/my-first-article/"><![CDATA[<h1 id="welcome-to-my-first-article">Welcome to My First Article</h1>
 
 <p>This is my first article on my new Jekyll website! I’ll be posting regularly about my projects and thoughts.</p>
 

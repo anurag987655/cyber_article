@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classical Cipher Part-II | Anurag's Digital Space</title>
+    <link rel="stylesheet" href="/cyber_article/assets/css/style.css">
+    <!-- Add MathJax for LaTeX math rendering -->
+    <script>
+    MathJax = {
+    tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: {
+        fontCache: 'global'
+    }
+    };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+</head>
+<body>
+    <header class="site-header">
+        <h1 class="site-title">Anurag's Digital Space</h1>
+        <nav class="site-nav">
+            <a href="/cyber_article/" class="nav-link">Home</a>
+            <a href="/cyber_article/faq/" class="nav-link">FAQ</a>
+            <a href="/cyber_article/projects/" class="nav-link">Projects</a>
+            <a href="/cyber_article/articles/" class="nav-link">Article</a>
+        </nav>
+    </header>
+    
+    <main class="wrapper">
+        <h1 class="page-title">Classical Cipher Part-II</h1>
+        <p>This article will introduce readers with some more classical cipher. This article will introduce polyalphabetic cipher where cryptographic algorithm uses a vector key.</p>
+
+<hr />
+
+<style>
+    /* GLOBAL STYLES */
+    body {
+        font-family: -apple-system, Segoe UI, Helvetica, Arial, sans-serif;
+        color: #24292e;
+        max-width: 700px;
+        margin: 40px auto;
+        line-height: 1.5;
+        padding: 20px;
+        background-color: #f6f8fa;
+    }
+    
+    /* Common section styles */
+    .module-section {
+        margin-bottom: 60px;
+        padding: 20px;
+        border: 1px solid #e1e4e8;
+        border-radius: 8px;
+        background-color: #ffffff;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    
+    .module-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #2ea44f;
+        color: #1b1f23;
+    }
+    
+    /* Vigenere specific */
+    .decrypt-title { 
+        border-bottom-color: #0366d6; 
+    }
+    
+    /* Playfair specific */
+    .playfair-title { 
+        border-bottom-color: #f66a0a; 
+    }
+    
+    .playfair-decrypt-title { 
+        border-bottom-color: #6f42c1; 
+    }
+    
+    label { 
+        display: block; 
+        font-size: 12px; 
+        font-weight: bold; 
+        text-transform: uppercase;
+        color: #586069; 
+        margin-bottom: 5px; 
+        margin-top: 15px;
+    }
+    
+    input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #d1d5da;
+        border-radius: 4px;
+        font-family: monospace;
+        box-sizing: border-box;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+    
+    button {
+        cursor: pointer;
+        padding: 10px 20px;
+        border-radius: 4px;
+        border: none;
+        font-weight: bold;
+        color: white;
+        margin-top: 10px;
+        width: 100%;
+        transition: opacity 0.2s;
+    }
+    
+    button:hover {
+        opacity: 0.9;
+    }
+    
+    /* Vigenere buttons */
+    .btn-enc { 
+        background: #2ea44f; 
+    }
+    
+    .btn-dec { 
+        background: #0366d6; 
+    }
+    
+    /* Playfair buttons */
+    .btn-playfair-enc { 
+        background: #f66a0a; 
+    }
+    
+    .btn-playfair-dec { 
+        background: #6f42c1; 
+    }
+    
+    .result-display {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f6f8fa;
+        border-radius: 4px;
+        font-family: monospace;
+        min-height: 24px;
+        word-break: break-all;
+        border: 1px solid #e1e4e8;
+    }
+    
+    /* Playfair matrix styles */
+    .matrix-container {
+        display: grid;
+        grid-template-columns: repeat(5, 40px);
+        gap: 5px;
+        margin: 15px 0;
+        justify-content: center;
+    }
+    
+    .cell {
+        width: 40px;
+        height: 40px;
+        border: 1px solid #e1e4e8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f6f8fa;
+        font-family: monospace;
+        font-weight: bold;
+        border-radius: 3px;
+    }
+    
+    .loading { 
+        animation: pulse 0.8s infinite; 
+        color: #6a737d; 
+    }
+    
+    @keyframes pulse { 
+        0%, 100% { opacity: 1; } 
+        50% { opacity: 0.4; } 
+    }
+    
+    /* Typography */
+    h1, h2, h3 {
+        margin-top: 24px;
+        margin-bottom: 16px;
+    }
+    
+    h2 {
+        border-bottom: 1px solid #eaecef;
+        padding-bottom: 8px;
+    }
+    
+    code {
+        background-color: rgba(27,31,35,0.05);
+        border-radius: 3px;
+        font-family: SFMono-Regular,Consolas,Menlo,monospace;
+        padding: 0.2em 0.4em;
+    }
+    
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 16px 0;
+    }
+    
+    th, td {
+        border: 1px solid #dfe2e5;
+        padding: 8px 12px;
+        text-align: left;
+    }
+    
+    th {
+        background-color: #f6f8fa;
+    }
+</style>
+
+<h2 id="the-vigenère-cipher">The Vigenère cipher:</h2>
+
+<p>The Vigenère cipher is upgraded version of Caesar cipher that uses repeating keyword instead of single fixed keyword.</p>
+
+<h3 id="mathematical-formulation">Mathematical Formulation:</h3>
+
+<p>Let the plaintext (P), ciphertext (C), and key (K) symbols belong to</p>
+
+\[\mathbb{Z}_{26} = \{0,1,2,\ldots,25\}.\]
+
+<p>The key is a vector and is defined as</p>
+
+\[K = (k_1, k_2, k_3, \ldots, k_m),\]
+
+<p>where each $k_i \in \mathbb{Z}_{26}$.</p>
+
+<p>The key is repeated cyclically to match the entire length of the plaintext.</p>
+
+<p>Let the plaintext be</p>
+
+\[P = (x_1, x_2, \ldots, x_n),\]
+
+<p>where each $x_i \in \mathbb{Z}_{26}$.</p>
+
+<hr />
+
+<p>The encryption function is</p>
+
+\[E(x_i) = (x_i + k_i) \bmod 26 = y_i.\]
+
+<hr />
+
+<p>The decryption function is</p>
+
+\[D(y_i) = (y_i - k_i) \bmod 26 = x_i.\]
+
+<hr />
+
+<h3 id="example">Example:</h3>
+
+<p>Let the plaintext be</p>
+
+\[P = \text{APPLE}.\]
+
+<p>So we already know as per fixed alphabet mapping APPLE gets mapped to following:</p>
+
+\[P = (0, 15, 15, 11, 4).\]
+
+<p>Let the key be</p>
+
+\[K = \text{KEY}.\]
+
+<p>Using the same mapping:</p>
+
+\[K \mapsto (10, 4, 24).\]
+
+<p>There are 5 values in plaintext. So we will repeat value on keyvector to make its length 5 by repeating.</p>
+
+\[K = (10, 4, 24, 10, 4).\]
+
+<hr />
+
+<p>Applying the encryption function:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>$x_i$ (Plain)</th>
+      <th>$k_i$ (Key)</th>
+      <th>$x_i + k_i$</th>
+      <th>$\bmod 26$</th>
+      <th>Cipher</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0 (A)</td>
+      <td>10 (K)</td>
+      <td>10</td>
+      <td>10</td>
+      <td>K</td>
+    </tr>
+    <tr>
+      <td>15 (P)</td>
+      <td>4 (E)</td>
+      <td>19</td>
+      <td>19</td>
+      <td>T</td>
+    </tr>
+    <tr>
+      <td>15 (P)</td>
+      <td>24 (Y)</td>
+      <td>39</td>
+      <td>13</td>
+      <td>N</td>
+    </tr>
+    <tr>
+      <td>11 (L)</td>
+      <td>10 (K)</td>
+      <td>21</td>
+      <td>21</td>
+      <td>V</td>
+    </tr>
+    <tr>
+      <td>4 (E)</td>
+      <td>4 (E)</td>
+      <td>8</td>
+      <td>8</td>
+      <td>I</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>So the ciphertext is</p>
+
+\[C = \text{KTNVI}.\]
+
+<hr />
+
+<p>Applying the decryption function:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>$y_i$ (Cipher)</th>
+      <th>$k_i$ (Key)</th>
+      <th>$y_i - k_i$</th>
+      <th>$\bmod 26$</th>
+      <th>Plain</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>10 (K)</td>
+      <td>10 (K)</td>
+      <td>0</td>
+      <td>0</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>19 (T)</td>
+      <td>4 (E)</td>
+      <td>15</td>
+      <td>15</td>
+      <td>P</td>
+    </tr>
+    <tr>
+      <td>13 (N)</td>
+      <td>24 (Y)</td>
+      <td>-11</td>
+      <td>15</td>
+      <td>P</td>
+    </tr>
+    <tr>
+      <td>21 (V)</td>
+      <td>10 (K)</td>
+      <td>11</td>
+      <td>11</td>
+      <td>L</td>
+    </tr>
+    <tr>
+      <td>8 (I)</td>
+      <td>4 (E)</td>
+      <td>4</td>
+      <td>4</td>
+      <td>E</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Thus, the original plaintext is recovered:</p>
+
+\[P = \text{APPLE}.\]
+
+<h3 id="interactive-vigenère-cipher">Interactive Vigenère cipher:</h3>
+<p>Try out Vigenère cipher for encryption and decryption:</p>
+
+<div class="module-section">
+    <h2 class="module-title">1. Plaintext to Ciphertext</h2>
+    <label>Encryption Key</label>
+    <input type="text" id="enc_key" placeholder="Key..." />
+    <label>Plaintext Message</label>
+    <input type="text" id="enc_input" placeholder="Message..." />
+    <button class="btn-enc" onclick="processVigenere('enc')">Execute Encryption</button>
+    <div class="result-display" id="enc_res">Waiting for data...</div>
+</div>
+
+<div class="module-section">
+    <h2 class="module-title decrypt-title">2. Ciphertext to Plaintext</h2>
+    <label>Decryption Key</label>
+    <input type="text" id="dec_key" placeholder="Key..." />
+    <label>Encrypted Ciphertext</label>
+    <input type="text" id="dec_input" placeholder="Ciphertext..." />
+    <button class="btn-dec" onclick="processVigenere('dec')">Execute Decryption</button>
+    <div class="result-display" id="dec_res">Waiting for data...</div>
+</div>
+
+<script>
+    function vigenereLogic(text, key, isEncrypt) {
+        if (!key || !text) return "ERROR: MISSING INPUT";
+        
+        let output = "";
+        let keyIndex = 0;
+        const cleanKey = key.toUpperCase().replace(/[^A-Z]/g, "");
+
+        for (let i = 0; i < text.length; i++) {
+            let char = text[i];
+            
+            if (char.match(/[a-z]/i)) {
+                const isUpper = char === char.toUpperCase();
+                const code = char.toUpperCase().charCodeAt(0) - 65;
+                const k = cleanKey.charCodeAt(keyIndex % cleanKey.length) - 65;
+                
+                let shift = isEncrypt ? (code + k) % 26 : (code - k + 26) % 26;
+                
+                let resultChar = String.fromCharCode(shift + 65);
+                output += isUpper ? resultChar : resultChar.toLowerCase();
+                
+                keyIndex++;
+            } else {
+                output += char;
+            }
+        }
+        return output;
+    }
+
+    function processVigenere(mode) {
+        const key = document.getElementById(mode + '_key').value;
+        const input = document.getElementById(mode + '_input').value;
+        const display = document.getElementById(mode + '_res');
+
+        display.innerHTML = "<span class='loading'>Processing case-sensitive shift...</span>";
+
+        setTimeout(() => {
+            display.innerText = vigenereLogic(input, key, mode === 'enc');
+        }, 600);
+    }
+</script>
+
+<hr />
+
+<h2 id="playfair-cipher">Playfair Cipher</h2>
+
+<p>The Playfair cipher is quite different from the ciphers we have seen so far.<br />
+Instead of encrypting single letters, it encrypts <strong>pairs of letters (digraphs)</strong>.<br />
+It uses a <strong>5 × 5 matrix</strong> of letters as the main structure for both encryption and decryption.</p>
+
+<hr />
+
+<h3 id="how-to-generate-the-5--5-matrix">How to Generate the 5 × 5 Matrix</h3>
+
+<ol>
+  <li>
+    <p>Choose a <strong>keyword</strong> and remove all repeated letters from it.</p>
+  </li>
+  <li>
+    <p>Fill the matrix <strong>row-wise</strong> using the letters of the keyword first.</p>
+  </li>
+  <li>
+    <p>After the keyword is filled, insert the remaining letters of the alphabet
+(in alphabetical order) that do <strong>not</strong> already appear in the key.</p>
+  </li>
+  <li>
+    <p>Since the English alphabet has 26 letters and the grid has only 25 cells,<br />
+the letters <strong>I and J are treated as the same letter</strong> and share one cell.</p>
+
+    <p><br /></p>
+
+    <p><strong>NOTE: You can use interactive demonstration below to generate the 5*5 matrix and practice to learn how it is done.</strong></p>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="preparing-the-plaintext">Preparing the Plaintext</h3>
+
+<p>Before encryption, the message must be prepared:</p>
+
+<ol>
+  <li>
+    <p>Split the plaintext into <strong>pairs of letters</strong>.</p>
+  </li>
+  <li>
+    <p>If a pair contains the <strong>same letter twice</strong>, insert <strong>X</strong> between them<br />
+and then continue pairing.</p>
+
+    <p>Example:<br />
+BALLOON → BA LX LO ON</p>
+  </li>
+  <li>
+    <p>If the final pair contains only <strong>one letter</strong>, append <strong>X</strong> to complete it.</p>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="rules-for-encryption">Rules for Encryption</h3>
+
+<p>Let the two letters of a pair be located in the matrix.</p>
+
+<ol>
+  <li>
+    <p><strong>Same Row</strong><br />
+Replace each letter with the letter <strong>to its right</strong><br />
+(wrap around to the beginning if needed).</p>
+  </li>
+  <li>
+    <p><strong>Same Column</strong><br />
+Replace each letter with the letter <strong>below it</strong><br />
+(wrap around to the top if needed).</p>
+  </li>
+  <li>
+    <p><strong>Different Row and Column (Rectangle Rule)</strong><br />
+Replace each letter with the letter in the <strong>same row</strong><br />
+but in the <strong>column of the other letter</strong>.</p>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="rules-for-decryption">Rules for Decryption</h3>
+
+<p>The rules are the reverse of encryption:</p>
+
+<ol>
+  <li>
+    <p><strong>Same Row</strong><br />
+Replace each letter with the letter <strong>to its left</strong>.</p>
+  </li>
+  <li>
+    <p><strong>Same Column</strong><br />
+Replace each letter with the letter <strong>above it</strong>.</p>
+  </li>
+  <li>
+    <p><strong>Rectangle Rule</strong><br />
+Use the same rectangle method as encryption<br />
+(rows stay the same, columns are swapped).</p>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="example-1">Example:</h3>
+
+<p>Let the keyword be:
+<strong>APPLE</strong></p>
+
+<p>and the plaintext be : 
+<strong>I AM LEARNING CRYPTOGRAPHY.</strong></p>
+
+<p>First remove repeated letters in keyspace and then construction 5 * 5 matrix :</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>A</th>
+      <th>P</th>
+      <th>L</th>
+      <th>E</th>
+      <th>B</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>C</td>
+      <td>D</td>
+      <td>F</td>
+      <td>G</td>
+      <td>H</td>
+    </tr>
+    <tr>
+      <td>I/J</td>
+      <td>K</td>
+      <td>M</td>
+      <td>N</td>
+      <td>O</td>
+    </tr>
+    <tr>
+      <td>Q</td>
+      <td>R</td>
+      <td>S</td>
+      <td>T</td>
+      <td>U</td>
+    </tr>
+    <tr>
+      <td>V</td>
+      <td>W</td>
+      <td>X</td>
+      <td>Y</td>
+      <td>Z</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h4 id="preparing-plaintext-">Preparing Plaintext :</h4>
+
+<p>Remove spaces from plaintext and convert to digraphs according to the rules from <strong>Preparing the Message</strong> . The plaintext becomes:</p>
+
+<p><br /></p>
+
+<p><strong>IA ML EA RN IN GC RY PT OG RA PH YX</strong></p>
+
+<p><br /></p>
+
+<hr />
+
+<h4 id="encrypt-each-pair">Encrypt Each Pair</h4>
+
+<p>Apply the rule of encryption:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Pair</th>
+      <th>Rule</th>
+      <th>Cipher</th>
+      <th>Logic</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>IA</td>
+      <td>Same Column</td>
+      <td>QC</td>
+      <td>I is below A. I moves down to Q, A moves down to C.</td>
+    </tr>
+    <tr>
+      <td>ML</td>
+      <td>Same Column</td>
+      <td>SF</td>
+      <td>M is below L. M moves down to S, L moves down to F.</td>
+    </tr>
+    <tr>
+      <td>EA</td>
+      <td>Same Row</td>
+      <td>BP</td>
+      <td>E moves right to B, A moves right to P.</td>
+    </tr>
+    <tr>
+      <td>RN</td>
+      <td>Rectangle</td>
+      <td>TK</td>
+      <td>R(4,2) and N(3,4). Corners: T and K.</td>
+    </tr>
+    <tr>
+      <td>IN</td>
+      <td>Same Row</td>
+      <td>KO</td>
+      <td>I moves right to K, N moves right to O.</td>
+    </tr>
+    <tr>
+      <td>GC</td>
+      <td>Same Row</td>
+      <td>HD</td>
+      <td>G moves right to H, C moves right to D.</td>
+    </tr>
+    <tr>
+      <td>RY</td>
+      <td>Rectangle</td>
+      <td>TW</td>
+      <td>R(4,2) and Y(5,4). Corners: T and W.</td>
+    </tr>
+    <tr>
+      <td>PT</td>
+      <td>Rectangle</td>
+      <td>ER</td>
+      <td>P(1,2) and T(4,4). Corners: E and R.</td>
+    </tr>
+    <tr>
+      <td>OG</td>
+      <td>Rectangle</td>
+      <td>NH</td>
+      <td>O(3,5) and G(2,4). Corners: N and H.</td>
+    </tr>
+    <tr>
+      <td>RA</td>
+      <td>Rectangle</td>
+      <td>QP</td>
+      <td>R(4,2) and A(1,1). Corners: Q and P.</td>
+    </tr>
+    <tr>
+      <td>PH</td>
+      <td>Rectangle</td>
+      <td>BD</td>
+      <td>P(1,2) and H(2,5). Corners: B and D.</td>
+    </tr>
+    <tr>
+      <td>YX</td>
+      <td>Same Row</td>
+      <td>ZY</td>
+      <td>Y moves right to Z, X moves right to Y.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>so finally the obtained ciphertext is <strong>QCSFBPTKKOHDTWERNHQPBDZY</strong></p>
+
+<p><br /></p>
+
+<hr />
+
+<p><strong>TRY OUT THE DECRYPTION!!</strong></p>
+
+<hr />
+
+<h3 id="interactive-playfair-cipher">Interactive Playfair cipher:</h3>
+
+<p>Try out interactive Playfair cipher for encryption and decryption:</p>
+
+<div class="module-section">
+    <h2 class="module-title playfair-title">1. Playfair Encryption</h2>
+    <label>Keyword (Matrix Generation)</label>
+    <input type="text" id="playfair_enc_key" placeholder="Enter key..." oninput="updatePlayfairMatrix('enc')" />
+    
+    <div class="matrix-container" id="playfair_enc_matrix"></div>
+
+    <label>Plaintext Message</label>
+    <input type="text" id="playfair_enc_input" placeholder="Enter message..." />
+    
+    <button class="btn-playfair-enc" onclick="processPlayfair('enc')">Execute Playfair Encryption ➔</button>
+    <div class="result-display" id="playfair_enc_res">Waiting for data...</div>
+</div>
+
+<div class="module-section">
+    <h2 class="module-title playfair-decrypt-title">2. Playfair Decryption</h2>
+    <label>Keyword</label>
+    <input type="text" id="playfair_dec_key" placeholder="Enter key..." oninput="updatePlayfairMatrix('dec')" />
+    
+    <div class="matrix-container" id="playfair_dec_matrix"></div>
+
+    <label>Ciphertext</label>
+    <input type="text" id="playfair_dec_input" placeholder="Enter ciphertext..." />
+    
+    <button class="btn-playfair-dec" onclick="processPlayfair('dec')">Execute Playfair Decryption ➔</button>
+    <div class="result-display" id="playfair_dec_res">Waiting for data...</div>
+</div>
+
+<script>
+    function getPlayfairMatrix(key) {
+        key = key.toUpperCase().replace(/J/g, "I").replace(/[^A-Z]/g, "");
+        let alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+        let full = [...new Set((key + alphabet).split(""))].slice(0, 25);
+        return full;
+    }
+
+    function updatePlayfairMatrix(mode) {
+        const key = document.getElementById(`playfair_${mode}_key`).value;
+        const matrix = getPlayfairMatrix(key);
+        const container = document.getElementById(`playfair_${mode}_matrix`);
+        container.innerHTML = matrix.map(char => `<div class="cell">${char}</div>`).join('');
+    }
+
+    function playfairLogic(text, key, isEncrypt) {
+        const m = getPlayfairMatrix(key);
+        let cleanText = text.toUpperCase().replace(/J/g, "I").replace(/[^A-Z]/g, "");
+
+        let prepared = cleanText;
+        if (isEncrypt) {
+            prepared = "";
+            for (let i = 0; i < cleanText.length; i += 2) {
+                let a = cleanText[i];
+                let b = cleanText[i + 1];
+                if (!b) {
+                    prepared += a + "X";
+                } else if (a === b) {
+                    prepared += a + "X";
+                    i--;
+                } else {
+                    prepared += a + b;
+                }
+            }
+        }
+
+        let out = "";
+        const move = isEncrypt ? 1 : -1;
+
+        for (let i = 0; i < prepared.length; i += 2) {
+            let a = prepared[i], b = prepared[i + 1];
+            let i1 = m.indexOf(a), i2 = m.indexOf(b);
+            let r1 = Math.floor(i1/5), c1 = i1%5;
+            let r2 = Math.floor(i2/5), c2 = i2%5;
+
+            if (r1 === r2) {
+                out += m[r1 * 5 + (c1 + move + 5) % 5] + m[r2 * 5 + (c2 + move + 5) % 5];
+            } else if (c1 === c2) {
+                out += m[((r1 + move + 5) % 5) * 5 + c1] + m[((r2 + move + 5) % 5) * 5 + c2];
+            } else {
+                out += m[r1 * 5 + c2] + m[r2 * 5 + c1];
+            }
+        }
+
+        if (!isEncrypt) {
+            let healed = "";
+            for (let i = 0; i < out.length; i++) {
+                let current = out[i];
+                let prev = out[i-1];
+                let next = out[i+1];
+                
+                if (current === "X") {
+                    if (prev && next && prev === next) continue;
+                    if (i === out.length - 1) continue;
+                }
+                healed += current;
+            }
+            return healed;
+        }
+
+        return out;
+    }
+
+    function processPlayfair(mode) {
+        const key = document.getElementById(`playfair_${mode}_key`).value;
+        const input = document.getElementById(`playfair_${mode}_input`).value;
+        const display = document.getElementById(`playfair_${mode}_res`);
+
+        display.innerHTML = "<span class='loading'>Processing...</span>";
+
+        setTimeout(() => {
+            display.innerText = playfairLogic(input, key, mode === 'enc');
+        }, 400);
+    }
+
+    // Initialize matrices
+    updatePlayfairMatrix('enc');
+    updatePlayfairMatrix('dec');
+</script>
+
+<hr />
+
+<h2 id="conclusion">Conclusion:</h2>
+
+<p>In this part, we explored some advanced classical ciphers, however, they remain vulnerable to cryptanalysis. In the upcoming article, we will look at more classical cipher and eventually identify vulnerability in classical cipher.</p>
+
+<p><br /></p>
+
+<hr />
+
+<p><em>End of article.</em></p>
+
+    </main>
+    
+    <footer class="site-footer">
+        <p>© 2026 Anurag's Digital Space</p>
+    </footer>
+</body>
+</html>
