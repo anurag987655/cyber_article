@@ -1,0 +1,1105 @@
+---
+layout: default
+title: "Statistics Introduction: Scales of Measurement"
+date: 2026-09-17
+categories: [updates]
+---
+
+<style>
+/* ── Stats Article Styles ── */
+.stats-callout {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border-left: 4px solid #2563eb;
+  border-radius: 0 12px 12px 0;
+  padding: 18px 22px;
+  margin: 24px 0;
+  font-size: 1.05rem;
+}
+.stats-callout strong { color: #1e40af; }
+
+.stats-warning {
+  background: linear-gradient(135deg, #fefce8, #fef3c7);
+  border-left: 4px solid #f59e0b;
+  border-radius: 0 12px 12px 0;
+  padding: 18px 22px;
+  margin: 24px 0;
+}
+
+.compare-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 24px 0;
+}
+@media (max-width: 600px) { .compare-cards { grid-template-columns: 1fr; } }
+.compare-card {
+  background: white;
+  border-radius: 14px;
+  padding: 24px;
+  border: 2px solid #e2e8f0;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.compare-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+.compare-card h4 { margin: 0 0 10px; font-size: 1.15rem; }
+.compare-card p { color: #475569; font-size: 0.95rem; }
+.card-descriptive { border-top: 4px solid #2563eb; }
+.card-descriptive h4 { color: #2563eb; }
+.card-inferential { border-top: 4px solid #7c3aed; }
+.card-inferential h4 { color: #7c3aed; }
+
+/* Scale cards */
+.scale-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 24px 0;
+}
+@media (max-width: 600px) { .scale-grid { grid-template-columns: 1fr; } }
+.scale-card {
+  border-radius: 14px;
+  padding: 20px;
+  border: 2px solid #e2e8f0;
+  transition: transform 0.3s;
+}
+.scale-card:hover { transform: scale(1.02); }
+.scale-card h4 { margin: 0 0 8px; font-size: 1.05rem; }
+.scale-card ul { margin: 8px 0 0 18px; font-size: 0.92rem; color: #475569; }
+.scale-nominal { background: #fef2f2; border-color: #fca5a5; }
+.scale-nominal h4 { color: #dc2626; }
+.scale-ordinal { background: #fff7ed; border-color: #fdba74; }
+.scale-ordinal h4 { color: #ea580c; }
+.scale-interval { background: #f0fdf4; border-color: #86efac; }
+.scale-interval h4 { color: #16a34a; }
+.scale-ratio { background: #eff6ff; border-color: #93c5fd; }
+.scale-ratio h4 { color: #2563eb; }
+
+/* Hierarchy visual */
+.scale-hierarchy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin: 30px 0;
+  flex-wrap: wrap;
+}
+.h-level {
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: white;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.5s ease forwards;
+}
+.h-nominal { animation-delay: 0.1s; background: #dc2626; }
+.h-ordinal { animation-delay: 0.3s; background: #ea580c; }
+.h-interval { animation-delay: 0.5s; background: #16a34a; }
+.h-ratio { animation-delay: 0.7s; background: #2563eb; }
+.h-arrow {
+  font-size: 1.4rem;
+  color: #94a3b8;
+  margin: 0 6px;
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+}
+.h-arrow-1 { animation-delay: 0.2s; }
+.h-arrow-2 { animation-delay: 0.4s; }
+.h-arrow-3 { animation-delay: 0.6s; }
+
+@keyframes slideUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* Quiz styles */
+.quiz-box {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 22px;
+  margin: 18px 0;
+}
+.quiz-box h4 { margin: 0 0 12px; color: #1e40af; }
+.quiz-options { list-style: none; padding: 0; }
+.quiz-options li {
+  padding: 10px 16px;
+  margin: 6px 0;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+.quiz-options li:hover { border-color: #2563eb; background: #eff6ff; }
+.quiz-options li.selected { border-color: #2563eb; background: #dbeafe; font-weight: 600; }
+.quiz-options li.correct { border-color: #16a34a; background: #dcfce7; }
+.quiz-options li.wrong { border-color: #dc2626; background: #fef2f2; }
+.quiz-feedback {
+  margin-top: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  display: none;
+}
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct { background: #dcfce7; color: #166534; }
+.quiz-feedback.wrong { background: #fef2f2; color: #991b1b; }
+
+/* Reveal answer */
+.reveal-block {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 18px;
+  margin: 14px 0;
+}
+.reveal-block h4 { margin: 0 0 10px; color: #334155; }
+.reveal-btn {
+  display: inline-block;
+  padding: 8px 20px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.reveal-btn:hover { background: #1d4ed8; transform: translateY(-1px); }
+.reveal-answer {
+  display: none;
+  margin-top: 12px;
+  padding: 14px;
+  background: #eff6ff;
+  border-radius: 8px;
+  border-left: 4px solid #2563eb;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+.reveal-answer.show { display: block; animation: fadeIn 0.3s ease; }
+
+/* Number line animation */
+.number-line-container {
+  position: relative;
+  margin: 30px auto;
+  max-width: 500px;
+}
+.number-line {
+  position: relative;
+  height: 6px;
+  background: #cbd5e1;
+  border-radius: 3px;
+  margin: 40px 0 30px;
+}
+.nl-tick {
+  position: absolute;
+  top: -8px;
+  width: 3px;
+  height: 22px;
+  background: #64748b;
+  border-radius: 2px;
+}
+.nl-label {
+  position: absolute;
+  top: 20px;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 600;
+}
+.nl-dot {
+  position: absolute;
+  top: -7px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  transition: left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.nl-dot-discrete { background: #dc2626; }
+.nl-dot-continuous { background: #2563eb; }
+.nl-legend {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 10px;
+  font-size: 0.85rem;
+}
+.nl-legend span::before {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.nl-legend .leg-disc::before { background: #dc2626; }
+.nl-legend .leg-cont::before { background: #2563eb; }
+
+/* IV DV card */
+.ivdv-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 22px;
+  margin: 16px 0;
+}
+.ivdv-card h4 { margin: 0 0 10px; color: #1e40af; font-size: 1.05rem; }
+.ivdv-card .study-text {
+  background: #f8fafc;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  margin-bottom: 14px;
+  border-left: 3px solid #93c5fd;
+  line-height: 1.7;
+}
+
+/* Grade calculator */
+.grade-calc {
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border: 2px solid #86efac;
+  border-radius: 14px;
+  padding: 24px;
+  text-align: center;
+  margin: 24px 0;
+}
+.grade-calc input[type="number"] {
+  width: 120px;
+  padding: 10px;
+  border: 2px solid #86efac;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  text-align: center;
+  margin: 10px 0;
+}
+.grade-calc input[type="number"]:focus { outline: none; border-color: #16a34a; }
+.grade-result {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 12px 0;
+  min-height: 50px;
+  transition: all 0.3s;
+}
+
+/* Real limits visual */
+.rl-visual {
+  position: relative;
+  height: 60px;
+  margin: 20px auto;
+  max-width: 460px;
+}
+.rl-bar {
+  position: absolute;
+  top: 20px;
+  height: 20px;
+  background: #e2e8f0;
+  border-radius: 10px;
+  width: 100%;
+}
+.rl-interval {
+  position: absolute;
+  top: 16px;
+  height: 28px;
+  background: #dbeafe;
+  border: 2px solid #2563eb;
+  border-radius: 6px;
+  transition: all 0.4s;
+}
+.rl-marker {
+  position: absolute;
+  top: 0;
+  width: 4px;
+  height: 52px;
+  background: #dc2626;
+  border-radius: 2px;
+  transition: left 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.rl-marker-label {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #dc2626;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.rl-bound-labels {
+  position: absolute;
+  bottom: -24px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+/* Classifier drag/click */
+.classifier-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin: 16px 0;
+}
+.classifier-item {
+  padding: 12px;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.classifier-item:hover { border-color: #2563eb; transform: translateY(-2px); }
+.classifier-item.done-correct { border-color: #16a34a; background: #dcfce7; }
+.classifier-item.done-wrong { border-color: #dc2626; background: #fef2f2; }
+.classifier-btns {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 12px;
+}
+.cl-btn {
+  padding: 8px 18px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+.cl-btn:hover { border-color: #2563eb; background: #eff6ff; }
+.cl-btn-active { border-color: #2563eb; background: #2563eb; color: white; }
+
+/* Pop vs Sample visual */
+.pop-sample-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin: 24px 0;
+  flex-wrap: wrap;
+}
+.pop-circle, .sample-circle {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  transition: transform 0.3s;
+}
+.pop-circle { width: 160px; height: 160px; background: #2563eb; font-size: 0.95rem; }
+.sample-circle { width: 100px; height: 100px; background: #7c3aed; font-size: 0.85rem; }
+.pop-circle:hover, .sample-circle:hover { transform: scale(1.05); }
+.pop-sample-arrow { font-size: 2rem; color: #94a3b8; }
+.pop-sample-labels {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 600;
+  margin-top: 8px;
+}
+</style>
+
+---
+
+## What Even is Statistics?
+
+Alright, let's kick things off. You've probably heard the famous quote:
+
+> *"There are three kinds of lies: lies, damned lies, and statistics."*
+> — Benjamin Disraeli
+
+Funny, right? But here's the thing — statistics itself isn't the problem. **How people use (and misuse) statistics** is where things go wrong.
+
+So what actually *is* statistics?
+
+<div class="stats-callout">
+<strong>Statistics</strong> = mathematical procedures for collecting, organizing, summarizing, and interpreting large amounts of information.
+</div>
+
+It's not just about numbers on a spreadsheet. It's about *how* those numbers were chosen, and *what they actually mean*. A number by itself is just a number — statistics gives it context.
+
+---
+
+## Why Should You Even Care?
+
+Let me throw some real-world scenarios at you:
+
+**Scenario 1:** A new Ben & Jerry's ad launches in late May. Ice cream sales jump 30% over the next three months. Conclusion: the ad worked!
+
+...or did people just buy more ice cream because it's *summer*? 🤔
+
+**Scenario 2:** "Interracial marriages are growing fast — 75% more this year than 25 years ago!"
+
+Sounds impressive, but what if the *baseline* was really small? A 75% increase from 4 marriages to 7 marriages is... not exactly a revolution.
+
+**Scenario 3:** A study claims "marriages that began online are less likely to end in divorce and have higher satisfaction."
+
+Cool — but who was studied? How many people? Was it just people who *stayed* married? (That's called **survivorship bias**, and it'll trick you every time.)
+
+This is why you need statistics: **to not get fooled.** Whether you're reading research articles, evaluating news claims, or just trying to win an argument at dinner — statistical literacy is a superpower.
+
+---
+
+## Descriptive vs. Inferential Statistics
+
+Think of statistics like cooking:
+
+<div class="compare-cards">
+<div class="compare-card card-descriptive">
+<h4>Descriptive Statistics</h4>
+<p><strong>Like reading a recipe aloud.</strong> You organize, summarize, and describe what you already have. Mean, median, charts, graphs — all descriptive. You're just telling people what's in the data.</p>
+<p style="margin-top:10px;font-size:0.85rem;color:#64748b;">Example: "The average score on the test was 78.5, with scores ranging from 42 to 99."</p>
+</div>
+<div class="compare-card card-inferential">
+<h4>Inferential Statistics</h4>
+<p><strong>Like tasting the soup and guessing how the whole pot tastes.</strong> You take a sample and make educated guesses (inferences) about the bigger population. This is where hypothesis testing comes in.</p>
+<p style="margin-top:10px;font-size:0.85rem;color:#64748b;">Example: "Based on our sample, we're 95% confident the average score for all students is between 75 and 82."</p>
+</div>
+</div>
+
+**Descriptive** = describing what you see. **Inferential** = going beyond what you see to make broader claims.
+
+---
+
+## Population vs. Sample
+
+This one's simple but crucial.
+
+<div class="pop-sample-visual">
+  <div>
+    <div class="pop-circle">All University<br>Students<br>(Population)</div>
+  </div>
+  <div class="pop-sample-arrow">→</div>
+  <div>
+    <div class="sample-circle">500<br>Students<br>(Sample)</div>
+  </div>
+</div>
+<div class="pop-sample-labels">
+  <span>Parameter (describes population)</span>
+  <span>Statistic (describes sample)</span>
+</div>
+
+| | Population | Sample |
+|---|---|---|
+| **What is it?** | Everyone you're interested in | A subset you actually study |
+| **Value called** | Parameter | Statistic |
+| **Example** | Average height of all university students | Average height of 500 surveyed students |
+
+<div class="stats-callout">
+<strong>Key idea:</strong> We want to know about the <em>population</em>, but we can usually only study a <em>sample</em>. The whole game of statistics is making sure our sample gives us a fair picture of the population.
+</div>
+
+### Quick check — NASA Twitter poll
+
+During the NASA/SpaceX launch in 2020, NASA tweeted a poll: *"Would you travel to space?"*
+
+- **Population:** All humans? All Americans? All Twitter users?
+- **Sample:** People who saw the tweet and chose to vote
+
+Can we conclude "most people want to go to space" from this? **Absolutely not.** This is a classic example of **sampling bias** — the sample (Twitter users who follow NASA) doesn't represent the general population.
+
+A Pew Research Center study found that **most Americans actually wouldn't be interested** in space tourism. The NASA poll was fun, but it wasn't science.
+
+---
+
+## Sampling Error
+
+Here's a truth that might sting: **your sample will NEVER perfectly represent the population.**
+
+That gap between your sample statistic and the true population parameter? That's called **sampling error.**
+
+It's not a "mistake" — it's a natural, expected discrepancy. Think of it like this: if you grab 5 random students from a university and measure their height, you probably won't get the *exact* average height of all 30,000 students. That's okay. That's normal.
+
+The key is: **samples must be representative.** If your sample is biased (like only surveying people in the library during finals week), your results will be biased too.
+
+---
+
+## Numerals vs. Numbers
+
+This distinction is subtle but important:
+
+| | Numerals | Numbers |
+|---|---|---|
+| **What are they?** | Labels or codes | Quantities |
+| **Do math on them?** | No (makes no sense) | Yes! |
+| **Example** | Gender: 1 = female, 2 = male, 3 = non-binary | Number of participants: 47 female, 32 male, 11 non-binary |
+
+Saying "the average gender is 2.3" makes zero sense. But "the average number of siblings is 2.3" does. One is a **label**, the other is a **measurement**.
+
+---
+
+## Discrete vs. Continuous Numbers
+
+<div class="stats-callout">
+<strong>Discrete</strong> = separate, indivisible categories. No values between units.<br>
+<strong>Continuous</strong> = infinite possible values between any two points.
+</div>
+
+**Discrete example:** You can have 4 kids or 5 kids, but not 4.37 kids. (Thankfully.)
+
+**Continuous example:** Height, weight, time, temperature — a person can be 170.5 cm, 170.53 cm, 170.531 cm... the precision is basically unlimited.
+
+### Let's visualize this
+
+<div class="number-line-container">
+  <p style="text-align:center;font-weight:600;margin-bottom:5px;">Watch the difference:</p>
+  <div class="number-line" id="numLine">
+    <div class="nl-tick" style="left:0%"></div><div class="nl-label" style="left:0%">0</div>
+    <div class="nl-tick" style="left:20%"></div><div class="nl-label" style="left:20%">1</div>
+    <div class="nl-tick" style="left:40%"></div><div class="nl-label" style="left:40%">2</div>
+    <div class="nl-tick" style="left:60%"></div><div class="nl-label" style="left:60%">3</div>
+    <div class="nl-tick" style="left:80%"></div><div class="nl-label" style="left:80%">4</div>
+    <div class="nl-tick" style="left:100%"></div><div class="nl-label" style="left:100%">5</div>
+    <div class="nl-dot nl-dot-discrete" id="dotDiscrete" style="left:0%"></div>
+    <div class="nl-dot nl-dot-continuous" id="dotContinuous" style="left:0%"></div>
+  </div>
+  <div class="nl-legend">
+    <span class="leg-disc">Discrete — snaps to whole numbers</span>
+    <span class="leg-cont">Continuous — slides anywhere</span>
+  </div>
+  <div style="text-align:center;margin-top:14px;display:flex;gap:12px;justify-content:center;">
+    <button onclick="animateDiscrete()" style="padding:10px 22px;background:#dc2626;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">Animate Discrete</button>
+    <button onclick="animateContinuous()" style="padding:10px 22px;background:#2563eb;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">Animate Continuous</button>
+  </div>
+</div>
+
+### Discrete continuum — wait, what?
+
+Sometimes we *treat* continuous data as discrete. Your final grade might be 89.67%, but the grade boundary says A+ starts at 89.5%. So we round. Age is technically continuous (you're never *exactly* 20), but we report it in whole years. Education level is reported as "completed grade 12" or "completed bachelor's" — discrete categories of something that's actually continuous.
+
+---
+
+## Real Limits — Where Do You Really Fall?
+
+Here's where it gets interesting. When we measure something on a continuous scale, the number you see is actually an **approximation**.
+
+Say your weight is 150 lbs. That doesn't mean you weigh *exactly* 150.0000... lbs. It means you're somewhere in the interval:
+
+$$149.5 \leq \text{weight} < 150.5$$
+
+These boundaries are called **real limits**:
+
+- **Lower real limit** = 149.5 (lower boundary)
+- **Upper real limit** = 150.5 (upper boundary)
+
+### Try the grade calculator
+
+<div class="grade-calc">
+  <p style="font-weight:600;margin-bottom:8px;">Enter your percentage grade:</p>
+  <input type="number" id="gradeInput" min="0" max="100" step="0.01" placeholder="e.g. 89.5" oninput="calcGrade()">
+  <div class="grade-result" id="gradeResult">—</div>
+  <div id="gradeInterval" style="font-size:0.9rem;color:#475569;min-height:24px;"></div>
+  <div style="margin-top:16px;text-align:left;max-width:280px;margin-left:auto;margin-right:auto;">
+    <div style="font-size:0.8rem;color:#64748b;line-height:1.8;">
+      <strong>Grade Scale:</strong><br>
+      A+ = 89.5–100% &nbsp;|&nbsp; A = 84.5–89.5%<br>
+      A− = 80–84.5% &nbsp;|&nbsp; B+ = 77–80%<br>
+      B = 73–77% &nbsp;|&nbsp; B− = 70–73%<br>
+      C+ = 65–70% &nbsp;|&nbsp; C = 60–65%<br>
+      D = 50–60% &nbsp;|&nbsp; F = 0–50%
+    </div>
+  </div>
+</div>
+
+So if your grade is **89.49%**, did you get an A or A+? Looking at the scale, A+ starts at 89.5, so 89.49% is an **A**. Just barely missed it!
+
+---
+
+## Independent vs. Dependent Variables
+
+In research, we're usually trying to figure out if one thing *affects* another.
+
+<div class="ivdv-card">
+<h4>Independent Variable (IV) — the "cause"</h4>
+<p>This is what the researcher manipulates or selects. It's the presumed influencer. Also called the <strong>predictor</strong>.</p>
+<p style="font-size:0.9rem;color:#64748b;margin-top:8px;">Can be: <em>manipulated</em> (researcher assigns groups) or <em>measured</em> (inherent trait like age, gender)</p>
+</div>
+
+<div class="ivdv-card">
+<h4>Dependent Variable (DV) — the "effect"</h4>
+<p>This is what's being measured or observed. It's the outcome. Also called the <strong>criterion</strong>.</p>
+<p style="font-size:0.9rem;color:#64748b;margin-top:8px;">Can be: behavioral, attitudinal, cognitive, or physiological</p>
+</div>
+
+### Example: The Blueberry Rat Study
+
+<div class="ivdv-card">
+<h4>Can blueberries slow down aging?</h4>
+<div class="study-text">
+19-month-old rats (equivalent to 60-year-old humans) were fed either their <strong>standard diet</strong> or a diet supplemented with <strong>blueberry, strawberry, or spinach powder</strong>. After 8 weeks, they were given memory and motor skills tests. Blueberry-supplemented rats showed the most improvement.
+</div>
+</div>
+
+**What's the IV?** → Diet type (what was manipulated)
+**What's the DV?** → Memory and motor skills (what was measured)
+
+### Your turn — identify IV and DV
+
+<div class="quiz-box" id="ivdvQuiz">
+<h4>Quiz: A researcher compares test scores between students who studied with background music vs. silence.</h4>
+<ul class="quiz-options">
+  <li onclick="checkIVDV(this, 'ivdvQuiz', false)">IV = test scores, DV = music type</li>
+  <li onclick="checkIVDV(this, 'ivdvQuiz', true)">IV = study condition (music vs silence), DV = test scores</li>
+  <li onclick="checkIVDV(this, 'ivdvQuiz', false)">IV = students, DV = background noise</li>
+</ul>
+<div class="quiz-feedback" id="ivdvQuiz-feedback"></div>
+</div>
+
+---
+
+## Scales of Measurement — The Big One
+
+This is the heart of today's topic. When we assign numbers to things, *what kind of numbers are they?*
+
+### The hierarchy
+
+<div class="scale-hierarchy">
+  <div class="h-level h-nominal">Nominal</div>
+  <div class="h-arrow h-arrow-1">→</div>
+  <div class="h-level h-ordinal">Ordinal</div>
+  <div class="h-arrow h-arrow-2">→</div>
+  <div class="h-level h-interval">Interval</div>
+  <div class="h-arrow h-arrow-3">→</div>
+  <div class="h-level h-ratio">Ratio</div>
+</div>
+
+Each level builds on the one before it. More info = more mathematical power.
+
+<div class="scale-grid">
+
+<div class="scale-card scale-nominal">
+<h4>1. Nominal — "What category?"</h4>
+<ul>
+  <li>Just labels / categories</li>
+  <li>No order, no math</li>
+  <li>Numbers are just names</li>
+  <li><strong>Example:</strong> Jersey numbers — #5 isn't "less than" #8</li>
+  <li><strong>Example:</strong> Eye color, gender, phone type</li>
+</ul>
+</div>
+
+<div class="scale-card scale-ordinal">
+<h4>2. Ordinal — "Which order?"</h4>
+<ul>
+  <li>Categories have a meaningful order</li>
+  <li>Gaps between ranks aren't equal</li>
+  <li><strong>Example:</strong> Gold > Silver > Bronze (but how much better?)</li>
+  <li><strong>Example:</strong> Likert scales (satisfied, neutral, dissatisfied)</li>
+</ul>
+</div>
+
+<div class="scale-card scale-interval">
+<h4>3. Interval — "How much more?"</h4>
+<ul>
+  <li>Equal gaps between values</li>
+  <li>No true zero (zero doesn't mean "none")</li>
+  <li><strong>Example:</strong> Temperature — 20°C is not "twice as hot" as 10°C</li>
+  <li><strong>Example:</strong> Calendar years, IQ scores</li>
+</ul>
+</div>
+
+<div class="scale-card scale-ratio">
+<h4>4. Ratio — "How many times more?"</h4>
+<ul>
+  <li>Equal gaps + true zero (zero = absence)</li>
+  <li>Can say "twice as much"</li>
+  <li><strong>Example:</strong> Weight, height, money, time</li>
+  <li><strong>Example:</strong> $0 = no money, 0 cm = no height</li>
+</ul>
+</div>
+
+</div>
+
+### Why does it matter?
+
+Here's the same number used three different ways:
+
+| Context | Scale | Can you do math? |
+|---|---|---|
+| Jersey number: 5 vs 8 | Nominal | Nope — just labels |
+| League ranking: 5th vs 8th | Ordinal | Can order, but can't say "how much" |
+| Goals scored: 5 vs 8 | Ratio | Yes! 8 is 60% more than 5 |
+
+### Quick scale quiz
+
+<div class="quiz-box" id="scaleQuiz1">
+<h4>What scale of measurement is "What kind of phone do you have?"</h4>
+<ul class="quiz-options">
+  <li onclick="checkScale(this,'scaleQuiz1','correct')">Nominal</li>
+  <li onclick="checkScale(this,'scaleQuiz1','wrong')">Ordinal</li>
+  <li onclick="checkScale(this,'scaleQuiz1','wrong')">Interval</li>
+  <li onclick="checkScale(this,'scaleQuiz1','wrong')">Ratio</li>
+</ul>
+<div class="quiz-feedback" id="scaleQuiz1-feedback"></div>
+</div>
+
+<div class="quiz-box" id="scaleQuiz2">
+<h4>What scale is "Number of items correctly recalled in a memory experiment"?</h4>
+<ul class="quiz-options">
+  <li onclick="checkScale(this,'scaleQuiz2','wrong')">Nominal</li>
+  <li onclick="checkScale(this,'scaleQuiz2','wrong')">Ordinal</li>
+  <li onclick="checkScale(this,'scaleQuiz2','wrong')">Interval</li>
+  <li onclick="checkScale(this,'scaleQuiz2','correct')">Ratio</li>
+</ul>
+<div class="quiz-feedback" id="scaleQuiz2-feedback"></div>
+</div>
+
+<div class="quiz-box" id="scaleQuiz3">
+<h4>What scale is "Temperature in Celsius"?</h4>
+<ul class="quiz-options">
+  <li onclick="checkScale(this,'scaleQuiz3','wrong')">Nominal</li>
+  <li onclick="checkScale(this,'scaleQuiz3','wrong')">Ordinal</li>
+  <li onclick="checkScale(this,'scaleQuiz3','correct')">Interval</li>
+  <li onclick="checkScale(this,'scaleQuiz3','wrong')">Ratio</li>
+</ul>
+<div class="quiz-feedback" id="scaleQuiz3-feedback"></div>
+</div>
+
+<div class="quiz-box" id="scaleQuiz4">
+<h4>What scale is "Satisfaction rating: Very Unsatisfied → Very Satisfied"?</h4>
+<ul class="quiz-options">
+  <li onclick="checkScale(this,'scaleQuiz4','wrong')">Nominal</li>
+  <li onclick="checkScale(this,'scaleQuiz4','correct')">Ordinal</li>
+  <li onclick="checkScale(this,'scaleQuiz4','wrong')">Interval</li>
+  <li onclick="checkScale(this,'scaleQuiz4','wrong')">Ratio</li>
+</ul>
+<div class="quiz-feedback" id="scaleQuiz4-feedback"></div>
+</div>
+
+### A word of caution
+
+In psychology, we generally follow Stevens' (1946) definition of scales. But real life is messy. **Likert scales** (rate 1-5) are technically ordinal, but researchers often treat them as interval. Why? Because with well-validated psychological measures (like personality or intelligence tests), treating them as interval gives us more analytical power.
+
+The most common mistake? **Treating ordinal data as if it were ratio.** Here's a real survey question that made this error:
+
+> *"How many times per week do you have sexual intercourse?"*
+> Options: 0, 1, 2, 3, 4, 5 or more
+
+The researchers reported a **mean of 3.57** with **SD of 1.5**. But these are categories, not actual counts! The "5 or more" category could mean 5 or 50 — you can't calculate a meaningful average from that.
+
+---
+
+## Classify It! — Interactive Practice
+
+Let's practice distinguishing discrete from continuous. Click on each item, then choose whether it's discrete or continuous.
+
+<div id="classifierArea">
+  <div class="classifier-grid" id="classifierGrid"></div>
+  <div class="classifier-btns">
+    <button class="cl-btn" onclick="classifyItem('discrete')" id="clBtnDiscrete">Discrete</button>
+    <button class="cl-btn" onclick="classifyItem('continuous')" id="clBtnContinuous">Continuous</button>
+  </div>
+  <div id="classifierFeedback" style="text-align:center;margin-top:10px;font-weight:600;min-height:24px;"></div>
+</div>
+
+---
+
+## Self-Assessment Quiz
+
+Test yourself! Click "Reveal Answer" to check.
+
+<div class="reveal-block">
+<h4>1. What are the two main branches of statistics?</h4>
+<button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
+<div class="reveal-answer">
+<strong>Descriptive statistics</strong> (summarizing and organizing data) and <strong>inferential statistics</strong> (making predictions/inferences about a population from a sample).
+</div>
+</div>
+
+<div class="reveal-block">
+<h4>2. What is the difference between a parameter and a statistic?</h4>
+<button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
+<div class="reveal-answer">
+A <strong>parameter</strong> describes a <em>population</em>. A <strong>statistic</strong> describes a <em>sample</em>. For example, the average height of all students (parameter) vs. the average height of 100 surveyed students (statistic).
+</div>
+</div>
+
+<div class="reveal-block">
+<h4>3. What is sampling error?</h4>
+<button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
+<div class="reveal-answer">
+The natural discrepancy between a sample statistic and the true population parameter. It's not a mistake — it's expected because a sample is never a perfect mirror of the population.
+</div>
+</div>
+
+<div class="reveal-block">
+<h4>4. A researcher assigns participants to either a drug group or placebo group and measures their anxiety levels. What is the IV and DV?</h4>
+<button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
+<div class="reveal-answer">
+<strong>IV:</strong> Group assignment (drug vs. placebo) — this is what the researcher manipulates.<br>
+<strong>DV:</strong> Anxiety levels — this is what's being measured.
+</div>
+</div>
+
+<div class="reveal-block">
+<h4>5. Why can't you calculate a meaningful average of jersey numbers?</h4>
+<button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
+<div class="reveal-answer">
+Jersey numbers are <strong>nominal</strong> — they're just labels. The number 10 isn't "twice" number 5 in any meaningful way. You can't do math on categories.
+</div>
+</div>
+
+<div class="reveal-block">
+<h4>6. What's the key difference between interval and ratio scales?</h4>
+<button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
+<div class="reveal-answer">
+<strong>Ratio scales have a true zero</strong> (zero means "none"), while interval scales don't. Temperature in Celsius has no true zero (0°C doesn't mean "no temperature"), but weight has a true zero (0 kg = no weight). This means ratio scales allow meaningful ratios ("twice as heavy").
+</div>
+</div>
+
+<div class="reveal-block">
+<h4>7. Classify: "Number of siblings" — discrete or continuous?</h4>
+<button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
+<div class="reveal-answer">
+<strong>Discrete.</strong> You can have 2 or 3 siblings, but not 2.74 siblings. The values are countable whole numbers with nothing in between.
+</div>
+</div>
+
+<div class="reveal-block">
+<h4>8. What is a real limit? Give an example.</h4>
+<button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
+<div class="reveal-answer">
+Real limits are the boundaries of intervals for continuous data. A reported weight of 150 lbs actually falls between <strong>149.5 and 150.5 lbs</strong>. The lower real limit is 149.5 and the upper real limit is 150.5.
+</div>
+</div>
+
+<div class="reveal-block">
+<h4>9. A survey asks people to rate a product as "Poor, Fair, Good, Excellent." What scale of measurement is this?</h4>
+<button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
+<div class="reveal-answer">
+<strong>Ordinal.</strong> The categories have a clear order (Poor < Fair < Good < Excellent), but the gaps between them aren't necessarily equal. We can't say the difference between "Poor" and "Fair" is the same as between "Good" and "Excellent."
+</div>
+</div>
+
+<div class="reveal-block">
+<h4>10. Why is it problematic to calculate a mean from ordinal data like a Likert scale?</h4>
+<button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
+<div class="reveal-answer">
+Because ordinal data only tells us <em>order</em>, not <em>distance</em>. The "gap" between "satisfied" and "very satisfied" may not be the same as between "neutral" and "satisfied." Calculating a mean assumes equal intervals, which ordinal scales don't guarantee. This is the most common error in survey research.
+</div>
+</div>
+
+---
+
+## Wrapping Up
+
+Alright, let's recap the key takeaways:
+
+- **Statistics** is about collecting, organizing, and interpreting data — not just crunching numbers
+- **Descriptive** summarizes what you have; **inferential** goes beyond to make claims
+- Always watch out for **sampling bias** and **sampling error**
+- Know the difference between **numerals** (labels) and **numbers** (quantities)
+- **Discrete** = countable; **Continuous** = measurable on a continuum
+- **Real limits** remind us that measurements are approximations
+- **IV** = what you manipulate; **DV** = what you measure
+- **Scales of measurement** (Nominal → Ordinal → Interval → Ratio) determine what math you can do
+
+And most importantly: **don't believe everything you read without checking the statistics behind it.** 😉
+
+---
+
+<script>
+// ── Grade Calculator ──
+function calcGrade() {
+  const val = parseFloat(document.getElementById('gradeInput').value);
+  const resultEl = document.getElementById('gradeResult');
+  const intervalEl = document.getElementById('gradeInterval');
+  if (isNaN(val) || val < 0 || val > 100) {
+    resultEl.textContent = '—';
+    resultEl.style.color = '#64748b';
+    intervalEl.textContent = '';
+    return;
+  }
+  let grade, color, interval;
+  if (val >= 89.5) { grade = 'A+'; color = '#16a34a'; interval = '89.5% – 100%'; }
+  else if (val >= 84.5) { grade = 'A'; color = '#2563eb'; interval = '84.5% – 89.5%'; }
+  else if (val >= 80) { grade = 'A−'; color = '#0891b2'; interval = '80% – 84.5%'; }
+  else if (val >= 77) { grade = 'B+'; color = '#7c3aed'; interval = '77% – 80%'; }
+  else if (val >= 73) { grade = 'B'; color = '#9333ea'; interval = '73% – 77%'; }
+  else if (val >= 70) { grade = 'B−'; color = '#c026d3'; interval = '70% – 73%'; }
+  else if (val >= 65) { grade = 'C+'; color = '#db2777'; interval = '65% – 70%'; }
+  else if (val >= 60) { grade = 'C'; color = '#ea580c'; interval = '60% – 65%'; }
+  else if (val >= 50) { grade = 'D'; color = '#d97706'; interval = '50% – 60%'; }
+  else { grade = 'F'; color = '#dc2626'; interval = '0% – 50%'; }
+  resultEl.textContent = grade;
+  resultEl.style.color = color;
+  intervalEl.textContent = 'Falls in interval: ' + interval;
+}
+
+// ── Number Line Animation ──
+function animateDiscrete() {
+  const discrete = document.getElementById('dotDiscrete');
+  discrete.style.transition = 'none';
+  discrete.style.left = '0%';
+  void discrete.offsetWidth;
+  discrete.style.transition = 'left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+  const steps = [0, 20, 40, 60, 80, 100, 60, 30, 80, 10];
+  let i = 0;
+  function snapStep() {
+    if (i >= steps.length) return;
+    discrete.style.left = steps[i] + '%';
+    i++;
+    setTimeout(snapStep, 500);
+  }
+  snapStep();
+}
+
+function animateContinuous() {
+  const continuous = document.getElementById('dotContinuous');
+  continuous.style.transition = 'none';
+  continuous.style.left = '0%';
+  void continuous.offsetWidth;
+  continuous.style.transition = 'left 2s cubic-bezier(0.25, 0.1, 0.25, 1)';
+  continuous.style.left = '73%';
+}
+
+// ── IV/DV Quiz ──
+function checkIVDV(el, quizId, correct) {
+  const quiz = document.getElementById(quizId);
+  if (quiz.dataset.answered) return;
+  quiz.dataset.answered = 'true';
+  const fb = document.getElementById(quizId + '-feedback');
+  const options = quiz.querySelectorAll('li');
+  options.forEach(opt => {
+    opt.style.cursor = 'default';
+    if (opt === el) {
+      opt.classList.add(correct ? 'correct' : 'wrong');
+    }
+  });
+  // Highlight correct answer
+  if (!correct) {
+    options[1].classList.add('correct');
+  }
+  fb.classList.add('show', correct ? 'correct' : 'wrong');
+  fb.innerHTML = correct
+    ? '✅ Correct! The IV is what\'s manipulated (music condition), and the DV is what\'s measured (test scores).'
+    : '❌ Not quite. The IV is the study condition (music vs. silence) — that\'s what the researcher chose. The DV is the test scores — that\'s what was measured.';
+}
+
+// ── Scale Quiz ──
+function checkScale(el, quizId, result) {
+  const quiz = document.getElementById(quizId);
+  if (quiz.dataset.answered) return;
+  quiz.dataset.answered = 'true';
+  const fb = document.getElementById(quizId + '-feedback');
+  const options = quiz.querySelectorAll('li');
+  options.forEach(opt => {
+    opt.style.cursor = 'default';
+    if (opt === el) {
+      opt.classList.add(result === 'correct' ? 'correct' : 'wrong');
+    }
+  });
+  if (result !== 'correct') {
+    options.forEach(opt => {
+      if (opt.textContent.trim().startsWith(quizId === 'scaleQuiz1' ? 'Nominal' :
+          quizId === 'scaleQuiz2' ? 'Ratio' :
+          quizId === 'scaleQuiz3' ? 'Interval' : 'Ordinal')) {
+        opt.classList.add('correct');
+      }
+    });
+  }
+  const explanations = {
+    scaleQuiz1: 'Phone type (Android, iPhone, etc.) is just a category — no inherent order. That makes it <strong>nominal</strong>.',
+    scaleQuiz2: 'Number of items recalled is a count with a true zero (0 items = recalled nothing). That\'s <strong>ratio</strong>.',
+    scaleQuiz3: 'Temperature in Celsius has equal intervals but no true zero (0°C doesn\'t mean "no temperature"). That\'s <strong>interval</strong>.',
+    scaleQuiz4: 'Satisfaction ratings have order, but the gaps between levels aren\'t necessarily equal. That\'s <strong>ordinal</strong>.'
+  };
+  fb.classList.add('show', result === 'correct' ? 'correct' : 'wrong');
+  fb.innerHTML = (result === 'correct' ? '✅ Correct! ' : '❌ Not quite. ') + explanations[quizId];
+}
+
+// ── Reveal Answers ──
+function toggleReveal(btn) {
+  const answer = btn.nextElementSibling;
+  answer.classList.toggle('show');
+  btn.textContent = answer.classList.contains('show') ? 'Hide Answer' : 'Reveal Answer';
+}
+
+// ── Discrete vs Continuous Classifier ──
+const classifierItems = [
+  { name: 'Number of students in a class', type: 'discrete' },
+  { name: 'Your exact height', type: 'continuous' },
+  { name: 'Score on a 0-100 exam', type: 'continuous' },
+  { name: 'Number of goals in a soccer game', type: 'discrete' },
+  { name: 'Time to run a marathon', type: 'continuous' },
+  { name: 'Number of pets you own', type: 'discrete' },
+  { name: 'Temperature outside', type: 'continuous' },
+  { name: 'Number of classes you take', type: 'discrete' },
+  { name: 'Your weight', type: 'continuous' },
+  { name: 'Number of siblings', type: 'discrete' }
+];
+let selectedClassifierItem = null;
+let classifierScore = 0;
+let classifierTotal = 0;
+
+function initClassifier() {
+  const grid = document.getElementById('classifierGrid');
+  grid.innerHTML = '';
+  classifierItems.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'classifier-item';
+    div.textContent = item.name;
+    div.dataset.idx = idx;
+    div.onclick = () => selectClassifierItem(div);
+    grid.appendChild(div);
+  });
+  classifierScore = 0;
+  classifierTotal = 0;
+  document.getElementById('classifierFeedback').textContent = '';
+}
+
+function selectClassifierItem(div) {
+  if (div.classList.contains('done-correct') || div.classList.contains('done-wrong')) return;
+  document.querySelectorAll('.classifier-item').forEach(d => d.style.outline = 'none');
+  div.style.outline = '3px solid #2563eb';
+  selectedClassifierItem = div;
+}
+
+function classifyItem(choice) {
+  if (!selectedClassifierItem) {
+    document.getElementById('classifierFeedback').textContent = '👆 Click an item first!';
+    return;
+  }
+  const idx = parseInt(selectedClassifierItem.dataset.idx);
+  const item = classifierItems[idx];
+  classifierTotal++;
+  if (choice === item.type) {
+    classifierScore++;
+    selectedClassifierItem.classList.add('done-correct');
+    document.getElementById('classifierFeedback').innerHTML = '✅ Correct! <strong>' + item.name + '</strong> is ' + item.type + '.';
+  } else {
+    selectedClassifierItem.classList.add('done-wrong');
+    document.getElementById('classifierFeedback').innerHTML = '❌ Nope! <strong>' + item.name + '</strong> is ' + item.type + '.';
+  }
+  selectedClassifierItem.style.outline = 'none';
+  selectedClassifierItem = null;
+  if (classifierTotal === classifierItems.length) {
+    document.getElementById('classifierFeedback').innerHTML += '<br>🏆 You finished! Score: ' + classifierScore + '/' + classifierItems.length;
+  }
+}
+
+// Init on load
+document.addEventListener('DOMContentLoaded', function() {
+  initClassifier();
+});
+</script>
