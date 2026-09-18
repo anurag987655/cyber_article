@@ -814,60 +814,29 @@ h3 {
   padding: 16px;
   margin-top: 8px;
 }
-.sim-histogram-wrap h5 {
-  margin: 0 0 12px;
-  color: #334155;
-  font-size: 0.9rem;
-  text-align: center;
-}
-.sim-histogram {
-  display: flex;
-  align-items: flex-end;
-  gap: 2px;
-  height: 120px;
-  border-bottom: 2px solid #cbd5e1;
-  position: relative;
-}
-.sim-hist-bar {
-  flex: 1;
-  min-width: 0;
-  border-radius: 3px 3px 0 0;
-  transition: height 0.3s;
-  position: relative;
-}
-.sim-hist-bar.near { background: #22c55e; }
-.sim-hist-bar.mid { background: #f59e0b; }
-.sim-hist-bar.far { background: #ef4444; }
-.sim-hist-labels {
+.sim-hist-header {
   display: flex;
   justify-content: space-between;
-  font-size: 0.7rem;
-  color: #94a3b8;
-  margin-top: 4px;
-  padding: 0 2px;
+  align-items: center;
+  margin-bottom: 8px;
 }
-.sim-hist-marker {
-  position: absolute;
-  top: 0;
-  width: 2px;
-  height: 100%;
-  background: #1e40af;
-  z-index: 3;
+.sim-hist-header h5 {
+  margin: 0;
+  color: #334155;
+  font-size: 0.9rem;
 }
-.sim-hist-marker::after {
-  content: 'μ';
-  position: absolute;
-  top: -18px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.75rem;
-  color: #1e40af;
-  font-weight: 700;
+.sim-numberline {
+  position: relative;
+}
+.sim-hist-svg {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 .sim-empty-msg {
   text-align: center;
   color: #94a3b8;
   font-style: italic;
   font-size: 0.85rem;
-  padding: 30px 0;
+  padding: 20px 0;
 }

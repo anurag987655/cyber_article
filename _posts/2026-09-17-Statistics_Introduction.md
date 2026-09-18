@@ -610,12 +610,41 @@ It's not a "mistake" — it's a natural, expected discrepancy. Think of it like 
     </div>
   </div>
   <div class="sim-histogram-wrap">
-    <h5>📊 Sampling Distribution of x̄ (watch it build up!)</h5>
-    <div class="sim-histogram" id="simHistogram">
-      <div class="sim-empty-msg" id="simEmptyMsg">Click "Take Sample" to start building the distribution</div>
+    <div class="sim-hist-header">
+      <h5>📊 Sample Mean vs Population Mean</h5>
     </div>
-    <div class="sim-hist-labels">
-      <span>150</span><span>155</span><span>160</span><span>165</span><span>170</span><span>175</span><span>180</span><span>185</span><span>190</span>
+    <div class="sim-numberline" id="simNumberline">
+      <svg class="sim-hist-svg" id="simHistSvg" viewBox="0 0 500 80" preserveAspectRatio="xMidYMid meet">
+        <!-- number line -->
+        <line x1="20" y1="50" x2="480" y2="50" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round"/>
+        <!-- ticks -->
+        <line x1="20" y1="44" x2="20" y2="56" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="77.5" y1="44" x2="77.5" y2="56" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="135" y1="44" x2="135" y2="56" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="192.5" y1="44" x2="192.5" y2="56" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="250" y1="44" x2="250" y2="56" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="307.5" y1="44" x2="307.5" y2="56" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="365" y1="44" x2="365" y2="56" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="422.5" y1="44" x2="422.5" y2="56" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="480" y1="44" x2="480" y2="56" stroke="#94a3b8" stroke-width="2"/>
+        <!-- tick labels -->
+        <text x="20" y="72" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">150</text>
+        <text x="77.5" y="72" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">155</text>
+        <text x="135" y="72" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">160</text>
+        <text x="192.5" y="72" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">165</text>
+        <text x="250" y="72" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">170</text>
+        <text x="307.5" y="72" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">175</text>
+        <text x="365" y="72" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">180</text>
+        <text x="422.5" y="72" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">185</text>
+        <text x="480" y="72" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">190</text>
+        <!-- population mean line -->
+        <line id="simMuLine" x1="250" y1="10" x2="250" y2="50" stroke="#1e40af" stroke-width="2.5" stroke-dasharray="6,4"/>
+        <text id="simMuLabel" x="250" y="8" text-anchor="middle" fill="#1e40af" font-size="12" font-weight="700">μ = 170.0</text>
+        <!-- sample mean dot (hidden initially) -->
+        <circle id="simSampleDot" cx="250" cy="50" r="0" fill="#7c3aed" stroke="white" stroke-width="2"/>
+        <text id="simSampleLabel" x="250" y="38" text-anchor="middle" fill="#7c3aed" font-size="11" font-weight="700" opacity="0">x̄</text>
+      </svg>
+      <div class="sim-empty-msg" id="simEmptyMsg">Click "Take Sample" to see where the sample mean falls</div>
     </div>
   </div>
 </div>
@@ -641,11 +670,15 @@ It's not a "mistake" — it's a natural, expected discrepancy. Think of it like 
 
   function initPopulation() {
     population = [];
+    let sum = 0;
     for (let i = 0; i < POP_SIZE; i++) {
       let h = randNormal(POP_MEAN, POP_SD);
       h = Math.max(140, Math.min(200, h));
-      population.push({ height: h, selected: false });
+      sum += h;
+      population.push({ height: h, selected: false, x: 3 + Math.random() * 94, y: 3 + Math.random() * 90 });
     }
+    const actualMean = sum / POP_SIZE;
+    document.getElementById('simPopMean').textContent = 'μ = ' + actualMean.toFixed(1) + ' cm';
   }
 
   function heightToColor(h) {
@@ -663,8 +696,8 @@ It's not a "mistake" — it's a natural, expected discrepancy. Think of it like 
     for (let i = 0; i < POP_SIZE; i++) {
       let dot = document.createElement('div');
       dot.className = 'sim-dot' + (population[i].selected ? ' selected' : '');
-      dot.style.left = (3 + Math.random() * 94) + '%';
-      dot.style.top = (3 + Math.random() * 90) + '%';
+      dot.style.left = population[i].x + '%';
+      dot.style.top = population[i].y + '%';
       dot.style.background = population[i].selected ? '#fbbf24' : heightToColor(population[i].height);
       if (population[i].selected) {
         dot.style.boxShadow = '0 0 6px 2px rgba(251,191,36,0.8)';
@@ -695,38 +728,54 @@ It's not a "mistake" — it's a natural, expected discrepancy. Think of it like 
   }
 
   function renderHistogram() {
-    const container = document.getElementById('simHistogram');
-    container.querySelectorAll('.sim-hist-bar, .sim-hist-marker').forEach(d => d.remove());
-    document.getElementById('simEmptyMsg').remove();
+    const emptyMsg = document.getElementById('simEmptyMsg');
+    if (emptyMsg) emptyMsg.remove();
 
-    const bins = new Array(20).fill(0);
-    const binMin = 150, binMax = 190, binWidth = (binMax - binMin) / 20;
-    sampleMeans.forEach(m => {
-      let idx = Math.floor((m - binMin) / binWidth);
-      idx = Math.max(0, Math.min(19, idx));
-      bins[idx]++;
-    });
+    const binMin = 150, binMax = 190;
+    const svgRange = 460;
+    const svgOffset = 20;
 
-    let maxBin = Math.max(...bins, 1);
-    const muPct = ((POP_MEAN - binMin) / (binMax - binMin)) * 100;
+    // Position population mean line
+    const muPct = (POP_MEAN - binMin) / (binMax - binMin);
+    const muX = svgOffset + muPct * svgRange;
+    document.getElementById('simMuLine').setAttribute('x1', muX);
+    document.getElementById('simMuLine').setAttribute('x2', muX);
+    document.getElementById('simMuLabel').setAttribute('x', muX);
+    document.getElementById('simMuLabel').textContent = 'μ = ' + POP_MEAN.toFixed(1);
 
-    bins.forEach((count, i) => {
-      let bar = document.createElement('div');
-      bar.className = 'sim-hist-bar';
-      let pct = (count / maxBin) * 100;
-      bar.style.height = pct + '%';
-      let binCenter = binMin + (i + 0.5) * binWidth;
-      let distFromMu = Math.abs(binCenter - POP_MEAN);
-      bar.classList.add(distFromMu < 3 ? 'near' : distFromMu < 7 ? 'mid' : 'far');
-      bar.title = count + ' samples';
-      container.appendChild(bar);
-    });
+    // Position sample mean dot
+    const lastMean = sampleMeans[sampleMeans.length - 1];
+    const samplePct = (lastMean - binMin) / (binMax - binMin);
+    const sampleX = svgOffset + Math.max(0, Math.min(1, samplePct)) * svgRange;
 
-    let marker = document.createElement('div');
-    marker.className = 'sim-hist-marker';
-    marker.style.left = muPct + '%';
-    container.appendChild(marker);
+    const dot = document.getElementById('simSampleDot');
+    dot.setAttribute('cx', sampleX);
+    dot.setAttribute('r', '7');
+
+    const label = document.getElementById('simSampleLabel');
+    label.setAttribute('x', sampleX);
+    label.textContent = 'x̄ = ' + lastMean.toFixed(1);
+    label.setAttribute('opacity', '1');
   }
+
+  window.simClearHistogram = function() {
+    sampleMeans = [];
+    totalAbsError = 0;
+    samplesTaken = 0;
+    updateStats();
+    const dot = document.getElementById('simSampleDot');
+    dot.setAttribute('r', '0');
+    const label = document.getElementById('simSampleLabel');
+    label.setAttribute('opacity', '0');
+    const hist = document.getElementById('simNumberline');
+    if (!document.getElementById('simEmptyMsg')) {
+      let msg = document.createElement('div');
+      msg.className = 'sim-empty-msg';
+      msg.id = 'simEmptyMsg';
+      msg.textContent = 'Click "Take Sample" to see where the sample mean falls';
+      hist.appendChild(msg);
+    }
+  };
 
   // ── Public functions ──
   window.simSetSize = function(size, btn) {
@@ -764,8 +813,18 @@ It's not a "mistake" — it's a natural, expected discrepancy. Think of it like 
     initPopulation();
     renderCloud();
     updateStats();
-    const hist = document.getElementById('simHistogram');
-    hist.innerHTML = '<div class="sim-empty-msg" id="simEmptyMsg">Click "Take Sample" to start building the distribution</div>';
+    const dot = document.getElementById('simSampleDot');
+    dot.setAttribute('r', '0');
+    const label = document.getElementById('simSampleLabel');
+    label.setAttribute('opacity', '0');
+    const hist = document.getElementById('simNumberline');
+    if (!document.getElementById('simEmptyMsg')) {
+      let msg = document.createElement('div');
+      msg.className = 'sim-empty-msg';
+      msg.id = 'simEmptyMsg';
+      msg.textContent = 'Click "Take Sample" to see where the sample mean falls';
+      hist.appendChild(msg);
+    }
   };
 
   // ── Init ──

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://anurag987655.github.io/cyber_article/feed.xml" rel="self" type="application/atom+xml" /><link href="https://anurag987655.github.io/cyber_article/" rel="alternate" type="text/html" /><updated>2026-09-18T08:36:48+05:45</updated><id>https://anurag987655.github.io/cyber_article/feed.xml</id><title type="html">Anurag’s Digital Space</title><subtitle>Welcome to my digital garden where I share articles, projects, and ideas.</subtitle><entry><title type="html">Statistics Introduction: Scales of Measurement</title><link href="https://anurag987655.github.io/cyber_article/updates/2026/09/17/Statistics_Introduction/" rel="alternate" type="text/html" title="Statistics Introduction: Scales of Measurement" /><published>2026-09-17T00:00:00+05:45</published><updated>2026-09-17T00:00:00+05:45</updated><id>https://anurag987655.github.io/cyber_article/updates/2026/09/17/Statistics_Introduction</id><content type="html" xml:base="https://anurag987655.github.io/cyber_article/updates/2026/09/17/Statistics_Introduction/"><![CDATA[<style>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="http://localhost:4000/cyber_article/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/cyber_article/" rel="alternate" type="text/html" /><updated>2026-09-18T13:43:28+05:45</updated><id>http://localhost:4000/cyber_article/feed.xml</id><title type="html">Anurag’s Digital Space</title><subtitle>Welcome to my digital garden where I share articles, projects, and ideas.</subtitle><entry><title type="html">Statistics Introduction: Scales of Measurement</title><link href="http://localhost:4000/cyber_article/updates/2026/09/17/Statistics_Introduction/" rel="alternate" type="text/html" title="Statistics Introduction: Scales of Measurement" /><published>2026-09-17T00:00:00+05:45</published><updated>2026-09-17T00:00:00+05:45</updated><id>http://localhost:4000/cyber_article/updates/2026/09/17/Statistics_Introduction</id><content type="html" xml:base="http://localhost:4000/cyber_article/updates/2026/09/17/Statistics_Introduction/"><![CDATA[<style>
 /* ── Stats Article Styles ── */
 .stats-callout {
   background: linear-gradient(135deg, #eff6ff, #dbeafe);
@@ -606,12 +606,41 @@
     </div>
   </div>
   <div class="sim-histogram-wrap">
-    <h5>📊 Sampling Distribution of x̄ (watch it build up!)</h5>
-    <div class="sim-histogram" id="simHistogram">
-      <div class="sim-empty-msg" id="simEmptyMsg">Click "Take Sample" to start building the distribution</div>
+    <div class="sim-hist-header">
+      <h5>📊 Sample Mean vs Population Mean</h5>
     </div>
-    <div class="sim-hist-labels">
-      <span>150</span><span>155</span><span>160</span><span>165</span><span>170</span><span>175</span><span>180</span><span>185</span><span>190</span>
+    <div class="sim-numberline" id="simNumberline">
+      <svg class="sim-hist-svg" id="simHistSvg" viewBox="0 0 500 80" preserveAspectRatio="xMidYMid meet">
+        <!-- number line -->
+        <line x1="20" y1="50" x2="480" y2="50" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round" />
+        <!-- ticks -->
+        <line x1="20" y1="44" x2="20" y2="56" stroke="#94a3b8" stroke-width="2" />
+        <line x1="77.5" y1="44" x2="77.5" y2="56" stroke="#94a3b8" stroke-width="2" />
+        <line x1="135" y1="44" x2="135" y2="56" stroke="#94a3b8" stroke-width="2" />
+        <line x1="192.5" y1="44" x2="192.5" y2="56" stroke="#94a3b8" stroke-width="2" />
+        <line x1="250" y1="44" x2="250" y2="56" stroke="#94a3b8" stroke-width="2" />
+        <line x1="307.5" y1="44" x2="307.5" y2="56" stroke="#94a3b8" stroke-width="2" />
+        <line x1="365" y1="44" x2="365" y2="56" stroke="#94a3b8" stroke-width="2" />
+        <line x1="422.5" y1="44" x2="422.5" y2="56" stroke="#94a3b8" stroke-width="2" />
+        <line x1="480" y1="44" x2="480" y2="56" stroke="#94a3b8" stroke-width="2" />
+        <!-- tick labels -->
+        <text x="20" y="72" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">150</text>
+        <text x="77.5" y="72" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">155</text>
+        <text x="135" y="72" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">160</text>
+        <text x="192.5" y="72" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">165</text>
+        <text x="250" y="72" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">170</text>
+        <text x="307.5" y="72" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">175</text>
+        <text x="365" y="72" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">180</text>
+        <text x="422.5" y="72" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">185</text>
+        <text x="480" y="72" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">190</text>
+        <!-- population mean line -->
+        <line id="simMuLine" x1="250" y1="10" x2="250" y2="50" stroke="#1e40af" stroke-width="2.5" stroke-dasharray="6,4" />
+        <text id="simMuLabel" x="250" y="8" text-anchor="middle" fill="#1e40af" font-size="12" font-weight="700">μ = 170.0</text>
+        <!-- sample mean dot (hidden initially) -->
+        <circle id="simSampleDot" cx="250" cy="50" r="0" fill="#7c3aed" stroke="white" stroke-width="2" />
+        <text id="simSampleLabel" x="250" y="38" text-anchor="middle" fill="#7c3aed" font-size="11" font-weight="700" opacity="0">x̄</text>
+      </svg>
+      <div class="sim-empty-msg" id="simEmptyMsg">Click "Take Sample" to see where the sample mean falls</div>
     </div>
   </div>
 </div>
@@ -637,11 +666,15 @@
 
   function initPopulation() {
     population = [];
+    let sum = 0;
     for (let i = 0; i < POP_SIZE; i++) {
       let h = randNormal(POP_MEAN, POP_SD);
       h = Math.max(140, Math.min(200, h));
-      population.push({ height: h, selected: false });
+      sum += h;
+      population.push({ height: h, selected: false, x: 3 + Math.random() * 94, y: 3 + Math.random() * 90 });
     }
+    const actualMean = sum / POP_SIZE;
+    document.getElementById('simPopMean').textContent = 'μ = ' + actualMean.toFixed(1) + ' cm';
   }
 
   function heightToColor(h) {
@@ -659,8 +692,8 @@
     for (let i = 0; i < POP_SIZE; i++) {
       let dot = document.createElement('div');
       dot.className = 'sim-dot' + (population[i].selected ? ' selected' : '');
-      dot.style.left = (3 + Math.random() * 94) + '%';
-      dot.style.top = (3 + Math.random() * 90) + '%';
+      dot.style.left = population[i].x + '%';
+      dot.style.top = population[i].y + '%';
       dot.style.background = population[i].selected ? '#fbbf24' : heightToColor(population[i].height);
       if (population[i].selected) {
         dot.style.boxShadow = '0 0 6px 2px rgba(251,191,36,0.8)';
@@ -691,38 +724,54 @@
   }
 
   function renderHistogram() {
-    const container = document.getElementById('simHistogram');
-    container.querySelectorAll('.sim-hist-bar, .sim-hist-marker').forEach(d => d.remove());
-    document.getElementById('simEmptyMsg').remove();
+    const emptyMsg = document.getElementById('simEmptyMsg');
+    if (emptyMsg) emptyMsg.remove();
 
-    const bins = new Array(20).fill(0);
-    const binMin = 150, binMax = 190, binWidth = (binMax - binMin) / 20;
-    sampleMeans.forEach(m => {
-      let idx = Math.floor((m - binMin) / binWidth);
-      idx = Math.max(0, Math.min(19, idx));
-      bins[idx]++;
-    });
+    const binMin = 150, binMax = 190;
+    const svgRange = 460;
+    const svgOffset = 20;
 
-    let maxBin = Math.max(...bins, 1);
-    const muPct = ((POP_MEAN - binMin) / (binMax - binMin)) * 100;
+    // Position population mean line
+    const muPct = (POP_MEAN - binMin) / (binMax - binMin);
+    const muX = svgOffset + muPct * svgRange;
+    document.getElementById('simMuLine').setAttribute('x1', muX);
+    document.getElementById('simMuLine').setAttribute('x2', muX);
+    document.getElementById('simMuLabel').setAttribute('x', muX);
+    document.getElementById('simMuLabel').textContent = 'μ = ' + POP_MEAN.toFixed(1);
 
-    bins.forEach((count, i) => {
-      let bar = document.createElement('div');
-      bar.className = 'sim-hist-bar';
-      let pct = (count / maxBin) * 100;
-      bar.style.height = pct + '%';
-      let binCenter = binMin + (i + 0.5) * binWidth;
-      let distFromMu = Math.abs(binCenter - POP_MEAN);
-      bar.classList.add(distFromMu < 3 ? 'near' : distFromMu < 7 ? 'mid' : 'far');
-      bar.title = count + ' samples';
-      container.appendChild(bar);
-    });
+    // Position sample mean dot
+    const lastMean = sampleMeans[sampleMeans.length - 1];
+    const samplePct = (lastMean - binMin) / (binMax - binMin);
+    const sampleX = svgOffset + Math.max(0, Math.min(1, samplePct)) * svgRange;
 
-    let marker = document.createElement('div');
-    marker.className = 'sim-hist-marker';
-    marker.style.left = muPct + '%';
-    container.appendChild(marker);
+    const dot = document.getElementById('simSampleDot');
+    dot.setAttribute('cx', sampleX);
+    dot.setAttribute('r', '7');
+
+    const label = document.getElementById('simSampleLabel');
+    label.setAttribute('x', sampleX);
+    label.textContent = 'x̄ = ' + lastMean.toFixed(1);
+    label.setAttribute('opacity', '1');
   }
+
+  window.simClearHistogram = function() {
+    sampleMeans = [];
+    totalAbsError = 0;
+    samplesTaken = 0;
+    updateStats();
+    const dot = document.getElementById('simSampleDot');
+    dot.setAttribute('r', '0');
+    const label = document.getElementById('simSampleLabel');
+    label.setAttribute('opacity', '0');
+    const hist = document.getElementById('simNumberline');
+    if (!document.getElementById('simEmptyMsg')) {
+      let msg = document.createElement('div');
+      msg.className = 'sim-empty-msg';
+      msg.id = 'simEmptyMsg';
+      msg.textContent = 'Click "Take Sample" to see where the sample mean falls';
+      hist.appendChild(msg);
+    }
+  };
 
   // ── Public functions ──
   window.simSetSize = function(size, btn) {
@@ -760,8 +809,18 @@
     initPopulation();
     renderCloud();
     updateStats();
-    const hist = document.getElementById('simHistogram');
-    hist.innerHTML = '<div class="sim-empty-msg" id="simEmptyMsg">Click "Take Sample" to start building the distribution</div>';
+    const dot = document.getElementById('simSampleDot');
+    dot.setAttribute('r', '0');
+    const label = document.getElementById('simSampleLabel');
+    label.setAttribute('opacity', '0');
+    const hist = document.getElementById('simNumberline');
+    if (!document.getElementById('simEmptyMsg')) {
+      let msg = document.createElement('div');
+      msg.className = 'sim-empty-msg';
+      msg.id = 'simEmptyMsg';
+      msg.textContent = 'Click "Take Sample" to see where the sample mean falls';
+      hist.appendChild(msg);
+    }
   };
 
   // ── Init ──
@@ -1426,7 +1485,7 @@ function classifyItem(choice) {
 document.addEventListener('DOMContentLoaded', function() {
   initClassifier();
 });
-</script>]]></content><author><name></name></author><category term="updates" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Classical Cipher Part-III</title><link href="https://anurag987655.github.io/cyber_article/updates/2026/07/19/Classical-Cipher-part-3/" rel="alternate" type="text/html" title="Classical Cipher Part-III" /><published>2026-07-19T00:00:00+05:45</published><updated>2026-07-19T00:00:00+05:45</updated><id>https://anurag987655.github.io/cyber_article/updates/2026/07/19/Classical-Cipher-part-3</id><content type="html" xml:base="https://anurag987655.github.io/cyber_article/updates/2026/07/19/Classical-Cipher-part-3/"><![CDATA[<p>This article will introduce readers with more classical cipher especially Hill Cipher and Transposition Cipher and the idea of one time pad</p>
+</script>]]></content><author><name></name></author><category term="updates" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Classical Cipher Part-III</title><link href="http://localhost:4000/cyber_article/updates/2026/07/19/Classical-Cipher-part-3/" rel="alternate" type="text/html" title="Classical Cipher Part-III" /><published>2026-07-19T00:00:00+05:45</published><updated>2026-07-19T00:00:00+05:45</updated><id>http://localhost:4000/cyber_article/updates/2026/07/19/Classical-Cipher-part-3</id><content type="html" xml:base="http://localhost:4000/cyber_article/updates/2026/07/19/Classical-Cipher-part-3/"><![CDATA[<p>This article will introduce readers with more classical cipher especially Hill Cipher and Transposition Cipher and the idea of one time pad</p>
 
 <style>
 .math-table {
@@ -2072,7 +2131,7 @@ K = (k_1, k_2, \ldots, k_n)\]
     }
 </script>
 
-<hr />]]></content><author><name></name></author><category term="updates" /><summary type="html"><![CDATA[This article will introduce readers with more classical cipher especially Hill Cipher and Transposition Cipher and the idea of one time pad]]></summary></entry><entry><title type="html">Classical Cipher Part-II</title><link href="https://anurag987655.github.io/cyber_article/updates/2026/02/06/Classic-Cipher-Part-2/" rel="alternate" type="text/html" title="Classical Cipher Part-II" /><published>2026-02-06T00:00:00+05:45</published><updated>2026-02-06T00:00:00+05:45</updated><id>https://anurag987655.github.io/cyber_article/updates/2026/02/06/Classic-Cipher-Part-2</id><content type="html" xml:base="https://anurag987655.github.io/cyber_article/updates/2026/02/06/Classic-Cipher-Part-2/"><![CDATA[<p>This article will introduce readers with some more classical cipher. This article will introduce polyalphabetic cipher where cryptographic algorithm uses a vector key.</p>
+<hr />]]></content><author><name></name></author><category term="updates" /><summary type="html"><![CDATA[This article will introduce readers with more classical cipher especially Hill Cipher and Transposition Cipher and the idea of one time pad]]></summary></entry><entry><title type="html">Classical Cipher Part-II</title><link href="http://localhost:4000/cyber_article/updates/2026/02/06/Classic-Cipher-Part-2/" rel="alternate" type="text/html" title="Classical Cipher Part-II" /><published>2026-02-06T00:00:00+05:45</published><updated>2026-02-06T00:00:00+05:45</updated><id>http://localhost:4000/cyber_article/updates/2026/02/06/Classic-Cipher-Part-2</id><content type="html" xml:base="http://localhost:4000/cyber_article/updates/2026/02/06/Classic-Cipher-Part-2/"><![CDATA[<p>This article will introduce readers with some more classical cipher. This article will introduce polyalphabetic cipher where cryptographic algorithm uses a vector key.</p>
 
 <hr />
 
@@ -2893,7 +2952,7 @@ Use the same rectangle method as encryption<br />
 
 <hr />
 
-<p><em>End of article.</em></p>]]></content><author><name></name></author><category term="updates" /><summary type="html"><![CDATA[This article will introduce readers with some more classical cipher. This article will introduce polyalphabetic cipher where cryptographic algorithm uses a vector key.]]></summary></entry><entry><title type="html">Classical Cipher Part-I</title><link href="https://anurag987655.github.io/cyber_article/updates/2026/02/01/Classical-Cipher-Part-1/" rel="alternate" type="text/html" title="Classical Cipher Part-I" /><published>2026-02-01T00:00:00+05:45</published><updated>2026-02-01T00:00:00+05:45</updated><id>https://anurag987655.github.io/cyber_article/updates/2026/02/01/Classical-Cipher-Part-1</id><content type="html" xml:base="https://anurag987655.github.io/cyber_article/updates/2026/02/01/Classical-Cipher-Part-1/"><![CDATA[<p>This article will introduce readers with basic mathematical notation used in cryptography, the idea behind cryptography and some of the classical cryptographic algorithm.</p>
+<p><em>End of article.</em></p>]]></content><author><name></name></author><category term="updates" /><summary type="html"><![CDATA[This article will introduce readers with some more classical cipher. This article will introduce polyalphabetic cipher where cryptographic algorithm uses a vector key.]]></summary></entry><entry><title type="html">Classical Cipher Part-I</title><link href="http://localhost:4000/cyber_article/updates/2026/02/01/Classical-Cipher-Part-1/" rel="alternate" type="text/html" title="Classical Cipher Part-I" /><published>2026-02-01T00:00:00+05:45</published><updated>2026-02-01T00:00:00+05:45</updated><id>http://localhost:4000/cyber_article/updates/2026/02/01/Classical-Cipher-Part-1</id><content type="html" xml:base="http://localhost:4000/cyber_article/updates/2026/02/01/Classical-Cipher-Part-1/"><![CDATA[<p>This article will introduce readers with basic mathematical notation used in cryptography, the idea behind cryptography and some of the classical cryptographic algorithm.</p>
 
 <style>
 .cipher-container {
@@ -3701,7 +3760,7 @@ And therefore the total possible combination of keys is:</p>
 <p>In the next article, we will explore <strong>cipher with changing key</strong> which are hard to break.</p>
 
 <hr />
-<p><em>End of article.</em></p>]]></content><author><name></name></author><category term="updates" /><summary type="html"><![CDATA[This article will introduce readers with basic mathematical notation used in cryptography, the idea behind cryptography and some of the classical cryptographic algorithm.]]></summary></entry><entry><title type="html">An introduction to number theory for cryptography</title><link href="https://anurag987655.github.io/cyber_article/updates/2026/01/21/An-introduction-to-number-theory-for-cryptography/" rel="alternate" type="text/html" title="An introduction to number theory for cryptography" /><published>2026-01-21T00:00:00+05:45</published><updated>2026-01-21T00:00:00+05:45</updated><id>https://anurag987655.github.io/cyber_article/updates/2026/01/21/An-introduction-to-number-theory-for-cryptography</id><content type="html" xml:base="https://anurag987655.github.io/cyber_article/updates/2026/01/21/An-introduction-to-number-theory-for-cryptography/"><![CDATA[<p>This article provides the reader a glimpse of number theory that is required for cryptography.<br />
+<p><em>End of article.</em></p>]]></content><author><name></name></author><category term="updates" /><summary type="html"><![CDATA[This article will introduce readers with basic mathematical notation used in cryptography, the idea behind cryptography and some of the classical cryptographic algorithm.]]></summary></entry><entry><title type="html">An introduction to number theory for cryptography</title><link href="http://localhost:4000/cyber_article/updates/2026/01/21/An-introduction-to-number-theory-for-cryptography/" rel="alternate" type="text/html" title="An introduction to number theory for cryptography" /><published>2026-01-21T00:00:00+05:45</published><updated>2026-01-21T00:00:00+05:45</updated><id>http://localhost:4000/cyber_article/updates/2026/01/21/An-introduction-to-number-theory-for-cryptography</id><content type="html" xml:base="http://localhost:4000/cyber_article/updates/2026/01/21/An-introduction-to-number-theory-for-cryptography/"><![CDATA[<p>This article provides the reader a glimpse of number theory that is required for cryptography.<br />
 So let us ponder into the world of number theory.</p>
 
 <style>
@@ -4760,7 +4819,7 @@ Starting at 1 and multiplicative jumping by ( a ), after exactly ( p-1 ) jumps, 
 
 <hr />
 
-<p><em>End of article.</em></p>]]></content><author><name></name></author><category term="updates" /><summary type="html"><![CDATA[This article provides the reader a glimpse of number theory that is required for cryptography. So let us ponder into the world of number theory.]]></summary></entry><entry><title type="html">My First Article</title><link href="https://anurag987655.github.io/cyber_article/updates/2026/01/14/my-first-article/" rel="alternate" type="text/html" title="My First Article" /><published>2026-01-14T00:00:00+05:45</published><updated>2026-01-14T00:00:00+05:45</updated><id>https://anurag987655.github.io/cyber_article/updates/2026/01/14/my-first-article</id><content type="html" xml:base="https://anurag987655.github.io/cyber_article/updates/2026/01/14/my-first-article/"><![CDATA[<h1 id="welcome-to-my-first-article">Welcome to My First Article</h1>
+<p><em>End of article.</em></p>]]></content><author><name></name></author><category term="updates" /><summary type="html"><![CDATA[This article provides the reader a glimpse of number theory that is required for cryptography. So let us ponder into the world of number theory.]]></summary></entry><entry><title type="html">My First Article</title><link href="http://localhost:4000/cyber_article/updates/2026/01/14/my-first-article/" rel="alternate" type="text/html" title="My First Article" /><published>2026-01-14T00:00:00+05:45</published><updated>2026-01-14T00:00:00+05:45</updated><id>http://localhost:4000/cyber_article/updates/2026/01/14/my-first-article</id><content type="html" xml:base="http://localhost:4000/cyber_article/updates/2026/01/14/my-first-article/"><![CDATA[<h1 id="welcome-to-my-first-article">Welcome to My First Article</h1>
 
 <p>This is my first article on my new Jekyll website! I’ll be posting regularly about my projects and thoughts.</p>
 
