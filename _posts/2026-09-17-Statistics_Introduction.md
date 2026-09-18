@@ -3,6 +3,7 @@ layout: default
 title: "Statistics Introduction: Scales of Measurement"
 date: 2026-09-17
 categories: [updates]
+hide_layout_title: true
 ---
 
 <style>
@@ -171,7 +172,7 @@ categories: [updates]
   font-size: 0.9rem;
   transition: all 0.2s;
 }
-.reveal-btn:hover { background: #1d4ed8; transform: translateY(-1px); }
+.reveal-btn:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(37,99,235,0.35); }
 .reveal-answer {
   display: none;
   margin-top: 12px;
@@ -422,8 +423,6 @@ categories: [updates]
   margin-top: 8px;
 }
 </style>
-
----
 
 <div class="hero-banner">
   <h1>Statistics Introduction</h1>
