@@ -425,6 +425,14 @@ categories: [updates]
 
 ---
 
+<div class="hero-banner">
+  <h1>Statistics Introduction</h1>
+  <p class="hero-sub">Scales of Measurement & Why Stats Actually Matters</p>
+  <span class="hero-tag">PSYC300A — Topic 1</span>
+</div>
+
+<div class="section-badge"><span class="badge badge-blue">1</span></div>
+
 ## What Even is Statistics?
 
 Alright, let's kick things off. You've probably heard the famous quote:
@@ -442,27 +450,41 @@ So what actually *is* statistics?
 
 It's not just about numbers on a spreadsheet. It's about *how* those numbers were chosen, and *what they actually mean*. A number by itself is just a number — statistics gives it context.
 
----
+<div class="takeaway-box">
+<h4>Key Takeaway</h4>
+<p>Statistics = collecting, organizing, summarizing, and interpreting data. It's not just math — it's how you <em>choose</em> and <em>interpret</em> numbers.</p>
+</div>
+
+<div class="section-divider"><span class="divider-icon">📊</span></div>
+<div class="section-badge"><span class="badge badge-purple">2</span></div>
 
 ## Why Should You Even Care?
 
 Let me throw some real-world scenarios at you:
 
-**Scenario 1:** A new Ben & Jerry's ad launches in late May. Ice cream sales jump 30% over the next three months. Conclusion: the ad worked!
+**Scenario 1:**
+<div class="scenario-quote">A new Ben & Jerry's ad launches in late May. Ice cream sales jump 30% over the next three months. Conclusion: the ad worked!</div>
 
 ...or did people just buy more ice cream because it's *summer*? 🤔
 
-**Scenario 2:** "Interracial marriages are growing fast — 75% more this year than 25 years ago!"
+**Scenario 2:**
+<div class="scenario-quote">"Interracial marriages are growing fast — 75% more this year than 25 years ago!"</div>
 
 Sounds impressive, but what if the *baseline* was really small? A 75% increase from 4 marriages to 7 marriages is... not exactly a revolution.
 
-**Scenario 3:** A study claims "marriages that began online are less likely to end in divorce and have higher satisfaction."
+**Scenario 3:**
+<div class="scenario-quote">A study claims "marriages that began online are less likely to end in divorce and have higher satisfaction."</div>
 
 Cool — but who was studied? How many people? Was it just people who *stayed* married? (That's called **survivorship bias**, and it'll trick you every time.)
 
 This is why you need statistics: **to not get fooled.** Whether you're reading research articles, evaluating news claims, or just trying to win an argument at dinner — statistical literacy is a superpower.
 
----
+<div class="did-you-know">
+<strong>Did you know?</strong> A 2019 study found that 59% of news articles misinterpreted statistical findings — usually by confusing correlation with causation. Learning stats makes you resistant to these traps!
+</div>
+
+<div class="section-divider"><span class="divider-icon">📈</span></div>
+<div class="section-badge"><span class="badge badge-green">3</span></div>
 
 ## Descriptive vs. Inferential Statistics
 
@@ -483,7 +505,9 @@ Think of statistics like cooking:
 
 **Descriptive** = describing what you see. **Inferential** = going beyond what you see to make broader claims.
 
----
+
+<div class="section-divider"><span class="divider-icon">🎯</span></div>
+<div class="section-badge"><span class="badge badge-orange">4</span></div>
 
 ## Population vs. Sample
 
@@ -503,11 +527,16 @@ This one's simple but crucial.
   <span>Statistic (describes sample)</span>
 </div>
 
-| | Population | Sample |
-|---|---|---|
-| **What is it?** | Everyone you're interested in | A subset you actually study |
-| **Value called** | Parameter | Statistic |
-| **Example** | Average height of all university students | Average height of 500 surveyed students |
+<table class="styled-table">
+<thead>
+<tr><th></th><th>Population</th><th>Sample</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>What is it?</strong></td><td>Everyone you're interested in</td><td>A subset you actually study</td></tr>
+<tr><td><strong>Value called</strong></td><td>Parameter</td><td>Statistic</td></tr>
+<tr><td><strong>Example</strong></td><td>Average height of all university students</td><td>Average height of 500 surveyed students</td></tr>
+</tbody>
+</table>
 
 <div class="stats-callout">
 <strong>Key idea:</strong> We want to know about the <em>population</em>, but we can usually only study a <em>sample</em>. The whole game of statistics is making sure our sample gives us a fair picture of the population.
@@ -524,7 +553,8 @@ Can we conclude "most people want to go to space" from this? **Absolutely not.**
 
 A Pew Research Center study found that **most Americans actually wouldn't be interested** in space tourism. The NASA poll was fun, but it wasn't science.
 
----
+<div class="section-divider"><span class="divider-icon">⚠️</span></div>
+<div class="section-badge"><span class="badge badge-red">5</span></div>
 
 ## Sampling Error
 
@@ -536,21 +566,33 @@ It's not a "mistake" — it's a natural, expected discrepancy. Think of it like 
 
 The key is: **samples must be representative.** If your sample is biased (like only surveying people in the library during finals week), your results will be biased too.
 
----
+<div class="takeaway-box">
+<h4>Key Takeaway</h4>
+<p>Sampling error is natural and expected. But <strong>sampling bias</strong> is a problem — that's when your sample systematically excludes parts of the population.</p>
+</div>
+
+<div class="section-divider"><span class="divider-icon">🔢</span></div>
+<div class="section-badge"><span class="badge badge-cyan">6</span></div>
 
 ## Numerals vs. Numbers
 
 This distinction is subtle but important:
 
-| | Numerals | Numbers |
-|---|---|---|
-| **What are they?** | Labels or codes | Quantities |
-| **Do math on them?** | No (makes no sense) | Yes! |
-| **Example** | Gender: 1 = female, 2 = male, 3 = non-binary | Number of participants: 47 female, 32 male, 11 non-binary |
+<table class="styled-table">
+<thead>
+<tr><th></th><th>Numerals</th><th>Numbers</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>What are they?</strong></td><td>Labels or codes</td><td>Quantities</td></tr>
+<tr><td><strong>Do math on them?</strong></td><td>No (makes no sense)</td><td>Yes!</td></tr>
+<tr><td><strong>Example</strong></td><td>Gender: 1 = female, 2 = male, 3 = non-binary</td><td>Number of participants: 47 female, 32 male, 11 non-binary</td></tr>
+</tbody>
+</table>
 
 Saying "the average gender is 2.3" makes zero sense. But "the average number of siblings is 2.3" does. One is a **label**, the other is a **measurement**.
 
----
+<div class="section-divider"><span class="divider-icon">📏</span></div>
+<div class="section-badge"><span class="badge badge-teal">7</span></div>
 
 ## Discrete vs. Continuous Numbers
 
@@ -564,6 +606,8 @@ Saying "the average gender is 2.3" makes zero sense. But "the average number of 
 **Continuous example:** Height, weight, time, temperature — a person can be 170.5 cm, 170.53 cm, 170.531 cm... the precision is basically unlimited.
 
 ### Let's visualize this
+
+<span class="interactive-label">Interactive</span>
 
 <div class="number-line-container">
   <p style="text-align:center;font-weight:600;margin-bottom:5px;">Watch the difference:</p>
@@ -591,7 +635,8 @@ Saying "the average gender is 2.3" makes zero sense. But "the average number of 
 
 Sometimes we *treat* continuous data as discrete. Your final grade might be 89.67%, but the grade boundary says A+ starts at 89.5%. So we round. Age is technically continuous (you're never *exactly* 20), but we report it in whole years. Education level is reported as "completed grade 12" or "completed bachelor's" — discrete categories of something that's actually continuous.
 
----
+<div class="section-divider"><span class="divider-icon">📐</span></div>
+<div class="section-badge"><span class="badge badge-indigo">8</span></div>
 
 ## Real Limits — Where Do You Really Fall?
 
@@ -607,6 +652,8 @@ These boundaries are called **real limits**:
 - **Upper real limit** = 150.5 (upper boundary)
 
 ### Try the grade calculator
+
+<span class="interactive-label">Interactive</span>
 
 <div class="grade-calc">
   <p style="font-weight:600;margin-bottom:8px;">Enter your percentage grade:</p>
@@ -627,7 +674,8 @@ These boundaries are called **real limits**:
 
 So if your grade is **89.49%**, did you get an A or A+? Looking at the scale, A+ starts at 89.5, so 89.49% is an **A**. Just barely missed it!
 
----
+<div class="section-divider"><span class="divider-icon">🧪</span></div>
+<div class="section-badge"><span class="badge badge-blue">9</span></div>
 
 ## Independent vs. Dependent Variables
 
@@ -659,6 +707,8 @@ In research, we're usually trying to figure out if one thing *affects* another.
 
 ### Your turn — identify IV and DV
 
+<span class="interactive-label">Quiz</span>
+
 <div class="quiz-box" id="ivdvQuiz">
 <h4>Quiz: A researcher compares test scores between students who studied with background music vs. silence.</h4>
 <ul class="quiz-options">
@@ -669,7 +719,8 @@ In research, we're usually trying to figure out if one thing *affects* another.
 <div class="quiz-feedback" id="ivdvQuiz-feedback"></div>
 </div>
 
----
+<div class="section-divider"><span class="divider-icon">⚖️</span></div>
+<div class="section-badge"><span class="badge badge-purple">10</span></div>
 
 ## Scales of Measurement — The Big One
 
@@ -746,6 +797,8 @@ Here's the same number used three different ways:
 
 ### Quick scale quiz
 
+<span class="interactive-label">Quiz</span>
+
 <div class="quiz-box" id="scaleQuiz1">
 <h4>What scale of measurement is "What kind of phone do you have?"</h4>
 <ul class="quiz-options">
@@ -801,11 +854,23 @@ The most common mistake? **Treating ordinal data as if it were ratio.** Here's a
 
 The researchers reported a **mean of 3.57** with **SD of 1.5**. But these are categories, not actual counts! The "5 or more" category could mean 5 or 50 — you can't calculate a meaningful average from that.
 
----
+<div class="did-you-know">
+<strong>Did you know?</strong> The debate over whether Likert scales are ordinal or interval has been going on since Stevens (1946) first proposed the four scales. Some statisticians argue there's a 5th scale — <strong>absolute</strong> — but that's a story for another day.
+</div>
+
+<div class="takeaway-box">
+<h4>Key Takeaway</h4>
+<p>The scale of measurement determines what math you can do. Nominal = categories only. Ordinal = order. Interval = equal gaps. Ratio = true zero + ratios. <strong>Always check your scale before running analyses!</strong></p>
+</div>
+
+<div class="section-divider"><span class="divider-icon">🎮</span></div>
+<div class="section-badge"><span class="badge badge-pink">11</span></div>
 
 ## Classify It! — Interactive Practice
 
 Let's practice distinguishing discrete from continuous. Click on each item, then choose whether it's discrete or continuous.
+
+<span class="interactive-label">Interactive</span>
 
 <div id="classifierArea">
   <div class="classifier-grid" id="classifierGrid"></div>
@@ -816,14 +881,16 @@ Let's practice distinguishing discrete from continuous. Click on each item, then
   <div id="classifierFeedback" style="text-align:center;margin-top:10px;font-weight:600;min-height:24px;"></div>
 </div>
 
----
+<div class="section-divider"><span class="divider-icon">📝</span></div>
+<div class="section-badge"><span class="badge badge-green">12</span></div>
 
 ## Self-Assessment Quiz
 
 Test yourself! Click "Reveal Answer" to check.
 
 <div class="reveal-block">
-<h4>1. What are the two main branches of statistics?</h4>
+<span class="reveal-num">1</span>
+<h4>What are the two main branches of statistics?</h4>
 <button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
 <div class="reveal-answer">
 <strong>Descriptive statistics</strong> (summarizing and organizing data) and <strong>inferential statistics</strong> (making predictions/inferences about a population from a sample).
@@ -831,7 +898,8 @@ Test yourself! Click "Reveal Answer" to check.
 </div>
 
 <div class="reveal-block">
-<h4>2. What is the difference between a parameter and a statistic?</h4>
+<span class="reveal-num">2</span>
+<h4>What is the difference between a parameter and a statistic?</h4>
 <button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
 <div class="reveal-answer">
 A <strong>parameter</strong> describes a <em>population</em>. A <strong>statistic</strong> describes a <em>sample</em>. For example, the average height of all students (parameter) vs. the average height of 100 surveyed students (statistic).
@@ -839,7 +907,8 @@ A <strong>parameter</strong> describes a <em>population</em>. A <strong>statisti
 </div>
 
 <div class="reveal-block">
-<h4>3. What is sampling error?</h4>
+<span class="reveal-num">3</span>
+<h4>What is sampling error?</h4>
 <button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
 <div class="reveal-answer">
 The natural discrepancy between a sample statistic and the true population parameter. It's not a mistake — it's expected because a sample is never a perfect mirror of the population.
@@ -847,7 +916,8 @@ The natural discrepancy between a sample statistic and the true population param
 </div>
 
 <div class="reveal-block">
-<h4>4. A researcher assigns participants to either a drug group or placebo group and measures their anxiety levels. What is the IV and DV?</h4>
+<span class="reveal-num">4</span>
+<h4>A researcher assigns participants to either a drug group or placebo group and measures their anxiety levels. What is the IV and DV?</h4>
 <button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
 <div class="reveal-answer">
 <strong>IV:</strong> Group assignment (drug vs. placebo) — this is what the researcher manipulates.<br>
@@ -856,7 +926,8 @@ The natural discrepancy between a sample statistic and the true population param
 </div>
 
 <div class="reveal-block">
-<h4>5. Why can't you calculate a meaningful average of jersey numbers?</h4>
+<span class="reveal-num">5</span>
+<h4>Why can't you calculate a meaningful average of jersey numbers?</h4>
 <button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
 <div class="reveal-answer">
 Jersey numbers are <strong>nominal</strong> — they're just labels. The number 10 isn't "twice" number 5 in any meaningful way. You can't do math on categories.
@@ -864,7 +935,8 @@ Jersey numbers are <strong>nominal</strong> — they're just labels. The number 
 </div>
 
 <div class="reveal-block">
-<h4>6. What's the key difference between interval and ratio scales?</h4>
+<span class="reveal-num">6</span>
+<h4>What's the key difference between interval and ratio scales?</h4>
 <button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
 <div class="reveal-answer">
 <strong>Ratio scales have a true zero</strong> (zero means "none"), while interval scales don't. Temperature in Celsius has no true zero (0°C doesn't mean "no temperature"), but weight has a true zero (0 kg = no weight). This means ratio scales allow meaningful ratios ("twice as heavy").
@@ -872,7 +944,8 @@ Jersey numbers are <strong>nominal</strong> — they're just labels. The number 
 </div>
 
 <div class="reveal-block">
-<h4>7. Classify: "Number of siblings" — discrete or continuous?</h4>
+<span class="reveal-num">7</span>
+<h4>Classify: "Number of siblings" — discrete or continuous?</h4>
 <button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
 <div class="reveal-answer">
 <strong>Discrete.</strong> You can have 2 or 3 siblings, but not 2.74 siblings. The values are countable whole numbers with nothing in between.
@@ -880,7 +953,8 @@ Jersey numbers are <strong>nominal</strong> — they're just labels. The number 
 </div>
 
 <div class="reveal-block">
-<h4>8. What is a real limit? Give an example.</h4>
+<span class="reveal-num">8</span>
+<h4>What is a real limit? Give an example.</h4>
 <button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
 <div class="reveal-answer">
 Real limits are the boundaries of intervals for continuous data. A reported weight of 150 lbs actually falls between <strong>149.5 and 150.5 lbs</strong>. The lower real limit is 149.5 and the upper real limit is 150.5.
@@ -888,7 +962,8 @@ Real limits are the boundaries of intervals for continuous data. A reported weig
 </div>
 
 <div class="reveal-block">
-<h4>9. A survey asks people to rate a product as "Poor, Fair, Good, Excellent." What scale of measurement is this?</h4>
+<span class="reveal-num">9</span>
+<h4>A survey asks people to rate a product as "Poor, Fair, Good, Excellent." What scale of measurement is this?</h4>
 <button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
 <div class="reveal-answer">
 <strong>Ordinal.</strong> The categories have a clear order (Poor < Fair < Good < Excellent), but the gaps between them aren't necessarily equal. We can't say the difference between "Poor" and "Fair" is the same as between "Good" and "Excellent."
@@ -896,14 +971,15 @@ Real limits are the boundaries of intervals for continuous data. A reported weig
 </div>
 
 <div class="reveal-block">
-<h4>10. Why is it problematic to calculate a mean from ordinal data like a Likert scale?</h4>
+<span class="reveal-num">10</span>
+<h4>Why is it problematic to calculate a mean from ordinal data like a Likert scale?</h4>
 <button class="reveal-btn" onclick="toggleReveal(this)">Reveal Answer</button>
 <div class="reveal-answer">
 Because ordinal data only tells us <em>order</em>, not <em>distance</em>. The "gap" between "satisfied" and "very satisfied" may not be the same as between "neutral" and "satisfied." Calculating a mean assumes equal intervals, which ordinal scales don't guarantee. This is the most common error in survey research.
 </div>
 </div>
 
----
+<div class="section-divider"><span class="divider-icon">🏁</span></div>
 
 ## Wrapping Up
 
