@@ -220,10 +220,14 @@ categories: [updates]
   height: 20px;
   border-radius: 50%;
   transform: translateX(-50%);
-  transition: left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.nl-dot-discrete { background: #dc2626; }
-.nl-dot-continuous { background: #2563eb; }
+.nl-dot-discrete {
+  background: #dc2626;
+  transition: left 0s, transform 0.15s, box-shadow 0.15s;
+}
+.nl-dot-continuous {
+  background: #2563eb;
+}
 .nl-legend {
   display: flex;
   gap: 20px;
@@ -951,15 +955,22 @@ function animateDiscrete() {
   const discrete = document.getElementById('dotDiscrete');
   discrete.style.transition = 'none';
   discrete.style.left = '0%';
+  discrete.style.opacity = '1';
   void discrete.offsetWidth;
-  discrete.style.transition = 'left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
-  const steps = [0, 20, 40, 60, 80, 100, 60, 30, 80, 10];
+  const ticks = [0, 20, 40, 60, 80, 100];
   let i = 0;
   function snapStep() {
-    if (i >= steps.length) return;
-    discrete.style.left = steps[i] + '%';
+    if (i >= ticks.length) return;
+    discrete.style.transition = 'none';
+    discrete.style.left = ticks[i] + '%';
+    discrete.style.transform = 'translateX(-50%) scale(1.4)';
+    discrete.style.boxShadow = '0 0 10px #dc2626';
+    void discrete.offsetWidth;
+    discrete.style.transition = 'transform 0.15s, box-shadow 0.15s';
+    discrete.style.transform = 'translateX(-50%) scale(1)';
+    discrete.style.boxShadow = 'none';
     i++;
-    setTimeout(snapStep, 500);
+    setTimeout(snapStep, 550);
   }
   snapStep();
 }
@@ -969,8 +980,12 @@ function animateContinuous() {
   continuous.style.transition = 'none';
   continuous.style.left = '0%';
   void continuous.offsetWidth;
-  continuous.style.transition = 'left 2s cubic-bezier(0.25, 0.1, 0.25, 1)';
-  continuous.style.left = '73%';
+  continuous.style.transition = 'left 1.5s ease-in-out';
+  continuous.style.left = '100%';
+  setTimeout(function() {
+    continuous.style.transition = 'left 1.5s ease-in-out';
+    continuous.style.left = '0%';
+  }, 1600);
 }
 
 // ── IV/DV Quiz ──
