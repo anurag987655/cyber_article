@@ -564,6 +564,216 @@ That gap between your sample statistic and the true population parameter? That's
 
 It's not a "mistake" — it's a natural, expected discrepancy. Think of it like this: if you grab 5 random students from a university and measure their height, you probably won't get the *exact* average height of all 30,000 students. That's okay. That's normal.
 
+### See it for yourself
+
+<span class="interactive-label">Interactive</span>
+
+<div class="sim-container" id="simContainer">
+  <div class="sim-header">
+    <h4>🎓 Sampling Error Simulator</h4>
+    <p class="sim-subtitle">1000 students with different heights — pick a sample size and watch the error happen</p>
+  </div>
+  <div class="sim-pop-label">
+    <span>Population</span>
+    <span id="simPopMean">μ = 170.0 cm</span>
+  </div>
+  <div class="sim-cloud" id="simCloud">
+  </div>
+  <div class="sim-controls">
+    <label>Sample size:</label>
+    <button class="sim-size-btn active" onclick="simSetSize(10, this)">10</button>
+    <button class="sim-size-btn" onclick="simSetSize(25, this)">25</button>
+    <button class="sim-size-btn" onclick="simSetSize(50, this)">50</button>
+    <button class="sim-size-btn" onclick="simSetSize(100, this)">100</button>
+    <button class="sim-size-btn" onclick="simSetSize(250, this)">250</button>
+  </div>
+  <div class="sim-controls">
+    <button class="sim-action-btn sim-btn-sample" onclick="simTakeSample()">🎲 Take Sample</button>
+    <button class="sim-action-btn sim-btn-reset" onclick="simReset()">🔄 Reset</button>
+  </div>
+  <div class="sim-stats">
+    <div class="sim-stat-card">
+      <div class="stat-label">Sample Mean (x̄)</div>
+      <div class="stat-value" id="simSampleMean" style="color:#7c3aed;">—</div>
+    </div>
+    <div class="sim-stat-card">
+      <div class="stat-label">Sampling Error</div>
+      <div class="stat-value" id="simError" style="color:#64748b;">—</div>
+    </div>
+    <div class="sim-stat-card">
+      <div class="stat-label">Samples Taken</div>
+      <div class="stat-value" id="simCount" style="color:#2563eb;">0</div>
+    </div>
+    <div class="sim-stat-card">
+      <div class="stat-label">Avg |Error|</div>
+      <div class="stat-value" id="simAvgError" style="color:#ea580c;">—</div>
+    </div>
+  </div>
+  <div class="sim-histogram-wrap">
+    <h5>📊 Sampling Distribution of x̄ (watch it build up!)</h5>
+    <div class="sim-histogram" id="simHistogram">
+      <div class="sim-empty-msg" id="simEmptyMsg">Click "Take Sample" to start building the distribution</div>
+    </div>
+    <div class="sim-hist-labels">
+      <span>150</span><span>155</span><span>160</span><span>165</span><span>170</span><span>175</span><span>180</span><span>185</span><span>190</span>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // ── Population Generation (Box-Muller) ──
+  function randNormal(mean, sd) {
+    let u = 0, v = 0;
+    while (u === 0) u = Math.random();
+    while (v === 0) v = Math.random();
+    return mean + sd * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+
+  const POP_SIZE = 1000;
+  const POP_MEAN = 170;
+  const POP_SD = 10;
+  let population = [];
+  let simSampleSize = 10;
+  let samplesTaken = 0;
+  let totalAbsError = 0;
+  let sampleMeans = [];
+
+  function initPopulation() {
+    population = [];
+    for (let i = 0; i < POP_SIZE; i++) {
+      let h = randNormal(POP_MEAN, POP_SD);
+      h = Math.max(140, Math.min(200, h));
+      population.push({ height: h, selected: false });
+    }
+  }
+
+  function heightToColor(h) {
+    let t = (h - 140) / 60;
+    t = Math.max(0, Math.min(1, t));
+    let r = Math.round(59 + t * 186);
+    let g = Math.round(130 - t * 60);
+    let b = Math.round(246 - t * 200);
+    return `rgb(${r},${g},${b})`;
+  }
+
+  function renderCloud() {
+    const cloud = document.getElementById('simCloud');
+    cloud.querySelectorAll('.sim-dot').forEach(d => d.remove());
+    for (let i = 0; i < POP_SIZE; i++) {
+      let dot = document.createElement('div');
+      dot.className = 'sim-dot' + (population[i].selected ? ' selected' : '');
+      dot.style.left = (3 + Math.random() * 94) + '%';
+      dot.style.top = (3 + Math.random() * 90) + '%';
+      dot.style.background = population[i].selected ? '#fbbf24' : heightToColor(population[i].height);
+      if (population[i].selected) {
+        dot.style.boxShadow = '0 0 6px 2px rgba(251,191,36,0.8)';
+      }
+      cloud.appendChild(dot);
+    }
+  }
+
+  function calcMean(arr) {
+    return arr.reduce((a, b) => a + b, 0) / arr.length;
+  }
+
+  function updateStats() {
+    document.getElementById('simCount').textContent = samplesTaken;
+    if (samplesTaken > 0) {
+      let lastMean = sampleMeans[sampleMeans.length - 1];
+      let error = lastMean - POP_MEAN;
+      document.getElementById('simSampleMean').textContent = lastMean.toFixed(1) + ' cm';
+      document.getElementById('simError').textContent = (error >= 0 ? '+' : '') + error.toFixed(1) + ' cm';
+      document.getElementById('simError').style.color = Math.abs(error) < 2 ? '#22c55e' : Math.abs(error) < 5 ? '#f59e0b' : '#ef4444';
+      document.getElementById('simAvgError').textContent = (totalAbsError / samplesTaken).toFixed(1) + ' cm';
+    } else {
+      document.getElementById('simSampleMean').textContent = '—';
+      document.getElementById('simError').textContent = '—';
+      document.getElementById('simError').style.color = '#64748b';
+      document.getElementById('simAvgError').textContent = '—';
+    }
+  }
+
+  function renderHistogram() {
+    const container = document.getElementById('simHistogram');
+    container.querySelectorAll('.sim-hist-bar, .sim-hist-marker').forEach(d => d.remove());
+    document.getElementById('simEmptyMsg').remove();
+
+    const bins = new Array(20).fill(0);
+    const binMin = 150, binMax = 190, binWidth = (binMax - binMin) / 20;
+    sampleMeans.forEach(m => {
+      let idx = Math.floor((m - binMin) / binWidth);
+      idx = Math.max(0, Math.min(19, idx));
+      bins[idx]++;
+    });
+
+    let maxBin = Math.max(...bins, 1);
+    const muPct = ((POP_MEAN - binMin) / (binMax - binMin)) * 100;
+
+    bins.forEach((count, i) => {
+      let bar = document.createElement('div');
+      bar.className = 'sim-hist-bar';
+      let pct = (count / maxBin) * 100;
+      bar.style.height = pct + '%';
+      let binCenter = binMin + (i + 0.5) * binWidth;
+      let distFromMu = Math.abs(binCenter - POP_MEAN);
+      bar.classList.add(distFromMu < 3 ? 'near' : distFromMu < 7 ? 'mid' : 'far');
+      bar.title = count + ' samples';
+      container.appendChild(bar);
+    });
+
+    let marker = document.createElement('div');
+    marker.className = 'sim-hist-marker';
+    marker.style.left = muPct + '%';
+    container.appendChild(marker);
+  }
+
+  // ── Public functions ──
+  window.simSetSize = function(size, btn) {
+    simSampleSize = size;
+    document.querySelectorAll('.sim-size-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  };
+
+  window.simTakeSample = function() {
+    population.forEach(p => p.selected = false);
+    let indices = Array.from({length: POP_SIZE}, (_, i) => i);
+    for (let i = POP_SIZE - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+    for (let i = 0; i < simSampleSize; i++) {
+      population[indices[i]].selected = true;
+    }
+    let selectedHeights = population.filter(p => p.selected).map(p => p.height);
+    let mean = calcMean(selectedHeights);
+    let error = Math.abs(mean - POP_MEAN);
+    sampleMeans.push(mean);
+    totalAbsError += error;
+    samplesTaken++;
+    renderCloud();
+    updateStats();
+    renderHistogram();
+  };
+
+  window.simReset = function() {
+    population.forEach(p => p.selected = false);
+    samplesTaken = 0;
+    totalAbsError = 0;
+    sampleMeans = [];
+    initPopulation();
+    renderCloud();
+    updateStats();
+    const hist = document.getElementById('simHistogram');
+    hist.innerHTML = '<div class="sim-empty-msg" id="simEmptyMsg">Click "Take Sample" to start building the distribution</div>';
+  };
+
+  // ── Init ──
+  initPopulation();
+  renderCloud();
+})();
+</script>
+
 The key is: **samples must be representative.** If your sample is biased (like only surveying people in the library during finals week), your results will be biased too.
 
 <div class="takeaway-box">
